@@ -52,14 +52,3 @@ bool Body::reactToGlucagon(float amount)
 {
 	return true;
 }
-
-
-int main()
-{
-
-    return 0;
-}
-
-
-
-
