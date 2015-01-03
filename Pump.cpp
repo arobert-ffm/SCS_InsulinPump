@@ -90,5 +90,17 @@ float Pump::getGlucagonLevel()
 }
 
 
+// needed to be realized here just for testing purpose, will be moved later on to correct location
+// and can be used with a method invocation later on
+
+int main(){
+
+	// Main process for pump and its components/classes
+	// Generating two pipes, 
+
+	return 0;
+
+}
+
 
 
