@@ -10,7 +10,25 @@
 #include "Body.h"
 #include <iostream>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <unistd.h>
+
 using namespace std;
+
+#define BUFLEN          100
+#define EXIT__FAILURE   -1
+
+int     main        (void);
+
+int     fdes_body_to_pump; // fildescriptor for Body --> Pump
+int     fdes_pump_to_body; // fildescriptor for Pump --> Body
+char    buffer;
+int     i;
 
 
 // Increases the blood sugar level depending on the strength parameter. Returns 
@@ -52,3 +70,78 @@ bool Body::reactToGlucagon(float amount)
 {
 	return true;
 }
+
+//
+//  main.cpp
+//  Body
+//
+//  Created by Johannes Kinzig on 04.01.15.
+//  Copyright (c) 2015 Johannes Kinzig. All rights reserved.
+//
+
+/****************************************************************
+*               used to store data for transmission             *
+*****************************************************************/
+
+/**********************************
+* transmit_hormone_injection      *
+**********************************/
+
+struct transmit_injection_hormones {
+    float injected_insulin;
+    float injected_glucagon;
+} Injecting; // will be send over pipe: pump_to_body
+
+/**********************************
+ * transmit_bloodsugar      *
+ **********************************/
+
+struct transmit_bloodsugar {
+    float bloodSugarLevel;
+} BodyStatus; // will be send over pipe: body_to_pump
+
+/****************************************************************
+ *                          END                                 *
+ ****************************************************************/
+
+int main(void)
+{
+    
+    BodyStatus.bloodSugarLevel = 29.00;
+    
+    // generate pipe for Body --> Pump
+    mknod("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",S_IFIFO | 0666,0);
+
+    if((fdes_body_to_pump=open("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",O_WRONLY))==(-1)) {
+        puts("Fehler 'open pipe'");
+        exit(EXIT__FAILURE);
+    }
+    
+    // generate pipe for Pump --> Body
+    mknod("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",S_IFIFO | 0666,0);
+    
+    if((fdes_pump_to_body=open("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",O_RDONLY))==(-1)) {
+        puts("Fehler 'open pipe'");
+        exit(EXIT__FAILURE);
+    }
+    
+    // write Body --> Pump
+    if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
+        printf("Fehler 'write-call'");
+        exit(EXIT__FAILURE);
+    }
+    close(fdes_body_to_pump);
+    
+    // read Pump --> Body
+    read(fdes_pump_to_body, &Injecting, BUFLEN);
+    cout << Injecting.injected_insulin;
+    cout << "\n";
+    cout << Injecting.injected_glucagon;
+    cout << "\n";
+    close(fdes_pump_to_body);
+    
+    
+    
+    exit(0);
+    
+} /* END_MAIN() */

@@ -9,6 +9,26 @@
 
 #include "Pump.h"
 
+#include <iostream>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <unistd.h>
+
+using namespace std;
+
+#define BUFLEN  100
+#define EXIT__FAILURE   -1
+
+int     i;
+int     main (void);
+int     fdes_body_to_pump; // fildescriptor for Body --> Pump
+int     fdes_pump_to_body; // fildescriptor for Pump --> Body
+
 
 
 // Injects the insulin into the body.
@@ -17,6 +37,7 @@
 // - amount: The amount of insulin which is injected into the body.
 bool Pump::injectInsulin(float amount)
 {
+	return true;
 }
 
 // Injects the glucagon into the body.
@@ -25,6 +46,7 @@ bool Pump::injectInsulin(float amount)
 // - amount: The amount of glucagon which is injected into the body.
 bool Pump::injectGlucagon(float amount)
 {
+	return true;
 }
 
 // Checks the blood sugar concentration and returns the value.
@@ -32,28 +54,32 @@ float Pump::getBloodsugar()
 {
 }
 
-// refills insulin and returns “True” when done
+// refills insulin and returns “true” when done
 bool Pump::refillInsulin()
 {
+	return true;
 }
 
-// refills glucagon and returns “True” when done
+// refills glucagon and returns “true” when done
 bool Pump::refillGlucagon()
 {
+	return true;
 }
 
 // decreases insulin level in reservoir when injected to body and returns 
-// “True” when done 
+// “true” when done 
 // 
 // Parameter:
 // - amount: The amount of insulin which is injected into the body needs to be 
 //     reduced in the reservoir. 
 bool Pump::decreaseInsulinLevel(float amount)
 {
+	return true;
 }
 
 bool Pump::decreaseGlucagonLevel(float amount)
 {
+	return true;
 }
 
 // Checks the battery status and returns the value in percent.
@@ -63,10 +89,11 @@ int Pump::getBatteryStatus()
 {
 }
 
-// Checks the entire pump (reservoir, mechanical parts) and returns “True” when 
+// Checks the entire pump (reservoir, mechanical parts) and returns “true” when 
 // everything is working fine. 
 bool Pump::getStatus()
 {
+	return true;
 }
 
 // Calculates the amount of insulin needed based on the blood sugar levels.
@@ -89,18 +116,77 @@ float Pump::getGlucagonLevel()
 {
 }
 
+//
+//  main.cpp
+//  Pump
+//
+//  Created by Johannes Kinzig on 04.01.15.
+//  Copyright (c) 2015 Johannes Kinzig. All rights reserved.
+//
 
-// needed to be realized here just for testing purpose, will be moved later on to correct location
-// and can be used with a method invocation later on
 
-int main(){
 
-	// Main process for pump and its components/classes
-	// Generating two pipes, 
+/****************************************************************
+ *               used to store data for receiving               *
+ ****************************************************************/
 
-	return 0;
+/**********************************
+ * transmit_hormone_injection      *
+ **********************************/
 
-}
+struct transmit_injection_hormones {
+    float injected_insulin;
+    float injected_glucagon;
+} Injecting;
+
+/**********************************
+ * transmit_bloodsugar      *
+ **********************************/
+
+struct transmit_bloodsugar {
+    float bloodSugarLevel;
+} BodyStatus;
+
+/****************************************************************
+ *                          END                                 *
+ ****************************************************************/
+
+
+int main(void) {
+    
+    // testing values
+    Injecting.injected_insulin = 10.00;
+    Injecting.injected_glucagon = 90.00;
+    
+    // open pipe Body --> Pump
+    if((fdes_body_to_pump=open("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",O_RDONLY))==(-1)) {
+        printf("Failure 'open pipe'");
+        exit(-1);
+    }
+    
+    // open pipe Pump --> Body
+    if((fdes_pump_to_body=open("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",O_WRONLY))==(-1)) {
+        printf("Failure 'open pipe'");
+        exit(-1);
+    }
+    
+    // read Body --> Pump
+    read(fdes_body_to_pump, &BodyStatus, BUFLEN);
+    cout << BodyStatus.bloodSugarLevel;
+    cout << "\n";
+    close(fdes_body_to_pump);
+    
+    // write Pump --> Body
+    if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
+        printf("Fehler 'write-call'");
+        exit(EXIT__FAILURE);
+    }
+    close(fdes_pump_to_body);
+    
+    
+    
+    exit(0);
+} /* END_main() */
 
 
 
