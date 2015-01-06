@@ -96,7 +96,7 @@ bool Body::changeBloodSugarLevel(float strength, bool increasing) {
         }
         
     }
-
+    
     return true;
 }
 
@@ -132,6 +132,7 @@ Body body;
 int main(void) {
     
     cout << body.getBloodsugarLevel();
+    cout << "\n";
     return 0;
 }
 
