@@ -421,26 +421,14 @@
       <height>91</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Info:                        Time: 18:05         Boodsugarlevel: 75</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Info:                        Time: 18:35         Boodsugarlevel: 70</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Insulinreservoir:     Insulin reservoir 75</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Info:                        Time: 19:05         Boodsugarlevel: 90</string>
-     </property>
-    </item>
+    <property name="font">
+     <font>
+      <family>Segoe UI Semibold</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
    </widget>
    <widget class="QGroupBox" name="groupBoxHormoneReservoir">
     <property name="geometry">
@@ -500,7 +488,7 @@
          </font>
         </property>
         <property name="text">
-         <string>55</string>
+         <string>100</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -550,7 +538,7 @@
          </font>
         </property>
         <property name="text">
-         <string>74</string>
+         <string>100</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

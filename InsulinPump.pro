@@ -19,7 +19,6 @@ SOURCES +=\
     Scheduler.cpp \
     Tracer.cpp \
     UserInterface.cpp \
-    Main.cpp \
     Body.cpp
 
 HEADERS  += \

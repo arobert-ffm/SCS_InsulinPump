@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <unistd.h>
+#include <QObject>
 
 using namespace std;
 
@@ -57,12 +58,16 @@ float Pump::getBloodsugar()
 // refills insulin and returns “true” when done
 bool Pump::refillInsulin()
 {
+    // Update UI
+    emit updateInsulinReservoir(100);
 	return true;
 }
 
 // refills glucagon and returns “true” when done
 bool Pump::refillGlucagon()
 {
+    // Update UI
+    emit updateGlucagonReservoir(100);
 	return true;
 }
 

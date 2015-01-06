@@ -8,6 +8,41 @@
 // Description:
 
 #include "ControlSystem.h"
+#include "UserInterface.h"
+#include <QApplication>
+#include <string>
+
+using namespace std;
+
+/**
+ * Initiation of the Userinterface, Humanbody- and Insulinpumpsimulation.
+ *
+ * @brief main
+ * @param argc
+ * @param argv
+ * @return
+ */
+int main(int argc, char *argv[])
+{
+    // Create User Interface
+    QApplication a(argc, argv);
+    UserInterface w;
+
+    Pump pump;
+    Tracer tracer;
+
+    // Init UI Callbacks
+    QObject::connect(&pump, SIGNAL(updateInsulinReservoir(float)), &w, SLOT(insulinAmountInReservoirChanged(float)));
+    QObject::connect(&pump, SIGNAL(updateGlucagonReservoir(float)), &w, SLOT(glucagonAmountInReservoirChanged(float)));
+    QObject::connect(&tracer, SIGNAL(writeStatusLogInUi(string&)), &w, SLOT(insertStatusLog(string&)));
+    QObject::connect(&tracer, SIGNAL(writeWarningLogInUi(string&)), &w, SLOT(insertWarningLog(string&)));
+    QObject::connect(&tracer, SIGNAL(writeCriticalLogInUi(string&)), &w, SLOT(insertCriticalLog(string&)));
+
+    // Show UI
+    w.show();
+
+    return a.exec();
+}
 
 
 

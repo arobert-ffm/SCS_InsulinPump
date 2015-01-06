@@ -12,28 +12,33 @@
 #define tracer_
 
 #include <vector>
-#include <string>
+#include <QString>
+#include <iostream>
+#include <QObject>
+
+using namespace std;
 
 
-
-class Tracer
+class Tracer : public QObject
 {
+    Q_OBJECT
+
     public:
-        virtual std::string& getFilename();
-        virtual void setFilename(std::string& value);
+        virtual string& getFilename();
+        virtual void setFilename(string& value);
 
         // Writes the message to the log file. Every Message is signed by date 
         // and time. 
         // When writing to file has finished, “True” is returned!
-        virtual bool writeStatusLog(std::string& Message);
+        virtual bool writeStatusLog(string& message);
         // Writes the message to the log file. Every Message is signed by date 
         // and time. 
         // When writing to file has finished, “True” is returned!
-        virtual bool writeWarningLog(std::string& Message);
+        virtual bool writeWarningLog(string& message);
         // Writes the message to the log file. Every Message is signed by date 
         // and time. 
         // When writing to file has finished, “True” is returned!
-        virtual bool writeCriticalLog(std::string& Message);
+        virtual bool writeCriticalLog(string& message);
         // Plays an acoustic sound and returns “True” when done
         virtual bool playAcousticWarning();
         // vibrates on a specific event and returns “True” when done
@@ -41,7 +46,24 @@ class Tracer
 
     private:
         // The complete filename and path will stored here.
-        std::string filename;
+        string filename;
+
+    signals:
+        // Callback for writing status log in the UI.
+        //
+        // Parameter:
+        // - The status log to insert
+        void writeStatusLogInUi(string& message);
+        // Callback for writing warning log in the UI.
+        //
+        // Parameter:
+        // - The warning log to insert
+        void writeWarningLogInUi(string& message);
+        // Callback for writing critical log in the UI.
+        //
+        // Parameter:
+        // - The critical log to insert
+        void writeCriticalLogInUi(string& message);
 
 };
 

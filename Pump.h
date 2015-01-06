@@ -14,11 +14,16 @@
 #include <vector>
 #include <string>
 #include "Tracer.h"
+#include <QObject>
+
+using namespace std;
 
 
 
-class Pump
+class Pump : public QObject
 {
+    Q_OBJECT
+
     public:
         // refills insulin and returns “True” when done
         virtual bool refillInsulin();
@@ -69,6 +74,18 @@ class Pump
         virtual float getInsulinLevel();
         // Returns the glucagon level in the reservoir.
         virtual float getGlucagonLevel();
+
+    signals:
+        // Callback for updating Insulin Reservoir in the UI.
+        //
+        // Parameter:
+        // - The current amount of insulin in the reservoir
+        void updateInsulinReservoir(float amount);
+        // Callback for updating Glucagon Reservoir in the UI.
+        //
+        // Parameter:
+        // - The current amount of glucagon in the reservoir
+        void updateGlucagonReservoir(float amount);
 
 };
 

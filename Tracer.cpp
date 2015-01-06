@@ -8,25 +8,38 @@
 // Description:
 
 #include "Tracer.h"
+#include <QString>
+#include <iostream>
+
+using namespace std;
 
 
 
 // Writes the message to the log file. Every Message is signed by date and time.
 // When writing to file has finished, “True” is returned!
-bool Tracer::writeStatusLog(std::string& Message)
+bool Tracer::writeStatusLog(string& message)
 {
+    // Update UI
+    emit writeStatusLogInUi(message);
+    return true;
 }
 
 // Writes the message to the log file. Every Message is signed by date and time.
 // When writing to file has finished, “True” is returned!
-bool Tracer::writeWarningLog(std::string& Message)
+bool Tracer::writeWarningLog(string& message)
 {
+    // Update UI
+    emit writeWarningLogInUi(message);
+    return true;
 }
 
 // Writes the message to the log file. Every Message is signed by date and time.
 // When writing to file has finished, “True” is returned!
-bool Tracer::writeCriticalLog(std::string& Message)
+bool Tracer::writeCriticalLog(string& message)
 {
+    // Update UI
+    emit writeCriticalLogInUi(message);
+    return true;
 }
 
 // Plays an acoustic sound and returns “True” when done
