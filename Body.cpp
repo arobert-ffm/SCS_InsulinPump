@@ -31,48 +31,6 @@ int     fdes_pump_to_body; // fildescriptor for Pump --> Body
 char    buffer;
 int     i;
 
-unsigned int sleeping = 500;
-
-// Increases the blood sugar level depending on the strength parameter. Returns
-// “True” when done.
-//
-// Parameter:
-// - strength: The strength of raising the blood sugar level 1: calm 2: middle
-//     3: fast
-bool Body::increaseBloodsugar(int strength) {
-    return true;
-    
-}
-
-// Decreases the blood sugar level depending on the strength parameter. Returns
-// “True” when done.
-//
-// Parameter:
-// - strength: The strength of sinking the blood sugar level 1: calm 2: middle
-//     3: fast
-bool Body::decreaseBloodsugar(int strength)
-{
-    return true;
-}
-
-// Reacts to insulin and returns “True” when done.
-//
-// Parameter:
-// - amount_injected: the amount of insulin injected
-bool Body::reactToInsulin(float amount_injected)
-{
-    return true;
-}
-
-// Reacts to glucagon and returns “True” when done.
-//
-// Parameter:
-// - amount: the amount of glucagon injected
-bool Body::reactToGlucagon(float amount)
-{
-    return true;
-}
-
 //
 //  Body.cpp
 //  Body
@@ -105,6 +63,33 @@ struct transmit_bloodsugar {
 /****************************************************************
  *                          END                                 *
  ****************************************************************/
+
+// changes the blood sugar level;
+// increasing: if True: rising; if False: falling
+// strength: the factor the BSL is rising or falling
+bool Body::changeBloodSugarLevel(float strength, bool increasing)
+{
+    
+    return true;
+}
+
+// Reacts to insulin and returns “True” when done.
+//
+// Parameter:
+// - amount_injected: the amount of insulin injected
+bool Body::reactToInsulin(float amount_injected)
+{
+    return true;
+}
+
+// Reacts to glucagon and returns “True” when done.
+//
+// Parameter:
+// - amount: the amount of glucagon injected
+bool Body::reactToGlucagon(float amount)
+{
+    return true;
+}
 
 // simulating BSL - should be inside a seperate thread
 int main(void) {
