@@ -14,28 +14,31 @@
 #include <vector>
 #include <string>
 
-
-
 class Body
 {
     public:
-        // Reacts to insulin and returns “True” when done.
-        // 
-        // Parameter:
-        // - amount_injected: the amount of insulin injected
-        virtual bool reactToInsulin(float amount_injected);
-        // Reacts to glucagon and returns “True” when done.
-        // 
-        // Parameter:
-        // - amount: the amount of glucagon injected
-        virtual bool reactToGlucagon(float amount);
+    Body();
+    ~Body();
+    // Reacts to insulin and returns “True” when done.
+    //
+    // Parameter:
+    // - amount_injected: the amount of insulin injected
+    virtual bool reactToInsulin(float amount_injected);
+    // Reacts to glucagon and returns “True” when done.
+    //
+    // Parameter:
+    // - amount: the amount of glucagon injected
+    virtual bool reactToGlucagon(float amount);
+    
+    virtual float getBloodsugarLevel(void);
+    virtual void setBloodsugarLevel(float);
 
     private:
-        float BloodsugarLevel;
-        // changes the blood sugar level;
-        // increasing: if True: rising; if False: falling
-        // strength: the factor the BSL is rising or falling
-        virtual bool changeBloodSugarLevel(float strength, bool increasing);
+    float BloodsugarLevel;
+    // changes the blood sugar level;
+    // increasing: if True: rising; if False: falling
+    // strength: the factor the BSL is rising or falling
+    virtual bool changeBloodSugarLevel(float strength, bool increasing);
 
 };
 
