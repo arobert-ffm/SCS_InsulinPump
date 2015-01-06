@@ -64,39 +64,12 @@ struct transmit_bloodsugar {
  *                          END                                 *
  ****************************************************************/
 
-// constructor
-Body::Body(void){
-    BloodsugarLevel = 80.00;
-};
-
-// destructor
-Body::~Body(void){
-    
-}
-
-
 // changes the blood sugar level;
 // increasing: if True: rising; if False: falling
 // strength: the factor the BSL is rising or falling
-bool Body::changeBloodSugarLevel(float strength, bool increasing) {
-    // defined 3 levels for increasing/decreasing:
-    //      Level 1: calm   --> 1,03
-    //      Level 2: middle --> 1,06
-    //      Level 3: fast   --> 1,09
+bool Body::changeBloodSugarLevel(float strength, bool increasing)
+{
     
-    // generating the curve values
-    while (true) {
-        this->BloodsugarLevel = this->BloodsugarLevel * 1.03;
-        cout << BodyStatus.bloodSugarLevel;
-        cout << "\n";
-        
-        if (this->BloodsugarLevel > 180) {
-            cout << "Value reached!\n";
-            break;
-        }
-        
-    }
-
     return true;
 }
 
@@ -118,20 +91,29 @@ bool Body::reactToGlucagon(float amount)
     return true;
 }
 
-void Body::setBloodsugarLevel(float BSL) {
-    this->BloodsugarLevel = BSL;
-}
-
-float Body::getBloodsugarLevel() {
-    return this->BloodsugarLevel;
-}
-
-Body body;
-
 // simulating BSL - should be inside a seperate thread
 int main(void) {
     
-    cout << body.getBloodsugarLevel();
+    // setting the starting value
+    BodyStatus.bloodSugarLevel = 80.00; // mg/dL
+    
+    // defined 3 levels for increasing/decreasing:
+    //      Level 1: calm   --> 1,03
+    //      Level 2: middle --> 1,06
+    //      Level 3: fast   --> 1,09
+    
+    // generating the curve values
+    while (true) {
+        BodyStatus.bloodSugarLevel = BodyStatus.bloodSugarLevel * 1.03;
+        cout << BodyStatus.bloodSugarLevel;
+        cout << "\n";
+        
+        if (BodyStatus.bloodSugarLevel > 180) {
+            cout << "Value reached!\n";
+            break;
+        }
+    }
+    
     return 0;
 }
 
