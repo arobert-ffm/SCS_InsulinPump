@@ -114,16 +114,24 @@ float Pump::calculateNeededGlucagon()
 // Returns the insulin level in the reservoir.
 float Pump::getInsulinLevel()
 {
+    return this->insulinLevel;
 }
 
 // Returns the glucagon level in the reservoir.
 float Pump::getGlucagonLevel()
 {
+    return this->glucagonLevel;
 }
 
+// Returns current blood sugar level.
+int Pump::getCurrentBloodSugarLevel()
+{
+   return this->currentBloodSugarLevel;
+};
+
 //runable for Pump. Gets triggered by Scheduler.
-int Pump::runPump(){
-    return 0;
+bool Pump::runPump(){
+    return true;
 }
 
 //
