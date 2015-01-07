@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>846</width>
-    <height>647</height>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>180</y>
       <width>821</width>
       <height>391</height>
      </rect>
@@ -416,7 +416,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>520</y>
+      <y>590</y>
       <width>821</width>
       <height>91</height>
      </rect>
@@ -436,7 +436,7 @@
       <x>10</x>
       <y>10</y>
       <width>421</width>
-      <height>61</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="font">
@@ -450,7 +450,7 @@
     <widget class="QWidget" name="horizontalLayoutWidget_27">
      <property name="geometry">
       <rect>
-       <x>224</x>
+       <x>220</x>
        <y>30</y>
        <width>181</width>
        <height>21</height>
@@ -546,6 +546,32 @@
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QPushButton" name="mGlucagonRefillButton">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>70</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refill Glucagon</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="mInsulinRefillButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>161</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refill Insulin</string>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxInfo">

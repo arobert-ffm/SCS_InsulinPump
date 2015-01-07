@@ -20,12 +20,10 @@
 
 
 
-class ControlSystem : public QObject
+class ControlSystem
 {
-    Q_OBJECT
-
     public:
-        ControlSystem(UserInterface ui);
+        ControlSystem(UserInterface* ui);
 
         // Checks the operation hours of the mechanical parts (motor) and 
         // returns the value in hours. 

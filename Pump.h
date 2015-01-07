@@ -98,7 +98,7 @@ class Pump : public QObject
         // Checks the blood sugar concentration and returns the value.
         virtual float getCurrentBloodSugarLevel();
 
-signals:
+    signals:
         // Callback for updating Insulin Reservoir in the UI.
         //
         // Parameter:

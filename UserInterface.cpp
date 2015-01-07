@@ -75,3 +75,21 @@ void UserInterface::insertCriticalLog(string& message)
     ui->mMessageList->addItem(item);
     ui->mMessageList->scrollToBottom();
 }
+
+/**
+ * Refill the Insulinreservoir in the Pump
+ */
+void UserInterface::on_mInsulinRefillButton_clicked()
+{
+    // Trigger Callback for refilling Insulin Reservoir in the Pump
+    emit refillInsulinInPump();
+}
+
+/**
+ * Refill the Glucagonreservoir in the Pump
+ */
+void UserInterface::on_mGlucagonRefillButton_clicked()
+{
+    // Trigger Callback for refilling Glucagon Reservoir in the Pump
+    emit refillGlucagonInPump();
+}

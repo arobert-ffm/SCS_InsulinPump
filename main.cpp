@@ -10,6 +10,7 @@
 
 #include <QApplication>
 #include "UserInterface.h"
+#include "ControlSystem.h"
 
 using namespace std;
 
@@ -28,6 +29,9 @@ int main(int argc, char *argv[])
     // Create User Interface
     QApplication application(argc, argv);
     UserInterface window;
+
+    // Start System
+    ControlSystem controlsystem(&window);
 
     // Show UI
     window.show();
