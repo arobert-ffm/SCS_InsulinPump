@@ -79,10 +79,26 @@ Body::~Body(void){
 // increasing: if True: rising; if False: falling
 // strength: the factor the BSL is rising or falling
 bool Body::changeBloodSugarLevel(float strength, bool increasing) {
-    // defined 3 levels for increasing/decreasing:
-    //      Level 1: calm   --> 1,03
-    //      Level 2: middle --> 1,06
-    //      Level 3: fast   --> 1,09
+    /******************************************************
+     *   defined 3 levels for increasing/decreasing:      *
+     *      Level 1: calm   --> 1.03                      *
+     *      Level 2: middle --> 1.06                      *
+     *      Level 3: fast   --> 1.09                      *
+     ******************************************************/
+    
+    
+    /**********************************
+     * deciding if rising or falling  *
+     **********************************/
+    if (increasing == true) {
+        //operations
+    }
+    
+    if (increasing == false) {
+        //operations
+    }
+    
+    
     
     // generating the curve values
     while (true) {
