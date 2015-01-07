@@ -31,16 +31,20 @@ class Tracer : public QObject
         // and time. 
         // When writing to file has finished, “True” is returned!
         virtual bool writeStatusLog(string& message);
-        // Writes the message to the log file. Every Message is signed by date 
+
+        // Writes the message to the log file. Every Message is signed by date
         // and time. 
         // When writing to file has finished, “True” is returned!
         virtual bool writeWarningLog(string& message);
+
         // Writes the message to the log file. Every Message is signed by date 
         // and time. 
         // When writing to file has finished, “True” is returned!
         virtual bool writeCriticalLog(string& message);
+
         // Plays an acoustic sound and returns “True” when done
         virtual bool playAcousticWarning();
+
         // vibrates on a specific event and returns “True” when done
         virtual bool vibrationWarning();
 
@@ -54,11 +58,13 @@ class Tracer : public QObject
         // Parameter:
         // - The status log to insert
         void writeStatusLogInUi(string& message);
+
         // Callback for writing warning log in the UI.
         //
         // Parameter:
         // - The warning log to insert
         void writeWarningLogInUi(string& message);
+
         // Callback for writing critical log in the UI.
         //
         // Parameter:
