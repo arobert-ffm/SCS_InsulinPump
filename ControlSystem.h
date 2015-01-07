@@ -13,8 +13,7 @@
 #ifndef controlsystem_
 #define controlsystem_
 
-#include <vector>
-#include <string>
+#include "UserInterface.h"
 #include "Scheduler.h"
 #include "Tracer.h"
 #include "Pump.h"
@@ -29,6 +28,8 @@ class ControlSystem
         Tracer tracer;
 
     public:
+        ControlSystem(UserInterface w);
+
         // Checks the operation hours of the mechanical parts (motor) and 
         // returns the value in hours. 
         virtual int checkOperationHours();
