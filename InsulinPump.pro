@@ -17,7 +17,8 @@ SOURCES +=\
     Pump.cpp \
     Scheduler.cpp \
     Tracer.cpp \
-    UserInterface.cpp
+    UserInterface.cpp \
+    main.cpp
 
 HEADERS  += \
     Pump.h \
