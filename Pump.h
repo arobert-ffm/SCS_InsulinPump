@@ -58,6 +58,8 @@ class Pump : public QObject
         float currentBloodSugarLevel;
         // current battery power level
         int batteryPowerLevel;
+        //for logging purposes
+        Tracer tracer;
 /*
  * FUNCTIONS
  */

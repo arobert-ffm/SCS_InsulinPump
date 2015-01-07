@@ -75,12 +75,34 @@ void Pump::refillGlucagon()
 //     reduced in the reservoir. 
 bool Pump::decreaseInsulinLevel(float amount)
 {
-	return true;
+    string str = "Reservoir Insulin too low!";
+    if (amount <= this->getInsulinLevel())
+    {
+            insulinLevel-=amount;
+            emit updateInsulinReservoir(insulinLevel);
+            return true;
+    }
+    tracer.writeCriticalLog(str);
+    return false;
 }
 
+// decreases glucagon level in reservoir when injected to body and returns
+// “true” when done
+//
+// Parameter:
+// - amount: The amount of glucagon which is injected into the body needs to be
+//     reduced in the reservoir.
 bool Pump::decreaseGlucagonLevel(float amount)
 {
-	return true;
+    string str = "Reservoir Glucagon too low!";
+    if (amount <= this->getGlucagonLevel())
+    {
+            glucagonLevel-=amount;
+            emit updateGlucagonReservoir(glucagonLevel);
+            return true;
+    }
+    tracer.writeCriticalLog(str);
+    return false;
 }
 
 // Calculates the amount of insulin needed based on the blood sugar levels.
