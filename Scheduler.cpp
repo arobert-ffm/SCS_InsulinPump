@@ -8,7 +8,7 @@
 // Description:  Triggering the hormone pump
 //               Keep track of operation time
 //
-// Author:       Sven Sperner
+// Author:       Sven Sperner, sillyconn@gmail.com
 
 
 #include "Scheduler.h"
@@ -48,7 +48,13 @@ bool Scheduler::getStatus()
     return true;
 }
 
-// Starts the counter for operation hours and returns “True” when successfully 
+// answers ControlSystem’s call for checkOperationTime()
+qint64 Scheduler::getOperationTime()
+{
+    return TotalOperationTime;
+}
+
+// Starts the counter for operation hours and returns “True” when successfully
 // started. The value will be written to “TotalOperationHours”. 
 bool Scheduler::startOperationHoursCounter()
 {
@@ -56,7 +62,6 @@ bool Scheduler::startOperationHoursCounter()
 
     SaveFile = new QSettings("InsulinPump.conf", QSettings::NativeFormat);
     SaveFile->beginGroup( "InsulinPump" );
-
     TotalOperationTime = SaveFile->value("TotalOperationTime").toLongLong();
 
     return true;
