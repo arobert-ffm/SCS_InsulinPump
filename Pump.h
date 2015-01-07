@@ -24,18 +24,16 @@ class Pump : public QObject
     Q_OBJECT
 
     public:
-        // refills insulin and returns “True” when done
-        virtual bool refillInsulin();
-        // refills glucagon and returns “True” when done
-        virtual bool refillGlucagon();
         // Checks the battery status and returns the value in percent.
         // In case of a critical status (level smaller than 15%) the user will 
         // be notified acoustically and the incident will be logged by the 
         // tracer. 
         virtual int getBatteryStatus();
-        // Checks the entire pump (reservoir, mechanical parts) and returns 
+
+        // Checks the entire pump (reservoir, mechanical parts) and returns
         // “True” when everything is working fine. 
         virtual bool getStatus();
+
         //"main"-function for pump
         //triggered by Scheduler.
         virtual bool runPump();
@@ -57,20 +55,24 @@ class Pump : public QObject
         int active;
         float insulinLevel;
         float glucagonLevel;
-        //
-        int currentBloodSugarLevel;
+
+        //current level
+        float currentBloodSugarLevel;
+/*
+ * FUNCTIONS
+ */
         // Injects the insulin into the body.
         // 
         // Parameter:
         // - amount: The amount of insulin which is injected into the body.
         virtual bool injectInsulin(float amount);
+
         // Injects the glucagon into the body.
         // 
         // Parameter:
         // - amount: The amount of glucagon which is injected into the body.
         virtual bool injectGlucagon(float amount);
-        // Checks the blood sugar concentration and returns the value.
-        virtual float getBloodsugar();
+
         // decreases insulin level in reservoir when injected to body and 
         // returns “True” when done 
         // 
@@ -79,19 +81,24 @@ class Pump : public QObject
         //     needs to be reduced in the reservoir. 
         virtual bool decreaseInsulinLevel(float amount);
         virtual bool decreaseGlucagonLevel(float amount);
+
         // Calculates the amount of insulin needed based on the blood sugar levels.
         virtual float calculateNeededInsulin();
-        // Calculates the amount of glucagon needed based on the blood sugar 
+
+        // Calculates the amount of glucagon needed based on the blood sugar
         // levels. 
         virtual float calculateNeededGlucagon();
+/*
+ * GETTER
+ */
         // Returns the insulin level in the reservoir.
         virtual float getInsulinLevel();
         // Returns the glucagon level in the reservoir.
         virtual float getGlucagonLevel();
-        //returns  current blood sugar level.
-        virtual int getCurrentBloodSugarLevel();
+        // Checks the blood sugar concentration and returns the value.
+        virtual float getCurrentBloodSugarLevel();
 
-    signals:
+signals:
         // Callback for updating Insulin Reservoir in the UI.
         //
         // Parameter:

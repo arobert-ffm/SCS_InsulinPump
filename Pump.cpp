@@ -31,6 +31,9 @@ int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
 
 
+/*
+ * FUNCTIONS
+ */
 
 // Injects the insulin into the body.
 // 
@@ -50,25 +53,18 @@ bool Pump::injectGlucagon(float amount)
 	return true;
 }
 
-// Checks the blood sugar concentration and returns the value.
-float Pump::getBloodsugar()
-{
-}
-
 // refills insulin and returns “true” when done
-bool Pump::refillInsulin()
+void Pump::refillInsulin()
 {
     // Update UI
     emit updateInsulinReservoir(100);
-	return true;
 }
 
 // refills glucagon and returns “true” when done
-bool Pump::refillGlucagon()
+void Pump::refillGlucagon()
 {
     // Update UI
     emit updateGlucagonReservoir(100);
-	return true;
 }
 
 // decreases insulin level in reservoir when injected to body and returns 
@@ -86,6 +82,19 @@ bool Pump::decreaseGlucagonLevel(float amount)
 {
 	return true;
 }
+// Calculates the amount of insulin needed based on the blood sugar levels.
+float Pump::calculateNeededInsulin()
+{
+}
+
+// Calculates the amount of glucagon needed based on the blood sugar levels.
+float Pump::calculateNeededGlucagon()
+{
+}
+
+/*
+ * GETTER
+ */
 
 // Checks the battery status and returns the value in percent.
 // In case of a critical status (level smaller than 15%) the user will be 
@@ -101,15 +110,12 @@ bool Pump::getStatus()
 	return true;
 }
 
-// Calculates the amount of insulin needed based on the blood sugar levels.
-float Pump::calculateNeededInsulin()
+// Checks the blood sugar concentration and returns the value.
+// Returns current blood sugar level.
+float Pump::getCurrentBloodSugarLevel()
 {
-}
-
-// Calculates the amount of glucagon needed based on the blood sugar levels.
-float Pump::calculateNeededGlucagon()
-{
-}
+   return this->currentBloodSugarLevel;
+};
 
 // Returns the insulin level in the reservoir.
 float Pump::getInsulinLevel()
@@ -123,11 +129,9 @@ float Pump::getGlucagonLevel()
     return this->glucagonLevel;
 }
 
-// Returns current blood sugar level.
-int Pump::getCurrentBloodSugarLevel()
-{
-   return this->currentBloodSugarLevel;
-};
+/*
+ * RUNABLE
+ */
 
 //runable for Pump. Gets triggered by Scheduler.
 bool Pump::runPump(){
