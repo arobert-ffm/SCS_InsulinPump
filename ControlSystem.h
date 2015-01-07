@@ -44,6 +44,16 @@ class ControlSystem : public QObject
         // checks the batteries charging state and returns the value in percent
         virtual int checkBatteryStatus();
 
+    public slots:
+        /**
+         * Refills the Insulin in the Reservoir of the Pump
+         */
+        void refillInsulin();
+        /**
+         * Refills the Glucagon in the Reservoir of the Pump
+         */
+        void refillGlucagon();
+
     private:
         Pump pump;
         Scheduler scheduler;

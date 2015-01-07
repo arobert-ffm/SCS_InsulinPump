@@ -40,16 +40,6 @@ class Pump : public QObject
         //triggered by Scheduler.
         virtual int runPump();
 
-    public slots:
-        /**
-         * Refills the Insulin in the Reservoir of the Pump
-         */
-        void refillInsulin();
-        /**
-         * Refills the Glucagon in the Reservoir of the Pump
-         */
-        void refillGlucagon();
-
     private:
         // When pump is active injecting insulin the value will be 1, when 
         // injecting glucagon the value will be 2 and when inactive the value 
