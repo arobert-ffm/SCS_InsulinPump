@@ -82,14 +82,23 @@ bool Pump::decreaseGlucagonLevel(float amount)
 {
 	return true;
 }
+
 // Calculates the amount of insulin needed based on the blood sugar levels.
-float Pump::calculateNeededInsulin()
+float Pump::calculateNeededInsulin(int targetInsValue, float currentBloodSugarLevel, int isf)
 {
+    int difference, fictInsUnit;
+    difference = currentBloodSugarLevel - targetInsValue;
+    fictInsUnit = difference / isf;
+    return fictInsUnit;
 }
 
 // Calculates the amount of glucagon needed based on the blood sugar levels.
-float Pump::calculateNeededGlucagon()
+float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf)
 {
+    int difference, fictGlucUnit;
+    difference = targetGlucValue - currentBloodSugarLevel;
+    fictGlucUnit = difference / gsf;
+    return fictGlucUnit;
 }
 
 /*
@@ -101,6 +110,7 @@ float Pump::calculateNeededGlucagon()
 // notified acoustically and the incident will be logged by the tracer. 
 int Pump::getBatteryStatus()
 {
+    return this->batteryPowerLevel;
 }
 
 // Checks the entire pump (reservoir, mechanical parts) and returns “true” when 
@@ -134,7 +144,8 @@ float Pump::getGlucagonLevel()
  */
 
 //runable for Pump. Gets triggered by Scheduler.
-bool Pump::runPump(){
+bool Pump::runPump()
+{
     return true;
 }
 

@@ -10,8 +10,6 @@
 #ifndef pump_
 #define pump_
 
-#include <vector>
-#include <string>
 #include "Tracer.h"
 #include <QObject>
 
@@ -34,8 +32,8 @@ class Pump : public QObject
         // “True” when everything is working fine. 
         virtual bool getStatus();
 
-        //"main"-function for pump
-        //triggered by Scheduler.
+        // "main"-function for pump
+        // triggered by Scheduler.
         virtual bool runPump();
 
     public slots:
@@ -56,8 +54,10 @@ class Pump : public QObject
         float insulinLevel;
         float glucagonLevel;
 
-        //current level
+        // current level
         float currentBloodSugarLevel;
+        // current battery power level
+        int batteryPowerLevel;
 /*
  * FUNCTIONS
  */
@@ -83,11 +83,11 @@ class Pump : public QObject
         virtual bool decreaseGlucagonLevel(float amount);
 
         // Calculates the amount of insulin needed based on the blood sugar levels.
-        virtual float calculateNeededInsulin();
+        virtual float calculateNeededInsulin(int targetInsValue, float currentBloodSugarLevel, int isf);
 
         // Calculates the amount of glucagon needed based on the blood sugar
         // levels. 
-        virtual float calculateNeededGlucagon();
+        virtual float calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf);
 /*
  * GETTER
  */
