@@ -47,6 +47,7 @@ void UserInterface::glucagonAmountInReservoirChanged(float amount)
 void UserInterface::insertStatusLog(string& message)
 {
     ui->mMessageList->addItem(new QListWidgetItem("Status:\t" + QString::fromStdString(message)));
+    ui->mMessageList->scrollToBottom();
 }
 
 /**
@@ -59,6 +60,7 @@ void UserInterface::insertWarningLog(string& message)
     QListWidgetItem* item = new QListWidgetItem("Warning:\t" + QString::fromStdString(message));
     item->setBackgroundColor(Qt::yellow);
     ui->mMessageList->addItem(item);
+    ui->mMessageList->scrollToBottom();
 }
 
 /**
@@ -71,4 +73,5 @@ void UserInterface::insertCriticalLog(string& message)
     QListWidgetItem* item = new QListWidgetItem("Critical:\t" + QString::fromStdString(message));
     item->setBackgroundColor(Qt::red);
     ui->mMessageList->addItem(item);
+    ui->mMessageList->scrollToBottom();
 }
