@@ -20,12 +20,10 @@
 
 
 
-class ControlSystem : public QObject
+class ControlSystem
 {
-    Q_OBJECT
-
     public:
-        ControlSystem(UserInterface ui);
+        ControlSystem(UserInterface* ui);
 
         // Checks the operation hours of the mechanical parts (motor) and 
         // returns the value in hours. 
@@ -43,16 +41,6 @@ class ControlSystem : public QObject
 
         // checks the batteries charging state and returns the value in percent
         virtual int checkBatteryStatus();
-
-    public slots:
-        /**
-         * Refills the Insulin in the Reservoir of the Pump
-         */
-        void refillInsulin();
-        /**
-         * Refills the Glucagon in the Reservoir of the Pump
-         */
-        void refillGlucagon();
 
     private:
         Pump pump;

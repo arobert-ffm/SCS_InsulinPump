@@ -56,19 +56,17 @@ float Pump::getBloodsugar()
 }
 
 // refills insulin and returns “true” when done
-bool Pump::refillInsulin()
+void Pump::refillInsulin()
 {
     // Update UI
     emit updateInsulinReservoir(100);
-	return true;
 }
 
 // refills glucagon and returns “true” when done
-bool Pump::refillGlucagon()
+void Pump::refillGlucagon()
 {
     // Update UI
     emit updateGlucagonReservoir(100);
-	return true;
 }
 
 // decreases insulin level in reservoir when injected to body and returns 

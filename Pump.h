@@ -24,10 +24,6 @@ class Pump : public QObject
     Q_OBJECT
 
     public:
-        // refills insulin and returns “True” when done
-        virtual bool refillInsulin();
-        // refills glucagon and returns “True” when done
-        virtual bool refillGlucagon();
         // Checks the battery status and returns the value in percent.
         // In case of a critical status (level smaller than 15%) the user will 
         // be notified acoustically and the incident will be logged by the 
@@ -76,6 +72,12 @@ class Pump : public QObject
         virtual float getInsulinLevel();
         // Returns the glucagon level in the reservoir.
         virtual float getGlucagonLevel();
+
+    public slots:
+        // refills insulin and returns “True” when done
+        void refillInsulin();
+        // refills glucagon and returns “True” when done
+        void refillGlucagon();
 
     signals:
         // Callback for updating Insulin Reservoir in the UI.
