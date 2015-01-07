@@ -66,12 +66,12 @@ struct transmit_bloodsugar {
 
 // constructor
 Body::Body(void){
-    BloodsugarLevel = 80.00;
+    BloodsugarLevel = 110.00;
 };
 
 // destructor
 Body::~Body(void){
-
+    
 }
 
 
@@ -85,34 +85,23 @@ bool Body::changeBloodSugarLevel(float strength, bool increasing) {
      *      Level 2: middle --> 1.06                      *
      *      Level 3: fast   --> 1.09                      *
      ******************************************************/
-
-
+    
+    
     /**********************************
      * deciding if rising or falling  *
      **********************************/
+    
+    // rising
     if (increasing == true) {
-        //operations
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
     }
-
+    
+    
+    // falling
     if (increasing == false) {
-        //operations
+        this->BloodsugarLevel = this->BloodsugarLevel / strength;
     }
-
-
-
-    // generating the curve values
-    while (true) {
-        this->BloodsugarLevel = this->BloodsugarLevel * 1.03;
-        cout << BodyStatus.bloodSugarLevel;
-        cout << "\n";
-
-        if (this->BloodsugarLevel > 180) {
-            cout << "Value reached!\n";
-            break;
-        }
-
-    }
-
+    
     return true;
 }
 
@@ -134,11 +123,11 @@ bool Body::reactToGlucagon(float amount)
     return true;
 }
 
-void Body::setBloodsugarLevel(float BSL) {
+void Body::setBloodSugarLevel(float BSL) {
     this->BloodsugarLevel = BSL;
 }
 
-float Body::getBloodsugarLevel() {
+float Body::getBloodSugarLevel() {
     return this->BloodsugarLevel;
 }
 
@@ -146,41 +135,43 @@ Body body;
 
 // simulating BSL - should be inside a seperate thread
 int main(void) {
-
-    cout << body.getBloodsugarLevel();
+    cout << "I am the body!\n";
+    
+    cout << body.getBloodSugarLevel();
     cout << "\n";
+    
+    body.changeBloodSugarLevel(1.03, false);
     return 0;
 }
 
 // communication via pipes
-int main_offline (void)
-{
-
+int main_offline (void) {
+    
     BodyStatus.bloodSugarLevel = 29.00;
-
+    
     // generate pipe for Body --> Pump
     mknod("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",S_IFIFO | 0666,0);
-
+    
     if((fdes_body_to_pump=open("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",O_WRONLY))==(-1)) {
         puts("Fehler 'open pipe'");
         exit(EXIT__FAILURE);
     }
-
+    
     // generate pipe for Pump --> Body
     mknod("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",S_IFIFO | 0666,0);
-
+    
     if((fdes_pump_to_body=open("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",O_RDONLY))==(-1)) {
         puts("Fehler 'open pipe'");
         exit(EXIT__FAILURE);
     }
-
+    
     // write Body --> Pump
     if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
         printf("Fehler 'write-call'");
         exit(EXIT__FAILURE);
     }
     close(fdes_body_to_pump);
-
+    
     // read Pump --> Body
     read(fdes_pump_to_body, &Injecting, BUFLEN);
     cout << Injecting.injected_insulin;
@@ -188,15 +179,7 @@ int main_offline (void)
     cout << Injecting.injected_glucagon;
     cout << "\n";
     close(fdes_pump_to_body);
-
+    
     exit(0);
-
+    
 } /* END_MAIN() */
-
-
-/* Qts main() - change as needed */
-int main_qt()
-{
-    cout << "Hello World!" << endl;
-    return 0;
-}

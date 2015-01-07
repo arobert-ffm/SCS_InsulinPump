@@ -19,22 +19,25 @@
 class Body
 {
     public:
-        // Reacts to insulin and returns “True” when done.
-        // 
-        // Parameter:
-        // - amount_injected: the amount of insulin injected
-        virtual bool reactToInsulin(float amount_injected);
-        // Reacts to glucagon and returns “True” when done.
-        // 
-        // Parameter:
-        // - amount: the amount of glucagon injected
-        virtual bool reactToGlucagon(float amount);
-        // changes the blood sugar level;
-        // increasing: if True: rising; if False: falling
-        // strength: the factor the BSL is rising or falling
-        virtual bool changeBloodSugarLevel(float strength, bool increasing);
-        virtual float getBloodsugarLevel();
-        virtual void setBloodsugarLevel();
+    // Reacts to insulin and returns “True” when done.
+    //
+    // Parameter:
+    // - amount_injected: the amount of insulin injected
+    virtual bool reactToInsulin(float amount_injected);
+    // Reacts to glucagon and returns “True” when done.
+    //
+    // Parameter:
+    // - amount: the amount of glucagon injected
+    virtual bool reactToGlucagon(float amount);
+    // changes the blood sugar level;
+    // increasing: if True: rising; if False: falling
+    // strength: the factor the BSL is rising or falling
+    virtual bool changeBloodSugarLevel(float strength, bool increasing);
+    virtual float getBloodSugarLevel();
+    virtual void setBloodSugarLevel(float);
+    
+    Body();
+    ~Body();
 
     private:
         float BloodsugarLevel;
