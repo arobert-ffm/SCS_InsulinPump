@@ -13,6 +13,8 @@
 
 #include "Scheduler.h"
 
+using namespace std;
+
 
 
 Scheduler::Scheduler()

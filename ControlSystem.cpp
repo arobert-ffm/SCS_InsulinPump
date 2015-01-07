@@ -9,25 +9,21 @@
 //
 // Author:       Sven Sperner, sillyconn@gmail.com
 
+
 #include "ControlSystem.h"
 
 using namespace std;
 
 
 
-ControlSystem::ControlSystem(UserInterface w)
+ControlSystem::ControlSystem(UserInterface ui)
 {
-    /*
-    pump = new Pump();
-    scheduler = new Scheduler();
-    tracer = new Tracer();
-    */
     // Init UI Callbacks
-    QObject::connect(&pump, SIGNAL(updateInsulinReservoir(float)), &w, SLOT(insulinAmountInReservoirChanged(float)));
-    QObject::connect(&pump, SIGNAL(updateGlucagonReservoir(float)), &w, SLOT(glucagonAmountInReservoirChanged(float)));
-    QObject::connect(&tracer, SIGNAL(writeStatusLogInUi(string&)), &w, SLOT(insertStatusLog(string&)));
-    QObject::connect(&tracer, SIGNAL(writeWarningLogInUi(string&)), &w, SLOT(insertWarningLog(string&)));
-    QObject::connect(&tracer, SIGNAL(writeCriticalLogInUi(string&)), &w, SLOT(insertCriticalLog(string&)));
+    QObject::connect(&pump, SIGNAL(updateInsulinReservoir(float)), &ui, SLOT(insulinAmountInReservoirChanged(float)));
+    QObject::connect(&pump, SIGNAL(updateGlucagonReservoir(float)), &ui, SLOT(glucagonAmountInReservoirChanged(float)));
+    QObject::connect(&tracer, SIGNAL(writeStatusLogInUi(string&)), &ui, SLOT(insertStatusLog(string&)));
+    QObject::connect(&tracer, SIGNAL(writeWarningLogInUi(string&)), &ui, SLOT(insertWarningLog(string&)));
+    QObject::connect(&tracer, SIGNAL(writeCriticalLogInUi(string&)), &ui, SLOT(insertCriticalLog(string&)));
 }
 
 // Checks the operation hours of the mechanical parts (motor) and returns the 

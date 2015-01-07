@@ -22,13 +22,8 @@
 
 class ControlSystem
 {
-    private:
-        Pump pump;
-        Scheduler scheduler;
-        Tracer tracer;
-
     public:
-        ControlSystem(UserInterface w);
+        ControlSystem(UserInterface ui);
 
         // Checks the operation hours of the mechanical parts (motor) and 
         // returns the value in hours. 
@@ -46,6 +41,11 @@ class ControlSystem
 
         // checks the batteries charging state and returns the value in percent
         virtual int checkBatteryStatus();
+
+    private:
+        Pump pump;
+        Scheduler scheduler;
+        Tracer tracer;
 
 };
 

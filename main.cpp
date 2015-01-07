@@ -7,8 +7,13 @@
 //
 // Author:       Sven Sperner, sillyconn@gmail.com
 
+
 #include <QApplication>
 #include "UserInterface.h"
+
+using namespace std;
+
+
 
 /**
  * Initiation of the Userinterface, Humanbody- and Insulinpumpsimulation.
