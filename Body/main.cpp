@@ -195,7 +195,7 @@ int main_offline (void)
 
 
 /* Qts main() - change as needed */
-int main()
+int main_qt()
 {
     cout << "Hello World!" << endl;
     return 0;

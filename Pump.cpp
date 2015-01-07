@@ -153,7 +153,7 @@ struct transmit_bloodsugar {
  ****************************************************************/
 
 
-int main(void) {
+int main_ofPump(void) {
     
     // testing values
     Injecting.injected_insulin = 10.00;
