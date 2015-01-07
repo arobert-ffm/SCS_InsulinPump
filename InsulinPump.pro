@@ -18,7 +18,8 @@ SOURCES +=\
     Pump.cpp \
     Scheduler.cpp \
     Tracer.cpp \
-    UserInterface.cpp
+    UserInterface.cpp \
+    Body.cpp
 
 HEADERS  += \
     HormoneReservoir.h \
