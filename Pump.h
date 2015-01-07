@@ -38,15 +38,17 @@ class Pump : public QObject
         virtual bool getStatus();
         //"main"-function for pump
         //triggered by Scheduler.
-        virtual int runPump();
+        virtual bool runPump();
 
     private:
         // When pump is active injecting insulin the value will be 1, when 
         // injecting glucagon the value will be 2 and when inactive the value 
         // will be 0. 
         int active;
-        float InsulinLevel;
-        float GlucagonLevel;
+        float insulinLevel;
+        float glucagonLevel;
+        //
+        int currentBloodSugarLevel;
         // Injects the insulin into the body.
         // 
         // Parameter:
@@ -76,6 +78,8 @@ class Pump : public QObject
         virtual float getInsulinLevel();
         // Returns the glucagon level in the reservoir.
         virtual float getGlucagonLevel();
+        //returns  current blood sugar level.
+        virtual int getCurrentBloodSugarLevel();
 
     signals:
         // Callback for updating Insulin Reservoir in the UI.
