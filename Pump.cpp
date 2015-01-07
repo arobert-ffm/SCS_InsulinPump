@@ -122,15 +122,11 @@ float Pump::getGlucagonLevel()
 }
 
 //
-//  main.cpp
-//  Pump
+//  Pump.cpp
 //
 //  Created by Johannes Kinzig on 04.01.15.
 //  Copyright (c) 2015 Johannes Kinzig. All rights reserved.
 //
-
-
-
 /****************************************************************
  *               used to store data for receiving               *
  ****************************************************************/
@@ -187,8 +183,6 @@ int main(void) {
         exit(EXIT__FAILURE);
     }
     close(fdes_pump_to_body);
-    
-    
     
     exit(0);
 } /* END_main() */
