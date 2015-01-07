@@ -14,14 +14,12 @@ TEMPLATE = app
 
 SOURCES +=\
     ControlSystem.cpp \
-    HormoneReservoir.cpp \
     Pump.cpp \
     Scheduler.cpp \
     Tracer.cpp \
     UserInterface.cpp
 
 HEADERS  += \
-    HormoneReservoir.h \
     Pump.h \
     Scheduler.h \
     Tracer.h \

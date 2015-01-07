@@ -11,8 +11,8 @@
 #ifndef scheduler_
 #define scheduler_
 
-#include <vector>
-#include <string>
+#include <QSettings>
+#include <QElapsedTimer>
 #include "Pump.h"
 
 
@@ -20,16 +20,25 @@
 class Scheduler
 {
     public:
+        Scheduler();
+        ~Scheduler();
+
         // answers ControlSystem’s call for checkScheduler()
-        virtual void getStatus();
+        virtual bool getStatus();
 
     private:
         int TimerResetValueSec;
 
-        // Counts the operation hours and notices the user when an inspection 
-        // is needed or when system lifetime (because of mechanical outwear) is 
-        // reached. 
-        float TotalOperationHours;
+        // Times of the Scheduler for measuring operation hours
+        QElapsedTimer Timer;
+
+        // File for saving total operation time
+        QSettings *SaveFile;
+
+        // Counter of operation time for noticing the user when an inspection
+        // is needed or when system lifetime (because of mechanical outwear) is
+        // reached.
+        qint64 TotalOperationTime;
 
         // triggers the pump which then checks the blood sugar level
         virtual bool triggerPump();
