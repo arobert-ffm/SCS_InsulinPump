@@ -7,7 +7,6 @@
 // 
 // Description:
 
-
 #ifndef pump_
 #define pump_
 
@@ -37,6 +36,9 @@ class Pump : public QObject
         // Checks the entire pump (reservoir, mechanical parts) and returns 
         // “True” when everything is working fine. 
         virtual bool getStatus();
+        //"main"-function for pump
+        //triggered by Scheduler.
+        virtual runPump();
 
     private:
         // When pump is active injecting insulin the value will be 1, when 
