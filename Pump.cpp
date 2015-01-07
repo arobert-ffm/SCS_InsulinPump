@@ -121,6 +121,11 @@ float Pump::getGlucagonLevel()
 {
 }
 
+//runable for Pump. Gets triggered by Scheduler.
+int Pump::runPump(){
+    return 0;
+}
+
 //
 //  Pump.cpp
 //

@@ -38,7 +38,7 @@ class Pump : public QObject
         virtual bool getStatus();
         //"main"-function for pump
         //triggered by Scheduler.
-        virtual runPump();
+        virtual int runPump();
 
     private:
         // When pump is active injecting insulin the value will be 1, when 
