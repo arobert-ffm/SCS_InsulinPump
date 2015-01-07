@@ -25,23 +25,26 @@ class Scheduler
 
     private:
         int TimerResetValueSec;
+
         // Counts the operation hours and notices the user when an inspection 
         // is needed or when system lifetime (because of mechanical outwear) is 
         // reached. 
         float TotalOperationHours;
+
         // triggers the pump which then checks the blood sugar level
         virtual bool triggerPump();
+
         // resets the timer and sets the countdown time according to parameter
         virtual bool resetTimer(int time_min);
+
         // Starts the counter for operation hours and returns “True” when 
         // successfully started. The value will be written to 
-        // “TotalOperationHours”. 
-        // 
+        // “TotalOperationHours”.  
         virtual bool startOperationHoursCounter();
+
         // Stops the counter for operation hours and returns “True” when 
         // successfully stopped. The value will be written to 
         // “TotalOperationHours”. 
-        // 
         virtual bool stopOperationHoursCounter();
 
 };

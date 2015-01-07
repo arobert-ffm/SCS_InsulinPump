@@ -25,13 +25,17 @@ class ControlSystem
         // Checks the operation hours of the mechanical parts (motor) and 
         // returns the value in hours. 
         virtual int checkOperationHours();
+
         // Checks the scheduler for correct operation and returns “True” when 
         // everything is working fine! 
         virtual bool checkScheduler();
+
         // Checks the hormone reservoir and returns “True” when everything is fine
         virtual bool checkPump();
+
         // Checks the tracer and returns “True” when everything is fine!
         virtual bool checkTracer();
+
         // checks the batteries charging state and returns the value in percent
         virtual int checkBatteryStatus();
 

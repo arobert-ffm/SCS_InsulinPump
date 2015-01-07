@@ -27,8 +27,7 @@ HEADERS  += \
     Scheduler.h \
     Tracer.h \
     UserInterface.h \
-    ControlSystem.h \
-    Body.h
+    ControlSystem.h
 
 FORMS    += \
     UserInterface.ui
