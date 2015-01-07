@@ -65,8 +65,9 @@ struct transmit_bloodsugar {
  ****************************************************************/
 
 // constructor
-Body::Body(void){
-    BloodsugarLevel = 110.00;
+Body::Body(float BSL, int constant){
+    BloodsugarLevel = BSL; // unit: mg/dL
+    insulin_constant = constant; // unit: mg/dL sinking per iteration => one iteration estimated as 0.5 hours
 };
 
 // destructor
@@ -78,7 +79,7 @@ Body::~Body(void){
 // changes the blood sugar level;
 // increasing: if True: rising; if False: falling
 // strength: the factor the BSL is rising or falling
-bool Body::changeBloodSugarLevel(float strength, bool increasing) {
+bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insulin_constant) {
     /******************************************************
      *   defined 3 levels for increasing/decreasing:      *
      *      Level 1: calm   --> 1.03                      *
@@ -86,40 +87,26 @@ bool Body::changeBloodSugarLevel(float strength, bool increasing) {
      *      Level 3: fast   --> 1.09                      *
      ******************************************************/
     
-    
     /**********************************
      * deciding if rising or falling  *
      **********************************/
     
     // rising
     if (increasing == true) {
-        this->BloodsugarLevel = this->BloodsugarLevel * strength;
+        this->BloodsugarLevel = this->BloodsugarLevel * strength; // body factor influences BSL
+        
+        if (use_insulin_constant == true) {
+            this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
+        }
     }
-    
-    
+
     // falling
     if (increasing == false) {
         this->BloodsugarLevel = this->BloodsugarLevel / strength;
+        if (use_insulin_constant == true) {
+            this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
+        }
     }
-    
-    return true;
-}
-
-// Reacts to insulin and returns “True” when done.
-//
-// Parameter:
-// - amount_injected: the amount of insulin injected
-bool Body::reactToInsulin(float amount_injected)
-{
-    return true;
-}
-
-// Reacts to glucagon and returns “True” when done.
-//
-// Parameter:
-// - amount: the amount of glucagon injected
-bool Body::reactToGlucagon(float amount)
-{
     return true;
 }
 
@@ -131,7 +118,7 @@ float Body::getBloodSugarLevel() {
     return this->BloodsugarLevel;
 }
 
-Body body;
+Body body(110.00, 5);
 
 // simulating BSL - should be inside a seperate thread
 int main(void) {
@@ -140,7 +127,7 @@ int main(void) {
     cout << body.getBloodSugarLevel();
     cout << "\n";
     
-    body.changeBloodSugarLevel(1.03, false);
+    body.changeBloodSugarLevel(1.03, false, 0);
     return 0;
 }
 
