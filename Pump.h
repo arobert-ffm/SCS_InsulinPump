@@ -89,12 +89,17 @@ class Pump : public QObject
         // Calculates the amount of glucagon needed based on the blood sugar levels.
         //
         // Parameter:
-        // - targetBloodSugarLevel: user defined value to raise or reduce blood sugar level to, e.g. 90mg/dl
-        // - currentBloodSugarLevel: current value of BSL, e.g. 160mg/dl
-        // - hsf: hormon sensitivity factor. Factor which indicates how much blood sugar one unit of used hormone
-        //        raises or reduces , e.g. 1:5 -> 1 unit hormone raises/reduces 5mg/dl glucose.
-        // - hormone: insulin or glucagon
-        virtual int calculateNeededHormone(int targetBloodSugarLevel, float currentBloodSugarLevel, int hsf, string &hormone);
+        // - targetBloodSugarLevel:     user defined value to raise or reduce blood sugar level to,
+        //                              e.g. 90mg/dl -> targetBloodSugarLevel = 90;
+        //
+        // - currentBloodSugarLevel:    current value of BSL, e.g. 160mg/dl -> currentBloodSugarLevel = 160;
+        //
+        // - hsf:                       hormon sensitivity factor. Factor which indicates how much blood sugar
+        //                              one unit of used hormone raises or reduces , e.g. 1:5 -> 1 unit hormone
+        //                              raises/reduces 5mg/dl glucose -> hsf = 5;
+        //
+        // - hormone:                   what sort of hormone is used, e.g. insulin or glucagon.
+        virtual int calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone);
 /*
  * END
  */

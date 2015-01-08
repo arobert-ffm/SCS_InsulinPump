@@ -126,7 +126,7 @@ float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugar
  * BEGIN <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
  */
 //see header!
-int Pump::calculateNeededHormone(int targetBloodSugarLevel, float currentBloodSugarLevel, int hsf, string& hormone)
+int Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
 {
     int difference, fictInsUnit,fictGlucUnit;
     string err = "Error! No valid hormone found!";
