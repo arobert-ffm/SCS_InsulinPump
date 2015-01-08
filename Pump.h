@@ -94,7 +94,7 @@ class Pump : public QObject
         // - hsf: hormon sensitivity factor. Factor which indicates how much blood sugar one unit of used hormone
         //        raises or reduces , e.g. 1:5 -> 1 unit hormone raises/reduces 5mg/dl glucose.
         // - hormone: insulin or glucagon
-        virtual int calculateNeededHormone(int targetBloodSugarLevel, float currentBloodSugarLevel, int hsf, string hormone);
+        virtual int calculateNeededHormone(int targetBloodSugarLevel, float currentBloodSugarLevel, int hsf, string &hormone);
 /*
  * END
  */
