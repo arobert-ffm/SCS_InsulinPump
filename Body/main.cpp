@@ -92,20 +92,30 @@ bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insul
      **********************************/
     
     // rising
-    if (increasing == true) {
-        this->BloodsugarLevel = this->BloodsugarLevel * strength; // body factor influences BSL
+    if (increasing == true && use_insulin_constant == true) {
+        // body factor influences BSL
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
         
-        if (use_insulin_constant == true) {
-            this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
-        }
+        // injected Insulin influences BSL per 0.5 hours
+        this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant;
+    }
+    else if (increasing == true && use_insulin_constant == false) {
+        // body factor influences BSL
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
     }
 
     // falling
-    if (increasing == false) {
+    else if (increasing == false && use_insulin_constant == true) {
+        // body factor influences BSL
         this->BloodsugarLevel = this->BloodsugarLevel / strength;
-        if (use_insulin_constant == true) {
-            this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
-        }
+        
+        // injected Insulin influences BSL per 0.5 hours
+        this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
+    }
+    
+    else if (increasing == false && use_insulin_constant == false) {
+        // body factor influences BSL
+        this->BloodsugarLevel = this->BloodsugarLevel / strength;
     }
     return true;
 }
@@ -123,8 +133,27 @@ Body body(110.00, 5); // generate Body object
 // simulating BSL - should be inside a seperate thread
 int main(void) {
     cout << "Init value for BloodSugarLevel: ";
+    int FU = 5; // fictive units of insulin - just for testing in this case
+    int iterations = 15;
     
-    cout << body.getBloodSugarLevel();
+    
+    
+    while ((iterations--) != 0) {
+        if (FU > 0) {
+            body.changeBloodSugarLevel(1.03, true, true);
+            FU--; // just for testing in this case
+        }
+        
+        else if (FU == 0) {
+            body.changeBloodSugarLevel(1.03, true, false);
+        }
+        
+        cout << body.getBloodSugarLevel();
+        cout << "\n";
+        
+    }
+    
+    
     cout << "\n";
     
     // sample method invocation, should run in loop
