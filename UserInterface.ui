@@ -6,419 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
-    <height>720</height>
+    <width>860</width>
+    <height>616</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Insulinpump</string>
   </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QGroupBox" name="groupBoxBloodSugar">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>821</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>Bloodsugar level</string>
-    </property>
-    <widget class="QGroupBox" name="groupBoxCurrent">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>271</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Current</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <widget class="QWidget" name="horizontalLayoutWidget_21">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>111</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutCurrentTime">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="mCurrentTimeTitle">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Time:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="mCurrentTimeValue">
-         <property name="text">
-          <string>19:05</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget_22">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>60</y>
-        <width>111</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutCurrentLevel">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="mCurrentLevelTitle">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Level:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="mCurrentLevelValue">
-         <property name="text">
-          <string>90</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="groupBoxPrevious1">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>791</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Previous</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <widget class="QWidget" name="horizontalLayoutWidget_23">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>111</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutPreviousTime1">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="mPrevious1TimeTitle">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Time:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="mPrevious1TimeValue">
-         <property name="text">
-          <string>18:35</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget_24">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>60</y>
-        <width>111</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutPreviousLevel1">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="mPrevious1LevelTitle">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Level:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="mPrevious1LevelValue">
-         <property name="text">
-          <string>70</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="groupBoxPrevious2">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>280</y>
-       <width>791</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Previous</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <widget class="QWidget" name="horizontalLayoutWidget_25">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>111</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutPreviousTime2">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="mPrevious2TimeTitle">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Time:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="mPrevious2TimeValue">
-         <property name="text">
-          <string>18:05</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget_26">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>60</y>
-        <width>111</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayoutPreviousLevel2">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="sizeConstraint">
-        <enum>QLayout::SetDefaultConstraint</enum>
-       </property>
-       <item>
-        <widget class="QLabel" name="mPrevious2LevelTitle">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Level:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="mPrevious2LevelValue">
-         <property name="text">
-          <string>75</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_Increase">
-     <property name="geometry">
-      <rect>
-       <x>320</x>
-       <y>40</y>
-       <width>481</width>
-       <height>80</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Increase</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <widget class="QPushButton" name="mIncreaseButton">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>30</y>
-        <width>141</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Increase level</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="mIncreaseValue">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>81</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </widget>
    <widget class="QListWidget" name="mMessageList">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>590</y>
+      <x>20</x>
+      <y>405</y>
       <width>821</width>
-      <height>91</height>
+      <height>191</height>
      </rect>
     </property>
     <property name="font">
@@ -433,8 +44,8 @@
    <widget class="QGroupBox" name="groupBoxHormoneReservoir">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>20</x>
+      <y>20</y>
       <width>421</width>
       <height>121</height>
      </rect>
@@ -444,14 +55,17 @@
       <pointsize>12</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="title">
      <string>Hormone Reservoir</string>
     </property>
     <widget class="QWidget" name="horizontalLayoutWidget_27">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>30</y>
+       <x>230</x>
+       <y>40</y>
        <width>181</width>
        <height>21</height>
       </rect>
@@ -500,8 +114,8 @@
     <widget class="QWidget" name="horizontalLayoutWidget_28">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>30</y>
+       <x>30</x>
+       <y>40</y>
        <width>161</width>
        <height>21</height>
       </rect>
@@ -550,8 +164,8 @@
     <widget class="QPushButton" name="mGlucagonRefillButton">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>70</y>
+       <x>230</x>
+       <y>80</y>
        <width>181</width>
        <height>31</height>
       </rect>
@@ -563,8 +177,8 @@
     <widget class="QPushButton" name="mInsulinRefillButton">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>70</y>
+       <x>30</x>
+       <y>80</y>
        <width>161</width>
        <height>31</height>
       </rect>
@@ -577,10 +191,10 @@
    <widget class="QGroupBox" name="groupBoxInfo">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>10</y>
+      <x>450</x>
+      <y>20</y>
       <width>391</width>
-      <height>61</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -594,8 +208,8 @@
     <widget class="QWidget" name="horizontalLayoutWidget_29">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>30</y>
+       <x>30</x>
+       <y>40</y>
        <width>171</width>
        <height>21</height>
       </rect>
@@ -644,8 +258,8 @@
     <widget class="QWidget" name="horizontalLayoutWidget_30">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>30</y>
+       <x>260</x>
+       <y>40</y>
        <width>121</width>
        <height>21</height>
       </rect>
@@ -692,10 +306,161 @@
      </layout>
     </widget>
    </widget>
+   <widget class="QGroupBox" name="groupBoxBloodsugar">
+    <property name="geometry">
+     <rect>
+      <x>19</x>
+      <y>190</y>
+      <width>821</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Bloodsugar Level</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <widget class="QLCDNumber" name="lcdNumber">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>40</y>
+       <width>81</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Segoe UI Semibold</family>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="smallDecimalPoint">
+      <bool>false</bool>
+     </property>
+     <property name="digitCount">
+      <number>3</number>
+     </property>
+     <property name="segmentStyle">
+      <enum>QLCDNumber::Flat</enum>
+     </property>
+    </widget>
+    <widget class="QSlider" name="mBloodSugarValue">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>110</y>
+       <width>611</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSlider::groove:horizontal {
+     border: 1px solid rgb(0, 0, 0);
+     height: 7px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+     background: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:1, stop:0 rgba(255, 0, 0, 255), stop:0.350236 rgba(255, 0, 0, 255), stop:0.354953 rgba(0, 255, 0, 255), stop:0.596507 rgba(0, 255, 0, 255), stop:0.601103 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 0, 255));
+     margin: 2px 0;
+ }
+
+ QSlider::handle:horizontal {
+     background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);
+     border: 1px solid #5c5c5c;
+     width: 8px;
+     margin: -7px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+     border-radius: 1px;
+ }</string>
+     </property>
+     <property name="maximum">
+      <number>200</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::NoTicks</enum>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="mMessageListTitle">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>380</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Messages</string>
+    </property>
+   </widget>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>mBloodSugarValue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lcdNumber</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>285</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>227</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mBloodSugarValue</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>lcdNumber</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>320</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>423</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
