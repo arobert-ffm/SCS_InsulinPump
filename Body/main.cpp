@@ -75,17 +75,14 @@ Body::~Body(void){
     
 }
 
-// changes the blood sugar level;
-// increasing: if True: rising; if False: falling
-// strength: the factor the BSL is rising or falling
+/******************************************************
+ *   defined 3 levels for increasing/decreasing:      *
+ *      Level 1: calm   --> 1.03                      *
+ *      Level 2: middle --> 1.06                      *
+ *      Level 3: fast   --> 1.09                      *
+ ******************************************************/
+
 bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insulin_constant) {
-    
-    /******************************************************
-     *   defined 3 levels for increasing/decreasing:      *
-     *      Level 1: calm   --> 1.03                      *
-     *      Level 2: middle --> 1.06                      *
-     *      Level 3: fast   --> 1.09                      *
-     ******************************************************/
     
     /**********************************
      * deciding if rising or falling  *
@@ -119,7 +116,15 @@ bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insul
     }
     return true;
 }
+/******************************************************
+ *                     END                            *
+ ******************************************************/
 
+
+/******************************************************
+ *      declaring getter and setter methods           *
+ *      for        private var BloodsugarLevel        *
+ ******************************************************/
 void Body::setBloodSugarLevel(float BSL) {
     this->BloodsugarLevel = BSL;
 }
@@ -127,16 +132,28 @@ void Body::setBloodSugarLevel(float BSL) {
 float Body::getBloodSugarLevel() {
     return this->BloodsugarLevel;
 }
+/******************************************************
+ *                     END                            *
+ ******************************************************/
+
 
 Body body(110.00, 5); // generate Body object
 
+
+
 // simulating BSL - should be inside a seperate thread
 int main(void) {
-    cout << "Init value for BloodSugarLevel: ";
+    cout << "\n Start \n";
+    /******************************************************
+     *            Vars and values for testing             *
+     ******************************************************/
+    
+
     int FU = 5; // fictive units of insulin - just for testing in this case
     int iterations = 15;
     
-    
+    cout << "Init value for BloodSugarLevel: ";
+
     
     while ((iterations--) != 0) {
         if (FU > 0) {
@@ -153,11 +170,12 @@ int main(void) {
         
     }
     
+    /******************************************************
+     *                     END                            *
+     ******************************************************/
     
-    cout << "\n";
     
-    // sample method invocation, should run in loop
-    //body.changeBloodSugarLevel(1.03, false, 0);
+    cout << "\n End \n";
     return 0;
 }
 
