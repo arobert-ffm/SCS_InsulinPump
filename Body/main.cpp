@@ -18,18 +18,20 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <thread>
+
 using namespace std;
 
 #define BUFLEN          100
 #define EXIT__FAILURE   -1
 
-int     main            (void);
-int     main_offline    (void); // is working!
+int     main                        (void);
+int     communication_via_pipes     (void); // is working!
+int     test_thread01               (void); // thread developed right now
 
 int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
-char    buffer;
-int     i;
+int     i; // needed for communication over pipes
 
 //
 //  Body.cpp
@@ -139,15 +141,24 @@ float Body::getBloodSugarLevel() {
 
 Body body(110.00, 5); // generate Body object
 
-
+int main(void) {
+    
+    cout << "Start\n";
+    
+    thread first_thread(test_thread01);
+    
+    first_thread.join();
+    
+    cout << "End\n";
+    return 0;
+}
 
 // simulating BSL - should be inside a seperate thread
-int main(void) {
-    cout << "\n Start \n";
+int test_thread01(void) {
+    cout << "\nThread started\n";
     /******************************************************
      *            Vars and values for testing             *
      ******************************************************/
-    
 
     int FU = 5; // fictive units of insulin - just for testing in this case
     int iterations = 15;
@@ -157,25 +168,23 @@ int main(void) {
     
     while ((iterations--) != 0) {
         if (FU > 0) {
-            body.changeBloodSugarLevel(1.03, true, true);
+            body.changeBloodSugarLevel(1.03, false, true);
             FU--; // just for testing in this case
         }
         
         else if (FU == 0) {
-            body.changeBloodSugarLevel(1.03, true, false);
+            body.changeBloodSugarLevel(1.03, false, false);
         }
         
         cout << body.getBloodSugarLevel();
         cout << "\n";
         
     }
-    
     /******************************************************
      *                     END                            *
      ******************************************************/
     
-    
-    cout << "\n End \n";
+    cout << "\nThread ended\n";
     return 0;
 }
 
