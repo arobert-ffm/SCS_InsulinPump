@@ -123,19 +123,22 @@ float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugar
 }
 
 /*
+ * author: Markus
  * BEGIN <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
  */
 //see header!
-int Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
+float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
 {
-    int difference, fictInsUnit,fictGlucUnit;
+    int difference; float fictInsUnit=0,fictGlucUnit=0;
     string err = "Error! No valid hormone found!";
     string ins = "insulin"; string gluc= "glucagon";
 
+//    cout << "hallo pumpe!" << endl; //<<-- for testing
     if (!hormone.empty())
     {
         if(hormone.compare(ins))
         {
+//            cout << "insulin" << endl; //<<-- for testing
             difference = currentBloodSugarLevel - targetBloodSugarLevel;
             fictInsUnit = difference / hsf;
             return fictInsUnit;
@@ -143,11 +146,13 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSuga
 
         else if(hormone.compare(gluc))
         {
+//            cout << "glucagon" << endl; //<<-- for testing
             difference = targetBloodSugarLevel - currentBloodSugarLevel;
             fictInsUnit = difference / hsf;
             return fictGlucUnit;
         }
     }
+//    cout << "err" + err << endl; //<<-- for testing
     tracer.writeCriticalLog(err);
     return -1;
 }
@@ -256,39 +261,39 @@ struct transmit_bloodsugar {
 /*
  * RUNABLE
  */
-int main_ofPump(void) {
+// int main_ofPump(void) {
     
-    // testing values
-    Injecting.injected_insulin = 10.00;
-    Injecting.injected_glucagon = 90.00;
+//    // testing values
+//    Injecting.injected_insulin = 10.00;
+//    Injecting.injected_glucagon = 90.00;
     
-    // open pipe Body --> Pump
-    if((fdes_body_to_pump=open("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",O_RDONLY))==(-1)) {
-        printf("Failure 'open pipe'");
-        exit(-1);
-    }
+//    // open pipe Body --> Pump
+//    if((fdes_body_to_pump=open("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",O_RDONLY))==(-1)) {
+//        printf("Failure 'open pipe'");
+//        exit(-1);
+//    }
     
-    // open pipe Pump --> Body
-    if((fdes_pump_to_body=open("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",O_WRONLY))==(-1)) {
-        printf("Failure 'open pipe'");
-        exit(-1);
-    }
+//    // open pipe Pump --> Body
+//    if((fdes_pump_to_body=open("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",O_WRONLY))==(-1)) {
+//        printf("Failure 'open pipe'");
+//        exit(-1);
+//    }
     
-    // read Body --> Pump
-    read(fdes_body_to_pump, &BodyStatus, BUFLEN);
-    cout << BodyStatus.bloodSugarLevel;
-    cout << "\n";
-    close(fdes_body_to_pump);
+//    // read Body --> Pump
+//    read(fdes_body_to_pump, &BodyStatus, BUFLEN);
+//    cout << BodyStatus.bloodSugarLevel;
+//    cout << "\n";
+//    close(fdes_body_to_pump);
     
-    // write Pump --> Body
-    if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
-        printf("Fehler 'write-call'");
-        exit(EXIT__FAILURE);
-    }
-    close(fdes_pump_to_body);
-    
-    exit(0);
-} /* END_main() */
+//    // write Pump --> Body
+//    if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
+//        printf("Fehler 'write-call'");
+//        exit(EXIT__FAILURE);
+//    }
+//    close(fdes_pump_to_body);
+
+//    exit(0);
+// } /* END_main() */
 
 
 
