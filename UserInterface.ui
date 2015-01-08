@@ -682,7 +682,7 @@
          </font>
         </property>
         <property name="text">
-         <string>19:07</string>
+         <string/>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
