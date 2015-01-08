@@ -133,22 +133,22 @@ int main(void) {
 }
 
 // communication via pipes
-int main_offline (void) {
+int communication_via_pipes (void) {
     
     BodyStatus.bloodSugarLevel = 29.00;
     
     // generate pipe for Body --> Pump
-    mknod("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",S_IFIFO | 0666,0);
+    mknod("body_to_pump",S_IFIFO | 0666,0);
     
-    if((fdes_body_to_pump=open("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",O_WRONLY))==(-1)) {
+    if((fdes_body_to_pump=open("body_to_pump",O_WRONLY))==(-1)) {
         puts("Fehler 'open pipe'");
         exit(EXIT__FAILURE);
     }
     
     // generate pipe for Pump --> Body
-    mknod("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",S_IFIFO | 0666,0);
+    mknod("pump_to_body",S_IFIFO | 0666,0);
     
-    if((fdes_pump_to_body=open("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",O_RDONLY))==(-1)) {
+    if((fdes_pump_to_body=open("pump_to_body",O_RDONLY))==(-1)) {
         puts("Fehler 'open pipe'");
         exit(EXIT__FAILURE);
     }
