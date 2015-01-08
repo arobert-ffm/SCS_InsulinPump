@@ -16,14 +16,16 @@ using namespace std;
 
 
 
-ControlSystem::ControlSystem(UserInterface ui)
+ControlSystem::ControlSystem(UserInterface* ui)
 {
     // Init UI Callbacks
-    QObject::connect(&pump, SIGNAL(updateInsulinReservoir(float)), &ui, SLOT(insulinAmountInReservoirChanged(float)));
-    QObject::connect(&pump, SIGNAL(updateGlucagonReservoir(float)), &ui, SLOT(glucagonAmountInReservoirChanged(float)));
-    QObject::connect(&tracer, SIGNAL(writeStatusLogInUi(string&)), &ui, SLOT(insertStatusLog(string&)));
-    QObject::connect(&tracer, SIGNAL(writeWarningLogInUi(string&)), &ui, SLOT(insertWarningLog(string&)));
-    QObject::connect(&tracer, SIGNAL(writeCriticalLogInUi(string&)), &ui, SLOT(insertCriticalLog(string&)));
+    QObject::connect(&pump, SIGNAL(updateInsulinReservoir(float)), ui, SLOT(insulinAmountInReservoirChanged(float)));
+    QObject::connect(&pump, SIGNAL(updateGlucagonReservoir(float)), ui, SLOT(glucagonAmountInReservoirChanged(float)));
+    QObject::connect(&tracer, SIGNAL(writeStatusLogInUi(string&)), ui, SLOT(insertStatusLog(string&)));
+    QObject::connect(&tracer, SIGNAL(writeWarningLogInUi(string&)), ui, SLOT(insertWarningLog(string&)));
+    QObject::connect(&tracer, SIGNAL(writeCriticalLogInUi(string&)), ui, SLOT(insertCriticalLog(string&)));
+    QObject::connect(ui, SIGNAL(refillInsulinInPump()), &pump, SLOT(refillInsulin()));
+    QObject::connect(ui, SIGNAL(refillGlucagonInPump()), &pump, SLOT(refillGlucagon()));
 }
 
 // Checks the operation hours of the mechanical parts (motor) and returns the 

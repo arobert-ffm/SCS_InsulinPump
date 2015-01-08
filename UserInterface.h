@@ -52,6 +52,26 @@ public slots:
      */
     void insertCriticalLog(string& message);
 
+private slots:
+    /**
+     * Refill the Insulinreservoir in the Pump
+     */
+    void on_mInsulinRefillButton_clicked();
+    /**
+     * Refill the Glucagonreservoir in the Pump
+     */
+    void on_mGlucagonRefillButton_clicked();
+
+signals:
+    /**
+     * Notifys the Pump to refill the Insulin Reservoir
+     */
+    void refillInsulinInPump();
+    /**
+     * Notifys the Pump to refill the Glucagon Reservoir
+     */
+    void refillGlucagonInPump();
+
 private:
     Ui::UserInterface *ui;
 };
