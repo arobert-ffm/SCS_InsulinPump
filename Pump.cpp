@@ -265,41 +265,43 @@ struct transmit_bloodsugar {
  *                          END                                 *
  ****************************************************************/
 
+/* RUNABLE */
 /*
- * RUNABLE
- */
-//int main_ofPump(void) {
+int main_ofPump(void) {
     
-//    // testing values
-//    Injecting.injected_insulin = 10.00;
-//    Injecting.injected_glucagon = 90.00;
+    // testing values
+    Injecting.injected_insulin = 10.00;
+    Injecting.injected_glucagon = 90.00;
     
-//    // open pipe Body --> Pump
-//    if((fdes_body_to_pump=open("/Users/johanneskinzig/Documents/XcodeDev/body_to_pump",O_RDONLY))==(-1)) {
-//        printf("Failure 'open pipe'");
-//        exit(-1);
-//    }
+    // open pipe Body --> Pump
+    if((fdes_body_to_pump=open("body_to_pump",O_RDONLY))==(-1)) {
+        printf("Failure 'open pipe'");
+        exit(-1);
+    }
     
-//    // open pipe Pump --> Body
-//    if((fdes_pump_to_body=open("/Users/johanneskinzig/Documents/XcodeDev/pump_to_body",O_WRONLY))==(-1)) {
-//        printf("Failure 'open pipe'");
-//        exit(-1);
-//    }
+    // open pipe Pump --> Body
+    if((fdes_pump_to_body=open("pump_to_body",O_WRONLY))==(-1)) {
+        printf("Failure 'open pipe'");
+        exit(-1);
+    }
     
-//    // read Body --> Pump
-//    read(fdes_body_to_pump, &BodyStatus, BUFLEN);
-//    cout << BodyStatus.bloodSugarLevel;
-//    cout << "\n";
-//    close(fdes_body_to_pump);
+    // read Body --> Pump
+    read(fdes_body_to_pump, &BodyStatus, BUFLEN);
+    cout << BodyStatus.bloodSugarLevel;
+    cout << "\n";
+    close(fdes_body_to_pump);
     
-//    // write Pump --> Body
-//    if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
-//        printf("Fehler 'write-call'");
-//        exit(EXIT__FAILURE);
-//    }
-//    close(fdes_pump_to_body);
-//    exit(0);
-//} /* END_main() */
+    // write Pump --> Body
+    if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
+        printf("Fehler 'write-call'");
+        exit(EXIT__FAILURE);
+    }
+    close(fdes_pump_to_body);
+    exit(0);
+}
+*/
+
+
 
 
 
