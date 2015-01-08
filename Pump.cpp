@@ -129,16 +129,22 @@ float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugar
 //see header!
 float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
 {
-    int difference; float fictInsUnit=0,fictGlucUnit=0;
+    int difference;
+    float fictInsUnit=0,fictGlucUnit=0;
     string err = "Error! No valid hormone found!";
-    string ins = "insulin"; string gluc= "glucagon";
+    string ins = "insulin";
+    string gluc= "glucagon";
 
-//    cout << "hallo pumpe!" << endl; //<<-- for testing
+    //test prints
+    cout << "hallo pumpe!" << endl; //<<-- for testing
+    cout << "variable ausgeben: \n" << "tBSL: " << targetBloodSugarLevel << " cBSL: " << currentBloodSugarLevel << " HSF: " << hsf << " Hormon: " << hormone << endl;
+
     if (!hormone.empty())
     {
         if(hormone.compare(ins))
         {
-//            cout << "insulin" << endl; //<<-- for testing
+            cout << "verzweigung fuer insulin. erhaltenes hormon: " << hormone << endl;
+            cout << "insulin berechnen" << endl; //<<-- for testing
             difference = currentBloodSugarLevel - targetBloodSugarLevel;
             fictInsUnit = difference / hsf;
             return fictInsUnit;
@@ -146,13 +152,14 @@ float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSu
 
         else if(hormone.compare(gluc))
         {
-//            cout << "glucagon" << endl; //<<-- for testing
+            cout << "verzweigung fuer glucagon. erhaltenes hormon: " << hormone << endl;
+            cout << "glucagon berechnen" << endl; //<<-- for testing
             difference = targetBloodSugarLevel - currentBloodSugarLevel;
             fictInsUnit = difference / hsf;
             return fictGlucUnit;
         }
     }
-//    cout << "err" + err << endl; //<<-- for testing
+    cout << "err" + err << endl; //<<-- for testing
     tracer.writeCriticalLog(err);
     return -1;
 }
@@ -261,7 +268,7 @@ struct transmit_bloodsugar {
 /*
  * RUNABLE
  */
-// int main_ofPump(void) {
+int main_ofPump(void) {
     
 //    // testing values
 //    Injecting.injected_insulin = 10.00;
@@ -291,9 +298,14 @@ struct transmit_bloodsugar {
 //        exit(EXIT__FAILURE);
 //    }
 //    close(fdes_pump_to_body);
+    Pump pumptest;
 
-//    exit(0);
-// } /* END_main() */
+    string ins = "insulin", gluc="glucagon", null_str="", horm="";
+    int tBSL, cBSL, hsf;
+    tBSL = 110; cBSL = 230; hsf=5; horm=gluc;
+    cout << "ausgabe pumptest: " << pumptest.calculateNeededHormone(tBSL,cBSL,hsf,horm) << " " << endl;
+    exit(0);
+} /* END_main() */
 
 
 
