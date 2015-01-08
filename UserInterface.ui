@@ -47,7 +47,7 @@
       <x>20</x>
       <y>20</y>
       <width>441</width>
-      <height>121</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="font">
@@ -61,111 +61,11 @@
     <property name="title">
      <string>Hormone Reservoir</string>
     </property>
-    <widget class="QWidget" name="horizontalLayoutWidget_27">
-     <property name="geometry">
-      <rect>
-       <x>230</x>
-       <y>40</y>
-       <width>181</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayoutGlucagon">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="mGlucagonReservoirTitle">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Glucagon reservoir:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="mGlucagonReservoirValue">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="horizontalLayoutWidget_28">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>40</y>
-       <width>161</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayoutInsulin">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="mInsulinReservoirTitle">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Insulin reservoir:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="mInsulinReservoirValue">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
     <widget class="QPushButton" name="mGlucagonRefillButton">
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>80</y>
+       <y>110</y>
        <width>181</width>
        <height>31</height>
       </rect>
@@ -178,13 +78,123 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>80</y>
+       <y>110</y>
        <width>161</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>Refill Insulin</string>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="mInsulinProgressBar">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>30</y>
+       <width>71</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar {
+     border: 1px solid grey;
+     border-radius: 4px;
+	 background-color: rgb(213, 213, 213);
+ }
+
+ QProgressBar::chunk {
+     background: rgb(0, 210, 0);
+ }</string>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="mGlucagonProgressBar">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>30</y>
+       <width>71</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar {
+     border: 1px solid grey;
+     border-radius: 4px;
+	 background-color: rgb(213, 213, 213);
+ }
+
+ QProgressBar::chunk {
+     background: rgb(0, 210, 0);
+ }</string>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="invertedAppearance">
+      <bool>false</bool>
+     </property>
+     <property name="textDirection">
+      <enum>QProgressBar::TopToBottom</enum>
+     </property>
+     <property name="format">
+      <string notr="true">%p%</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="mInsulinReservoirValue">
+     <property name="geometry">
+      <rect>
+       <x>125</x>
+       <y>50</y>
+       <width>41</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="mGlucagonReservoirValue">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>50</y>
+       <width>41</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </widget>
@@ -473,11 +483,11 @@ QProgressBar::chunk {
    <hints>
     <hint type="sourcelabel">
      <x>285</x>
-     <y>282</y>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>436</x>
-     <y>227</y>
+     <y>250</y>
     </hint>
    </hints>
   </connection>
@@ -489,11 +499,43 @@ QProgressBar::chunk {
    <hints>
     <hint type="sourcelabel">
      <x>320</x>
-     <y>276</y>
+     <y>320</y>
     </hint>
     <hint type="destinationlabel">
      <x>423</x>
-     <y>240</y>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mInsulinProgressBar</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>mInsulinReservoirValue</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>95</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mGlucagonProgressBar</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>mGlucagonReservoirValue</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>305</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>

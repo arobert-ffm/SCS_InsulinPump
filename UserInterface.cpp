@@ -34,7 +34,26 @@ UserInterface::~UserInterface()
  */
 void UserInterface::insulinAmountInReservoirChanged(float amount)
 {
-    ui->mInsulinReservoirValue->setText(QString::number(amount));
+    // Update Color
+    if (amount < 50 && amount >= 25)
+    {
+        ui->mInsulinProgressBar->setStyleSheet(ui->mInsulinProgressBar->property("defaultStyleSheet").toString() +
+                                                   "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
+                                                    "QProgressBar::chunk { background: rgb(240, 240, 0); }");
+    } else if(amount < 25)
+    {
+        ui->mInsulinProgressBar->setStyleSheet(ui->mInsulinProgressBar->property("defaultStyleSheet").toString() +
+                                                   "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
+                                                    "QProgressBar::chunk { background: rgb(255, 0, 0); }");
+    } else
+    {
+        ui->mInsulinProgressBar->setStyleSheet(ui->mInsulinProgressBar->property("defaultStyleSheet").toString() +
+                                                   "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
+                                                    "QProgressBar::chunk { background: rgb(0, 210, 0); }");
+    }
+
+    // Set Amount
+    ui->mInsulinProgressBar->setValue(amount);
 }
 
 /**
@@ -44,7 +63,26 @@ void UserInterface::insulinAmountInReservoirChanged(float amount)
  */
 void UserInterface::glucagonAmountInReservoirChanged(float amount)
 {
-    ui->mGlucagonReservoirValue->setText(QString::number(amount));
+    // Update Color
+    if (amount < 50 && amount >= 25)
+    {
+        ui->mGlucagonProgressBar->setStyleSheet(ui->mGlucagonProgressBar->property("defaultStyleSheet").toString() +
+                                                   "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
+                                                    "QProgressBar::chunk { background: rgb(240, 240, 0); }");
+    } else if(amount < 25)
+    {
+        ui->mGlucagonProgressBar->setStyleSheet(ui->mGlucagonProgressBar->property("defaultStyleSheet").toString() +
+                                                   "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
+                                                    "QProgressBar::chunk { background: rgb(255, 0, 0); }");
+    } else
+    {
+        ui->mGlucagonProgressBar->setStyleSheet(ui->mGlucagonProgressBar->property("defaultStyleSheet").toString() +
+                                                   "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
+                                                    "QProgressBar::chunk { background: rgb(0, 210, 0); }");
+    }
+
+    // Set Amount
+    ui->mGlucagonProgressBar->setValue(amount);
 }
 
 /**
