@@ -63,32 +63,23 @@ class Pump : public QObject
 /*
  * FUNCTIONS
  */
-        // Injects the insulin into the body.
-        // 
-        // Parameter:
-        // - amount: The amount of insulin which is injected into the body.
-        virtual bool injectInsulin(float amount);
 
-        // Injects the glucagon into the body.
-        // 
+        // Calculates the amount of insulin needed based on the blood sugar levels. Returns calculated fictional Units when done.
+        //
         // Parameter:
-        // - amount: The amount of glucagon which is injected into the body.
-        virtual bool injectGlucagon(float amount);
-
-        // decreases insulin level in reservoir when injected to body and 
-        // returns “True” when done 
-        // 
-        // Parameter:
-        // - amount: The amount of insulin which is injected into the body 
-        //     needs to be reduced in the reservoir. 
-        virtual bool decreaseInsulinLevel(float amount);
-        virtual bool decreaseGlucagonLevel(float amount);
-
-        // Calculates the amount of insulin needed based on the blood sugar levels.
+        // - targetInsValue: user defined vale to reduce blood sugar level  to, e.g. 110mg/dl
+        // - currentBloodSugarLevel: current value of BSL, e.g. 160mg/dl
+        // - isf: insulin sensitivity factor. Factor which indicates how much blood sugar one unit of insulin reduces, e.g.
+        //        1:5 -> 1 unit insulin reduces 5mg/dl glucose
         virtual float calculateNeededInsulin(int targetInsValue, float currentBloodSugarLevel, int isf);
 
-        // Calculates the amount of glucagon needed based on the blood sugar
-        // levels. 
+        // Calculates the amount of glucagon needed based on the blood sugar levels.
+        //
+        // Parameter:
+        // - targetGlucValue: user defined vale to raise blood sugar level  to, e.g. 80mg/dl
+        // - currentBloodSugarLevel: current value of BSL, e.g. 60mg/dl
+        // - gsf: glucagon sensitivity factor. Factor which indicates how much blood sugar one unit of glucagon , e.g.
+        //        1:5 -> 1 unit glucagon raises 5mg/dl glucose
         virtual float calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf);
 /*
  * GETTER
@@ -100,17 +91,44 @@ class Pump : public QObject
         // Checks the blood sugar concentration and returns the value.
         virtual float getCurrentBloodSugarLevel();
 
-    signals:
-        // Callback for updating Insulin Reservoir in the UI.
+/*
+ * SETTER
+ */
+        // Injects the insulin into the body.
         //
         // Parameter:
-        // - The current amount of insulin in the reservoir
-        void updateInsulinReservoir(float amount);
-        // Callback for updating Glucagon Reservoir in the UI.
+        // - amount: The amount of insulin which is injected into the body.
+        virtual bool injectInsulin(float amount);
+
+        // Injects the glucagon into the body.
         //
         // Parameter:
-        // - The current amount of glucagon in the reservoir
-        void updateGlucagonReservoir(float amount);
+        // - amount: The amount of glucagon which is injected into the body.
+        virtual bool injectGlucagon(float amount);
+
+        // decreases insulin level in reservoir when injected to body and
+        // returns “True” when done
+        //
+        // Parameter:
+        // - amount: The amount of insulin which is injected into the body
+        //     needs to be reduced in the reservoir.
+        virtual bool decreaseInsulinLevel(float amount);
+        virtual bool decreaseGlucagonLevel(float amount);
+
+/*
+ * SIGNALS
+ */
+signals:
+    // Callback for updating Insulin Reservoir in the UI.
+    //
+    // Parameter:
+    // - The current amount of insulin in the reservoir
+    void updateInsulinReservoir(float amount);
+    // Callback for updating Glucagon Reservoir in the UI.
+    //
+    // Parameter:
+    // - The current amount of glucagon in the reservoir
+    void updateGlucagonReservoir(float amount);
 
 };
 

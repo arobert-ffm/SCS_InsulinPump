@@ -53,20 +53,6 @@ bool Pump::injectGlucagon(float amount)
 	return true;
 }
 
-// refills insulin and returns “true” when done
-void Pump::refillInsulin()
-{
-    // Update UI
-    emit updateInsulinReservoir(100);
-}
-
-// refills glucagon and returns “true” when done
-void Pump::refillGlucagon()
-{
-    // Update UI
-    emit updateGlucagonReservoir(100);
-}
-
 // decreases insulin level in reservoir when injected to body and returns 
 // “true” when done 
 // 
@@ -105,7 +91,14 @@ bool Pump::decreaseGlucagonLevel(float amount)
     return false;
 }
 
-// Calculates the amount of insulin needed based on the blood sugar levels.
+
+// Calculates the amount of insulin needed based on the blood sugar levels. Returns calculated fictional Units when done.
+//
+// Parameter:
+// - targetInsValue: user defined vale to reduce blood sugar level  to, e.g. 110mg/dl
+// - currentBloodSugarLevel: current value of BSL, e.g. 160mg/dl
+// - isf: insulin sensitivity factor. Factor which indicates how much blood sugar one unit of insulin reduces, e.g.
+//        1:5 -> 1 unit insulin reduces 5mg/dl glucose
 float Pump::calculateNeededInsulin(int targetInsValue, float currentBloodSugarLevel, int isf)
 {
     int difference, fictInsUnit;
@@ -115,6 +108,12 @@ float Pump::calculateNeededInsulin(int targetInsValue, float currentBloodSugarLe
 }
 
 // Calculates the amount of glucagon needed based on the blood sugar levels.
+//
+// Parameter:
+// - targetGlucValue: user defined vale to raise blood sugar level  to, e.g. 80mg/dl
+// - currentBloodSugarLevel: current value of BSL, e.g. 60mg/dl
+// - gsf: glucagon sensitivity factor. Factor which indicates how much blood sugar one unit of glucagon , e.g.
+//        1:5 -> 1 unit glucagon raises 5mg/dl glucose
 float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf)
 {
     int difference, fictGlucUnit;
@@ -162,6 +161,24 @@ float Pump::getGlucagonLevel()
 }
 
 /*
+ * SETTER
+ */
+
+// refills insulin and returns “true” when done
+void Pump::refillInsulin()
+{
+    // Update UI
+    emit updateInsulinReservoir(100);
+}
+
+// refills glucagon and returns “true” when done
+void Pump::refillGlucagon()
+{
+    // Update UI
+    emit updateGlucagonReservoir(100);
+}
+
+/*
  * RUNABLE
  */
 
@@ -202,7 +219,9 @@ struct transmit_bloodsugar {
  *                          END                                 *
  ****************************************************************/
 
-
+/*
+ * RUNABLE
+ */
 int main_ofPump(void) {
     
     // testing values
