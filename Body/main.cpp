@@ -75,41 +75,56 @@ Body::~Body(void){
     
 }
 
-// changes the blood sugar level;
-// increasing: if True: rising; if False: falling
-// strength: the factor the BSL is rising or falling
+/******************************************************
+ *   defined 3 levels for increasing/decreasing:      *
+ *      Level 1: calm   --> 1.03                      *
+ *      Level 2: middle --> 1.06                      *
+ *      Level 3: fast   --> 1.09                      *
+ ******************************************************/
+
 bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insulin_constant) {
-    
-    /******************************************************
-     *   defined 3 levels for increasing/decreasing:      *
-     *      Level 1: calm   --> 1.03                      *
-     *      Level 2: middle --> 1.06                      *
-     *      Level 3: fast   --> 1.09                      *
-     ******************************************************/
     
     /**********************************
      * deciding if rising or falling  *
      **********************************/
     
     // rising
-    if (increasing == true) {
-        this->BloodsugarLevel = this->BloodsugarLevel * strength; // body factor influences BSL
+    if (increasing == true && use_insulin_constant == true) {
+        // body factor influences BSL
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
         
-        if (use_insulin_constant == true) {
-            this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
-        }
+        // injected Insulin influences BSL per 0.5 hours
+        this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant;
+    }
+    else if (increasing == true && use_insulin_constant == false) {
+        // body factor influences BSL
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
     }
 
     // falling
-    if (increasing == false) {
+    else if (increasing == false && use_insulin_constant == true) {
+        // body factor influences BSL
         this->BloodsugarLevel = this->BloodsugarLevel / strength;
-        if (use_insulin_constant == true) {
-            this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
-        }
+        
+        // injected Insulin influences BSL per 0.5 hours
+        this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
+    }
+    
+    else if (increasing == false && use_insulin_constant == false) {
+        // body factor influences BSL
+        this->BloodsugarLevel = this->BloodsugarLevel / strength;
     }
     return true;
 }
+/******************************************************
+ *                     END                            *
+ ******************************************************/
 
+
+/******************************************************
+ *      declaring getter and setter methods           *
+ *      for        private var BloodsugarLevel        *
+ ******************************************************/
 void Body::setBloodSugarLevel(float BSL) {
     this->BloodsugarLevel = BSL;
 }
@@ -117,18 +132,50 @@ void Body::setBloodSugarLevel(float BSL) {
 float Body::getBloodSugarLevel() {
     return this->BloodsugarLevel;
 }
+/******************************************************
+ *                     END                            *
+ ******************************************************/
+
 
 Body body(110.00, 5); // generate Body object
 
+
+
 // simulating BSL - should be inside a seperate thread
 int main(void) {
+    cout << "\n Start \n";
+    /******************************************************
+     *            Vars and values for testing             *
+     ******************************************************/
+    
+
+    int FU = 5; // fictive units of insulin - just for testing in this case
+    int iterations = 15;
+    
     cout << "Init value for BloodSugarLevel: ";
+
     
-    cout << body.getBloodSugarLevel();
-    cout << "\n";
+    while ((iterations--) != 0) {
+        if (FU > 0) {
+            body.changeBloodSugarLevel(1.03, true, true);
+            FU--; // just for testing in this case
+        }
+        
+        else if (FU == 0) {
+            body.changeBloodSugarLevel(1.03, true, false);
+        }
+        
+        cout << body.getBloodSugarLevel();
+        cout << "\n";
+        
+    }
     
-    // sample method invocation, should run in loop
-    //body.changeBloodSugarLevel(1.03, false, 0);
+    /******************************************************
+     *                     END                            *
+     ******************************************************/
+    
+    
+    cout << "\n End \n";
     return 0;
 }
 

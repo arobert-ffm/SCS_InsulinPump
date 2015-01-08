@@ -29,3 +29,6 @@ HEADERS  += \
 
 FORMS    += \
     UserInterface.ui
+
+RESOURCES += \
+    Ressources.qrc
