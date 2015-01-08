@@ -151,7 +151,7 @@ float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugar
  * BEGIN <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
  */
 //see header!
-//clean up!
+//clean up! refactor code!
 
 /*
  * what happens with non-empty string with value other than insulin or glucagon?
