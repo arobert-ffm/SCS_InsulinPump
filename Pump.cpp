@@ -7,6 +7,18 @@
 // 
 // Description:
 
+
+//TODO
+/*
+ * 1. clean up code.
+ * 2. summarize decreaseInsulin and decreaseGlucagon into one.
+ * 3. summarize injectInsulin and injectGlucagon into one.
+ * 4. code runable and rest of methods.
+ * 5. test calculateNeededHormone for non-empty wrong value strings.
+ * 6. refactor code. especially code that is redundant.
+ * 7. test pump.
+ */
+
 #include "Pump.h"
 
 #include <iostream>
@@ -35,6 +47,9 @@ int     fdes_pump_to_body; // fildescriptor for Pump --> Body
  * FUNCTIONS
  */
 
+/*
+ * SUMMARIZE!
+ */
 // Injects the insulin into the body.
 // 
 // Parameter:
@@ -90,8 +105,13 @@ bool Pump::decreaseGlucagonLevel(float amount)
     tracer.writeCriticalLog(err);
     return false;
 }
+/*
+ * END SUMMARIZE!
+ */
 
-
+/*
+ * still necessary?
+ */
 // Calculates the amount of insulin needed based on the blood sugar levels. Returns calculated fictional Units when done.
 //
 // Parameter:
@@ -121,12 +141,21 @@ float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugar
     fictGlucUnit = difference / gsf;
     return fictGlucUnit;
 }
+/*
+ * END still necessary?
+ */
+
 
 /*
  * author: Markus
  * BEGIN <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
  */
 //see header!
+//clean up!
+
+/*
+ * what happens with non-empty string with value other than insulin or glucagon?
+ */
 float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
 {
     int difference;
