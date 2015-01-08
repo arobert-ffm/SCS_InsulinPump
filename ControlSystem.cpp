@@ -34,7 +34,8 @@ int ControlSystem::checkOperationHours()
 {
     if(scheduler.getOperationTime() > 123456789)
     {
-        tracer.writeCriticalLog("The maximum operation time is reached.");
+        string msg = "The maximum operation time is reached.";
+        tracer.writeCriticalLog(msg);
         tracer.playAcousticWarning();
         tracer.vibrationWarning();
         return EXIT_FAILURE;
@@ -48,7 +49,8 @@ bool ControlSystem::checkScheduler()
 {
     if(!scheduler.getStatus())
     {
-        tracer.writeCriticalLog("The scheduler is in a critical state.");
+        string msg = "The scheduler is in a critical state.";
+        tracer.writeCriticalLog(msg);
         tracer.playAcousticWarning();
         tracer.vibrationWarning();
         return false;
@@ -64,7 +66,8 @@ bool ControlSystem::checkPump()
 {
     if(!pump.getStatus())
     {
-        tracer.writeCriticalLog("The pump is in a critical state.");
+        string msg = "The pump is in a critical state.";
+        tracer.writeCriticalLog(msg);
         tracer.playAcousticWarning();
         tracer.vibrationWarning();
         return false;
@@ -80,7 +83,8 @@ bool ControlSystem::checkTracer()
 {
 /*    if(!tracer.getStatus())
     {
-        tracer.writeCriticalLog("The tracer is in a critical state.");
+        string msg = "The tracer is in a critical state.";
+        tracer.writeCriticalLog(msg);
         tracer.playAcousticWarning();
         tracer.vibrationWarning();
         return false
@@ -96,7 +100,8 @@ int ControlSystem::checkBatteryStatus()
 {
     if(pump.getBatteryStatus() < 12345)
     {
-        tracer.writeCriticalLog("The batteries charging state is to low.");
+        string msg = "The batteries charging state is to low.";
+        tracer.writeCriticalLog(msg);
         tracer.playAcousticWarning();
         tracer.vibrationWarning();
         return EXIT_FAILURE;
