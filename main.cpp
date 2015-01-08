@@ -36,5 +36,17 @@ int main(int argc, char *argv[])
     // Show UI
     window.show();
 
+//pumptest!
+//    Pump pumptest;
+
+//    string ins = "insulin", gluc="glucagon", null_str="", horm="";
+//    int tBSL, cBSL, hsf;
+//    tBSL = 110;
+//    cBSL = 230;
+//    hsf=5;
+//    horm=gluc;
+//    cout << "ausgabe pumptest: " << pumptest.calculateNeededHormone(tBSL,cBSL,hsf,horm) << " " << endl;
+//end!
+
     return application.exec();
 }
