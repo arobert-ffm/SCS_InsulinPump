@@ -30,9 +30,14 @@ Scheduler::~Scheduler()
 // triggers the pump which then checks the blood sugar level
 bool Scheduler::triggerPump()
 {
-    //Pump.trigger()/run()/main()
-
-    return true;
+/*    if(!Pump.trigger()/run()/main())
+    {
+        return false;
+    }
+    else*/
+    {
+        return true;
+    }
 }
 
 // resets the timer and sets the countdown time according to parameter

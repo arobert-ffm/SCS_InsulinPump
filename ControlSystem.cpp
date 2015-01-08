@@ -32,38 +32,81 @@ ControlSystem::ControlSystem(UserInterface* ui)
 // value in hours. 
 int ControlSystem::checkOperationHours()
 {
-    scheduler.getOperationTime();
+    if(scheduler.getOperationTime() > 123456789)
+    {
+        string msg = "The maximum operation time is reached.";
+        tracer.writeCriticalLog(msg);
+        tracer.playAcousticWarning();
+        tracer.vibrationWarning();
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 
 // Checks the scheduler for correct operation and returns “True” when 
 // everything is working fine! 
 bool ControlSystem::checkScheduler()
 {
-    scheduler.getStatus();
-
-    return true;
+    if(!scheduler.getStatus())
+    {
+        string msg = "The scheduler is in a critical state.";
+        tracer.writeCriticalLog(msg);
+        tracer.playAcousticWarning();
+        tracer.vibrationWarning();
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 // Checks the hormone reservoir and returns “True” when everything is fine
 bool ControlSystem::checkPump()
 {
-    pump.getStatus();
-
-    return true;
+    if(!pump.getStatus())
+    {
+        string msg = "The pump is in a critical state.";
+        tracer.writeCriticalLog(msg);
+        tracer.playAcousticWarning();
+        tracer.vibrationWarning();
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 // Checks the tracer and returns “True” when everything is fine!
 bool ControlSystem::checkTracer()
 {
-    //tracer.getStatus();
-
-    return true;
+/*    if(!tracer.getStatus())
+    {
+        string msg = "The tracer is in a critical state.";
+        tracer.writeCriticalLog(msg);
+        tracer.playAcousticWarning();
+        tracer.vibrationWarning();
+        return false
+    }
+    else*/
+    {
+        return true;
+    }
 }
 
-// checks the batteries charging state and returns the value in percent
+// Checks the batteries charging state and returns the value in percent
 int ControlSystem::checkBatteryStatus()
 {
-    pump.getBatteryStatus();
+    if(pump.getBatteryStatus() < 12345)
+    {
+        string msg = "The batteries charging state is to low.";
+        tracer.writeCriticalLog(msg);
+        tracer.playAcousticWarning();
+        tracer.vibrationWarning();
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 
 

@@ -53,20 +53,6 @@ bool Pump::injectGlucagon(float amount)
 	return true;
 }
 
-// refills insulin and returns “true” when done
-void Pump::refillInsulin()
-{
-    // Update UI
-    emit updateInsulinReservoir(100);
-}
-
-// refills glucagon and returns “true” when done
-void Pump::refillGlucagon()
-{
-    // Update UI
-    emit updateGlucagonReservoir(100);
-}
-
 // decreases insulin level in reservoir when injected to body and returns 
 // “true” when done 
 // 
@@ -75,21 +61,65 @@ void Pump::refillGlucagon()
 //     reduced in the reservoir. 
 bool Pump::decreaseInsulinLevel(float amount)
 {
-	return true;
+    string str = "Reservoir Insulin too low!";
+    if (amount <= this->getInsulinLevel())
+    {
+            insulinLevel-=amount;
+            emit updateInsulinReservoir(insulinLevel);
+            return true;
+    }
+    tracer.writeCriticalLog(str);
+    return false;
 }
 
+// decreases glucagon level in reservoir when injected to body and returns
+// “true” when done
+//
+// Parameter:
+// - amount: The amount of glucagon which is injected into the body needs to be
+//     reduced in the reservoir.
 bool Pump::decreaseGlucagonLevel(float amount)
 {
-	return true;
+    string str = "Reservoir Glucagon too low!";
+    if (amount <= this->getGlucagonLevel())
+    {
+            glucagonLevel-=amount;
+            emit updateGlucagonReservoir(glucagonLevel);
+            return true;
+    }
+    tracer.writeCriticalLog(str);
+    return false;
 }
-// Calculates the amount of insulin needed based on the blood sugar levels.
-float Pump::calculateNeededInsulin()
+
+
+// Calculates the amount of insulin needed based on the blood sugar levels. Returns calculated fictional Units when done.
+//
+// Parameter:
+// - targetInsValue: user defined vale to reduce blood sugar level  to, e.g. 110mg/dl
+// - currentBloodSugarLevel: current value of BSL, e.g. 160mg/dl
+// - isf: insulin sensitivity factor. Factor which indicates how much blood sugar one unit of insulin reduces, e.g.
+//        1:5 -> 1 unit insulin reduces 5mg/dl glucose
+float Pump::calculateNeededInsulin(int targetInsValue, float currentBloodSugarLevel, int isf)
 {
+    int difference, fictInsUnit;
+    difference = currentBloodSugarLevel - targetInsValue;
+    fictInsUnit = difference / isf;
+    return fictInsUnit;
 }
 
 // Calculates the amount of glucagon needed based on the blood sugar levels.
-float Pump::calculateNeededGlucagon()
+//
+// Parameter:
+// - targetGlucValue: user defined vale to raise blood sugar level  to, e.g. 80mg/dl
+// - currentBloodSugarLevel: current value of BSL, e.g. 60mg/dl
+// - gsf: glucagon sensitivity factor. Factor which indicates how much blood sugar one unit of glucagon , e.g.
+//        1:5 -> 1 unit glucagon raises 5mg/dl glucose
+float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf)
 {
+    int difference, fictGlucUnit;
+    difference = targetGlucValue - currentBloodSugarLevel;
+    fictGlucUnit = difference / gsf;
+    return fictGlucUnit;
 }
 
 /*
@@ -101,6 +131,7 @@ float Pump::calculateNeededGlucagon()
 // notified acoustically and the incident will be logged by the tracer. 
 int Pump::getBatteryStatus()
 {
+    return this->batteryPowerLevel;
 }
 
 // Checks the entire pump (reservoir, mechanical parts) and returns “true” when 
@@ -130,11 +161,30 @@ float Pump::getGlucagonLevel()
 }
 
 /*
+ * SETTER
+ */
+
+// refills insulin and returns “true” when done
+void Pump::refillInsulin()
+{
+    // Update UI
+    emit updateInsulinReservoir(100);
+}
+
+// refills glucagon and returns “true” when done
+void Pump::refillGlucagon()
+{
+    // Update UI
+    emit updateGlucagonReservoir(100);
+}
+
+/*
  * RUNABLE
  */
 
 //runable for Pump. Gets triggered by Scheduler.
-bool Pump::runPump(){
+bool Pump::runPump()
+{
     return true;
 }
 
@@ -169,7 +219,9 @@ struct transmit_bloodsugar {
  *                          END                                 *
  ****************************************************************/
 
-
+/*
+ * RUNABLE
+ */
 int main_ofPump(void) {
     
     // testing values
