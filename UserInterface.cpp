@@ -3,6 +3,8 @@
 #include "iostream"
 #include <string>
 #include <QString>
+#include <QTime>
+#include <QTimer>
 
 using namespace std;
 
@@ -12,6 +14,12 @@ UserInterface::UserInterface(QWidget *parent) :
     ui(new Ui::UserInterface)
 {
     ui->setupUi(this);
+
+    // Init Time
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateClock()));
+    timer->start();
+    updateClock();
 }
 
 UserInterface::~UserInterface()
@@ -92,4 +100,16 @@ void UserInterface::on_mGlucagonRefillButton_clicked()
 {
     // Trigger Callback for refilling Glucagon Reservoir in the Pump
     emit refillGlucagonInPump();
+}
+
+/**
+ * Updates the Time in the UI
+ */
+void UserInterface::updateClock()
+{
+    // Get Time
+    QTime time = QTime::currentTime();
+    // Format and set Time
+    QString text = time.toString("hh:mm:ss");
+    ui->mTimeValue->setText(text);
 }

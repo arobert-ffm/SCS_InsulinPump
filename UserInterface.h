@@ -62,6 +62,11 @@ private slots:
      */
     void on_mGlucagonRefillButton_clicked();
 
+    /**
+     * Updates the Time in the UI
+     */
+    void updateClock();
+
 signals:
     /**
      * Notifys the Pump to refill the Insulin Reservoir
