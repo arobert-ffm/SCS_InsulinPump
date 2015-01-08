@@ -61,14 +61,14 @@ bool Pump::injectGlucagon(float amount)
 //     reduced in the reservoir. 
 bool Pump::decreaseInsulinLevel(float amount)
 {
-    string str = "Reservoir Insulin too low!";
+    string err = "Reservoir Insulin too low!";
     if (amount <= this->getInsulinLevel())
     {
             insulinLevel-=amount;
             emit updateInsulinReservoir(insulinLevel);
             return true;
     }
-    tracer.writeCriticalLog(str);
+    tracer.writeCriticalLog(err);
     return false;
 }
 
@@ -80,14 +80,14 @@ bool Pump::decreaseInsulinLevel(float amount)
 //     reduced in the reservoir.
 bool Pump::decreaseGlucagonLevel(float amount)
 {
-    string str = "Reservoir Glucagon too low!";
+    string err = "Reservoir Glucagon too low!";
     if (amount <= this->getGlucagonLevel())
     {
             glucagonLevel-=amount;
             emit updateGlucagonReservoir(glucagonLevel);
             return true;
     }
-    tracer.writeCriticalLog(str);
+    tracer.writeCriticalLog(err);
     return false;
 }
 
@@ -121,6 +121,40 @@ float Pump::calculateNeededGlucagon(int targetGlucValue, float currentBloodSugar
     fictGlucUnit = difference / gsf;
     return fictGlucUnit;
 }
+
+/*
+ * BEGIN <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
+ */
+//see header!
+int Pump::calculateNeededHormone(int targetBloodSugarLevel, float currentBloodSugarLevel, int hsf, string hormone)
+{
+    int difference, fictInsUnit,fictGlucUnit;
+    string err = "Error! No valid hormone found!";
+    string ins = "insulin"; string gluc= "glucagon";
+
+    if (this->hormone != 0)
+    {
+        if(hormone.compare(ins))
+        {
+            difference = currentBloodSugarLevel - targetBloodSugarLevel;
+            fictInsUnit = difference / hsf;
+            return fictInsUnit;
+        }
+
+        else if(hormone.compare(gluc))
+        {
+            difference = targetBloodSugarLevel - currentBloodSugarLevel;
+            fictInsUnit = difference / hsf;
+            return fictGlucUnit;
+        }
+    }
+    tracer.writeCriticalLog(err);
+    return -1;
+}
+/*
+ * END
+ */
+
 
 /*
  * GETTER

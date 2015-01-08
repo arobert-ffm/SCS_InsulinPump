@@ -81,6 +81,24 @@ class Pump : public QObject
         // - gsf: glucagon sensitivity factor. Factor which indicates how much blood sugar one unit of glucagon , e.g.
         //        1:5 -> 1 unit glucagon raises 5mg/dl glucose
         virtual float calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf);
+
+
+/*
+ * BEGIN <<<<< meine bevorzugte loesung
+ */
+        // Calculates the amount of glucagon needed based on the blood sugar levels.
+        //
+        // Parameter:
+        // - targetBloodSugarLevel: user defined value to raise or reduce blood sugar level to, e.g. 90mg/dl
+        // - currentBloodSugarLevel: current value of BSL, e.g. 160mg/dl
+        // - hsf: hormon sensitivity factor. Factor which indicates how much blood sugar one unit of used hormone
+        //        raises or reduces , e.g. 1:5 -> 1 unit hormone raises/reduces 5mg/dl glucose.
+        // - hormone: insulin or glucagon
+        virtual int calculateNeededHormone(int targetBloodSugarLevel, float currentBloodSugarLevel, int hsf, string hormone);
+/*
+ * END
+ */
+
 /*
  * GETTER
  */
