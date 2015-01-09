@@ -23,19 +23,19 @@
 class Scheduler
 {
     public:
-        Scheduler();
+        Scheduler(Pump *ThePump);
         ~Scheduler();
 
-        // answers ControlSystem’s call for checkScheduler()
+        // Answers ControlSystem’s call for checkScheduler()
         virtual bool getStatus();
 
-        // answers ControlSystem's call for checkOperationTime()
+        // Answers ControlSystem's call for checkOperationTime()
         virtual qint64 getOperationTime();
 
     private:
         int TimerResetValueSec;
 
-        // Times of the Scheduler for measuring operation hours
+        // Timer of the Scheduler for measuring operation hours
         QElapsedTimer Timer;
 
         // File for saving total operation time
@@ -46,10 +46,13 @@ class Scheduler
         // reached.
         qint64 TotalOperationTime;
 
-        // triggers the pump which then checks the blood sugar level
+        // Pump
+        Pump *HormonePump;
+
+        // Triggers the pump which then checks the blood sugar level
         virtual bool triggerPump();
 
-        // resets the timer and sets the countdown time according to parameter
+        // Resets the timer and sets the countdown time according to parameter
         virtual bool resetTimer(int time_min);
 
         // Starts the counter for operation hours and returns “True” when 

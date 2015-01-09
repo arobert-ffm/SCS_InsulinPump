@@ -17,9 +17,11 @@ using namespace std;
 
 
 
-Scheduler::Scheduler()
+Scheduler::Scheduler(Pump *ThePump)
 {
     startOperationHoursCounter();
+
+    this->HormonePump = ThePump;
 }
 
 Scheduler::~Scheduler()
@@ -27,20 +29,18 @@ Scheduler::~Scheduler()
     stopOperationHoursCounter();
 }
 
-// triggers the pump which then checks the blood sugar level
+// Triggers the pump which then checks the blood sugar level
 bool Scheduler::triggerPump()
 {
-/*    if(!Pump.trigger()/run()/main())
+    if(!HormonePump->runPump())
     {
         return false;
     }
-    else*/
-    {
-        return true;
-    }
+
+    return true;
 }
 
-// resets the timer and sets the countdown time according to parameter
+// Resets the timer and sets the countdown time according to parameter
 bool Scheduler::resetTimer(int time_min)
 {
     TotalOperationTime = time_min;
@@ -49,13 +49,18 @@ bool Scheduler::resetTimer(int time_min)
     return true;
 }
 
-// answers ControlSystem’s call for checkScheduler()
+// Answers ControlSystem’s call for checkScheduler()
 bool Scheduler::getStatus()
 {
+    if(!Timer.isValid() || TotalOperationTime <= 0)
+    {
+        return false;
+    }
+
     return true;
 }
 
-// answers ControlSystem’s call for checkOperationTime()
+// Answers ControlSystem’s call for checkOperationTime()
 qint64 Scheduler::getOperationTime()
 {
     return TotalOperationTime;

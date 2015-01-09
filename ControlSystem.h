@@ -18,6 +18,9 @@
 #include "Tracer.h"
 #include "Pump.h"
 
+#define BATTERY_MIN_LOAD 10
+#define MAX_OPERATION_HOURS 500
+
 
 
 class ControlSystem
@@ -26,26 +29,26 @@ class ControlSystem
         ControlSystem(UserInterface* ui);
 
         // Checks the operation hours of the mechanical parts (motor) and 
-        // returns the value in hours. 
+        // returns the value in hours
         virtual int checkOperationHours();
 
         // Checks the scheduler for correct operation and returns “True” when 
-        // everything is working fine! 
+        // everything is working fine
         virtual bool checkScheduler();
 
         // Checks the hormone reservoir and returns “True” when everything is fine
         virtual bool checkPump();
 
-        // Checks the tracer and returns “True” when everything is fine!
+        // Checks the tracer and returns “True” when everything is fine
         virtual bool checkTracer();
 
-        // checks the batteries charging state and returns the value in percent
+        // Checks the batteries charging state and returns the value in percent
         virtual int checkBatteryStatus();
 
     private:
-        Pump pump;
-        Scheduler scheduler;
-        Tracer tracer;
+        Pump *ThePump;
+        Scheduler *TheScheduler;
+        Tracer *TheTracer;
 
 };
 

@@ -14,9 +14,12 @@
 #include <vector>
 #include <string>
 
-class Body
-{
+class Body {
     public:
+    
+    Body(float BSL, int constant);
+    ~Body();
+    
     // changes the blood sugar level;
     // increasing: if True: rising; if False: falling
     // strength: the factor the BSL is rising or falling
@@ -24,13 +27,9 @@ class Body
     virtual float getBloodSugarLevel();
     virtual void setBloodSugarLevel(float);
     
-    Body(float BSL, int constant);
-    ~Body();
-
     private:
     float BloodsugarLevel;
     int insulin_constant;
 
 };
-
 #endif
