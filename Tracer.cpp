@@ -11,8 +11,6 @@
 // Author:       Sven Sperner, sillyconn@gmail.com
 
 #include "Tracer.h"
-#include <QString>
-#include <iostream>
 
 using namespace std;
 

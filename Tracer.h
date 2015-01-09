@@ -18,7 +18,6 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QFile>
-#include <QObject>
 #include <QString>
 #include <QTextStream>
 
