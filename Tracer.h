@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <QApplication>
+#include <QDateTime>
 #include <QFile>
 #include <QObject>
 #include <QString>
@@ -31,28 +32,21 @@ class Tracer : public QObject
 
     public:
         Tracer();
-        Tracer(QString LogFileName);
         ~Tracer();
 
-        // Returns the filename of the logfile
-        virtual QString getFilename();
-
-        // Sets the filename of the logfile
-        virtual void setFilename(QString Name);
-
-        // Writes the message to the log file. Every Message is signed by date 
-        // and time. 
-        // When writing to file has finished, “True” is returned!
+        // Writes the message to the log file.
+        // Every Message is signed by date and time.
+        // When writing to file has finished, “True” is returned
         virtual bool writeStatusLog(QString message);
 
-        // Writes the message to the log file. Every Message is signed by date
-        // and time. 
-        // When writing to file has finished, “True” is returned!
+        // Writes the message to the log file.
+        // Every Message is signed by date and time.
+        // When writing to file has finished, “True” is returned
         virtual bool writeWarningLog(QString message);
 
-        // Writes the message to the log file. Every Message is signed by date 
-        // and time. 
-        // When writing to file has finished, “True” is returned!
+        // Writes the message to the log file.
+        // Every Message is signed by date and time.
+        // When writing to file has finished, “True” is returned
         virtual bool writeCriticalLog(QString message);
 
         // Plays an acoustic sound and returns “True” when done

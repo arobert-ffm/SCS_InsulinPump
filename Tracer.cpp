@@ -26,14 +26,6 @@ Tracer::Tracer()
     QTextStream TextStream(&LogFile);
 }
 
-Tracer::Tracer(QString LogFileName)
-{
-    FileName = LogFileName;
-
-    QFile LogFile(FileName);
-    QTextStream TextStream(&LogFile);
-}
-
 Tracer::~Tracer()
 {
     TextStream.flush();
@@ -42,10 +34,10 @@ Tracer::~Tracer()
 }
 
 // Writes the message to the log file. Every Message is signed by date and time.
-// When writing to file has finished, “True” is returned!
+// When writing to file has finished, “True” is returned
 bool Tracer::writeStatusLog(QString message)
 {
-    TextStream << message;
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << message;
 
     // Update UI
     emit writeStatusLogInUi(message);
@@ -53,10 +45,10 @@ bool Tracer::writeStatusLog(QString message)
 }
 
 // Writes the message to the log file. Every Message is signed by date and time.
-// When writing to file has finished, “True” is returned!
+// When writing to file has finished, “True” is returned
 bool Tracer::writeWarningLog(QString message)
 {
-    TextStream << message;
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " WARNING: " << message;
 
     // Update UI
     emit writeWarningLogInUi(message);
@@ -64,10 +56,10 @@ bool Tracer::writeWarningLog(QString message)
 }
 
 // Writes the message to the log file. Every Message is signed by date and time.
-// When writing to file has finished, “True” is returned!
+// When writing to file has finished, “True” is returned
 bool Tracer::writeCriticalLog(QString message)
 {
-    TextStream << message;
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " CRITICAL: " << message;
 
     // Update UI
     emit writeCriticalLogInUi(message);
@@ -87,17 +79,6 @@ bool Tracer::vibrationWarning()
     cout << "vibrating...";
     return true;
 }
-
-QString Tracer::getFilename()
-{
-    return FileName;
-}
-
-void Tracer::setFilename(QString Name)
-{
-    FileName = Name;
-}
-
 
 
 
