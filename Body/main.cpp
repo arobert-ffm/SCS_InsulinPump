@@ -90,24 +90,20 @@ bool BodyThreadController::getThreadRising(void) {
     return this->ThreadRising;
 }
 
-// ThreadUseGlucagon -- tells the thread to use glucagon
-void BodyThreadController::setThreadUseGlucagon(bool value) {
-    this->ThreadUseGlucagon = value;
+// ThreadGlucagonUnits -- tells the thread the amount of glucagon units to use
+void BodyThreadController::setThreadGlucagonUnits(int units) {
+    this->ThreadGlucagonUnits = units;
 }
 
-bool BodyThreadController::getThreadUseGlucagon() {
-    return this->ThreadUseGlucagon;
+int BodyThreadController::getThreadGlucagonUnits() {
+    return this->ThreadGlucagonUnits;
 }
 
-// ThreadUseInsulin -- tells the thread to use insulin
-void BodyThreadController::setThreadUseInsulin(bool value) {
-    this->ThreadUseInsulin = value;
-}
-bool BodyThreadController::getThreadUseInsulin() {
-    return this->ThreadUseInsulin;
+void BodyThreadController::minusThreadGlucagonUnits(int value) {
+    this->ThreadGlucagonUnits = this->ThreadGlucagonUnits - value;
 }
 
-// ThreadUseInsulinUnits -- tells the thread the amount of inuslin units
+// ThreadInsulinUnits -- tells the thread the amount of inuslin units to use
 void BodyThreadController::setThreadInsulinUnits(int units) {
     this->ThreadInsulinUnits = units;
 }
@@ -138,9 +134,11 @@ bool BodyThreadController::getThreadEndThread() {
  ****************************************************************/
 
 // constructor
-Body::Body(float BSL, int constant){
+Body::Body(float BSL, int in_constant, int gluc_constant){
     BloodsugarLevel = BSL; // unit: mg/dL
-    insulin_constant = constant; // unit: mg/dL sinking per iteration => one iteration estimated as 0.5 hours
+    insulin_constant = in_constant; // unit: mg/dL sinking per iteration => one iteration estimated as 0.5 hours
+    glucagon_constant = gluc_constant; // glucagon which influences the BSL per 0.5 hours
+    
 }
 
 // destructor
@@ -155,39 +153,52 @@ Body::~Body(){
  *      Level 3: fast   --> 1.09                      *
  ******************************************************/
 
-bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insulin_constant) {
+bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insulin_constant, bool use_glucagon_constant) {
     
-    /**********************************
-     * deciding if rising or falling  *
-     **********************************/
+    if (increasing == false && use_insulin_constant == false && use_glucagon_constant == false) {
+        // BSL falling with body factor
+        this->BloodsugarLevel = this->BloodsugarLevel / strength;
+    }
     
-    // rising
-    if (increasing == true && use_insulin_constant == true) {
-        // body factor influences BSL
-        this->BloodsugarLevel = this->BloodsugarLevel * strength;
-        
-        // injected Insulin influences BSL per 0.5 hours
+    else if (increasing == false && use_insulin_constant == false && use_glucagon_constant == true) {
+        //BSL falling with body factor + adding the glucagon constant
+        this->BloodsugarLevel = this->BloodsugarLevel / strength;
+        this->BloodsugarLevel = this->BloodsugarLevel + this->glucagon_constant;
+    }
+    
+    else if (increasing == false && use_insulin_constant == true && use_glucagon_constant == false) {
+        // BSL falling with body factor + falling with the additional insulin constant
+        this->BloodsugarLevel = this->BloodsugarLevel / strength;
         this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant;
     }
-    else if (increasing == true && use_insulin_constant == false) {
-        // body factor influences BSL
-        this->BloodsugarLevel = this->BloodsugarLevel * strength;
-    }
-
-    // falling
-    else if (increasing == false && use_insulin_constant == true) {
-        // body factor influences BSL
-        this->BloodsugarLevel = this->BloodsugarLevel / strength;
-        
-        // injected Insulin influences BSL per 0.5 hours
-        this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant; // injected Insulin influences BSL per 0.5 hours
+    
+    else if (increasing == false && use_insulin_constant == true && use_glucagon_constant == true) {
+        // injecting insulin and glucagon at the same time??? does this make sense???
     }
     
-    else if (increasing == false && use_insulin_constant == false) {
-        // body factor influences BSL
-        this->BloodsugarLevel = this->BloodsugarLevel / strength;
+    else if (increasing == true && use_insulin_constant == false && use_glucagon_constant == false) {
+        // rising gently
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
     }
+    
+    else if (increasing == true && use_insulin_constant == false && use_glucagon_constant == true) {
+        // rising with body factor + adding glucagon constant
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
+        this->BloodsugarLevel = this->BloodsugarLevel + this->glucagon_constant;
+    }
+    
+    else if (increasing == true && use_insulin_constant == true && use_glucagon_constant == false) {
+        // rising with body factor + subtracting the insulin constant
+        this->BloodsugarLevel = this->BloodsugarLevel * strength;
+        this->BloodsugarLevel = this->BloodsugarLevel - this->insulin_constant;
+    }
+    
+    else if (increasing == true && use_insulin_constant == true && use_glucagon_constant == true) {
+        // rising + injecting insulin + injecting glucagon at the same time, does this make sense???
+    }
+    
     return true;
+    
 }
 
 /******************************************************
@@ -206,17 +217,17 @@ float Body::getBloodSugarLevel() {
  *                          END Body                            *
  ****************************************************************/
 
-Body body(110.00, 5); // generate Body object
+Body body(110.00, 5, 2); // generate Body object - natural BSL, insulin constant, glucagon constant
 BodyThreadController communication; // generate object for communication
 
 
 int main(void) {
     
     // Initialize values
-    communication.setThreadBodyFactor(1.003);
-    communication.setThreadRising(false);
-    communication.setThreadUseGlucagon(false);
-    communication.setThreadInsulinUnits(5);
+    communication.setThreadBodyFactor(1.03);
+    communication.setThreadRising(true);
+    communication.setThreadInsulinUnits(0);
+    communication.setThreadGlucagonUnits(0);
     communication.setThreadEndThread(false);
     
     
@@ -242,15 +253,22 @@ int BSL_Sim_thread(void) {
     
     while (true) {
         
-        // generate BSL graph
-        if ((communication.getThreadInsulinUnits()) > 0) {
-            body.changeBloodSugarLevel(communication.getThreadBodyFactor(), communication.getThreadRising(), true);
+        // generate BSL graph by reacting or not reacting to insulin
+        if ((communication.getThreadInsulinUnits()) > 0 && communication.getThreadGlucagonUnits() == 0) {
+            body.changeBloodSugarLevel(communication.getThreadBodyFactor(), communication.getThreadRising(), true, false);
             communication.minusThreadInsulinUnits(1);
         }
         
-        else if (communication.getThreadInsulinUnits() == 0) {
-            body.changeBloodSugarLevel(communication.getThreadBodyFactor(), communication.getThreadRising(), false);
+        else if (communication.getThreadInsulinUnits() == 0 && communication.getThreadGlucagonUnits() == 0) {
+            body.changeBloodSugarLevel(communication.getThreadBodyFactor(), communication.getThreadRising(), false, false);
         }
+        
+        // generate BSL graph by reacting or not reacting to glucagon
+        else if (communication.getThreadGlucagonUnits() > 0 && communication.getThreadInsulinUnits() == 0) {
+            body.changeBloodSugarLevel(communication.getThreadBodyFactor(), communication.getThreadRising(), false, true);
+            communication.minusThreadGlucagonUnits(1);
+        }
+        
         
         cout << body.getBloodSugarLevel();
         cout << "\n";

@@ -29,15 +29,12 @@ public:
     virtual void setThreadRising(bool value);
     virtual bool getThreadRising(void);
     
-    // ThreadUseGlucagon -- tells the thread to use glucagon
-    virtual void setThreadUseGlucagon(bool value);
-    virtual bool getThreadUseGlucagon(void);
+    // ThreadGlucagonUnits -- tells the thread the amount of fictive glucagon units to use
+    virtual void setThreadGlucagonUnits(int units);
+    virtual int getThreadGlucagonUnits(void);
+    virtual void minusThreadGlucagonUnits(int);
     
-    // ThreadUseInsulin -- tells the thread to use insulin
-    virtual void setThreadUseInsulin(bool value);
-    virtual bool getThreadUseInsulin(void);
-    
-    // ThreadUseInsulinUnits -- tells the thread the amount of inuslin units
+    // ThreadUseInsulinUnits -- tells the thread the amount of fictive inuslin units to use
     virtual void setThreadInsulinUnits(int units);
     virtual int getThreadInsulinUnits(void);
     virtual void minusThreadInsulinUnits(int); // subtracts the argument from ThreadInsulinUnits
@@ -50,9 +47,8 @@ public:
 private:
     float   ThreadBodyFactor;
     bool    ThreadRising;
-    bool    ThreadUseGlucagon;
-    bool    ThreadUseInsulin;
     int     ThreadInsulinUnits;
+    int     ThreadGlucagonUnits;
     bool    ThreadEndThread;
 
 };
