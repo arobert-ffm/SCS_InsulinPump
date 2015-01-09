@@ -50,6 +50,31 @@ int     fdes_pump_to_body; // fildescriptor for Pump --> Body
 /*
  * SUMMARIZE!
  */
+
+
+
+// Injects either insulin or glucagon into the body.
+//
+// Parameters:
+// - amount : int       the amount of FU that should be injected
+// - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+bool Pump::injectHormone(int amount, bool insulin)
+{
+    if (insulin)
+    {
+        // inject insulin here
+    } else
+    {
+        // inject glucagon here
+    }
+    return true;
+}
+
+
+/**
+  *
+  * summarized to above one injectHormone(amount, insulin)
+  *
 // Injects the insulin into the body.
 // 
 // Parameter:
@@ -68,6 +93,18 @@ bool Pump::injectGlucagon(float amount)
 	return true;
 }
 
+*/
+
+bool decreaseHormoneLevel(int amount, bool insulin)
+{
+
+}
+
+
+/**
+  *
+  * summarized to the above
+  *
 // decreases insulin level in reservoir when injected to body and returns 
 // “true” when done 
 // 
@@ -105,6 +142,7 @@ bool Pump::decreaseGlucagonLevel(float amount)
     tracer.writeCriticalLog(err);
     return false;
 }
+*/
 /*
  * END SUMMARIZE!
  */

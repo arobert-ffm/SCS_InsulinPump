@@ -107,6 +107,11 @@ class Pump : public QObject
         //                              raises/reduces 5mg/dl glucose -> hsf = 5;
         //
         // - hormone:                   what sort of hormone is used, e.g. insulin or glucagon.
+        //
+        // >> jenny's solution <<       strings as parameters are bad. really bad. so lets just use a bool
+        //                              called insulin that is true when insulin should be injected and false in
+        //                              case of glucagon.
+        // - insulin:                   true when insulin should be injected, false when glucagon should be injected
 public:
         virtual float calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone);
 /*
@@ -126,6 +131,16 @@ public:
 /*
  * SETTER
  */
+        // Injects either insulin or glucagon into the body.
+        //
+        // Parameters:
+        // - amount : int       the amount of FU that should be injected
+        // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        virtual bool injectHormone(int amount, bool insulin);
+
+        /**
+          * summarized to above one injectHormone(amount, insulin)
+          *
         // Injects the insulin into the body.
         //
         // Parameter:
@@ -137,7 +152,21 @@ public:
         // Parameter:
         // - amount: The amount of glucagon which is injected into the body.
         virtual bool injectGlucagon(float amount);
+        */
 
+
+        // Decreases either the insulin or the glucagon level in the reservoir when a hormone is
+        // injected to the body
+        //
+        // Parameters:
+        // - amount : int       the amount of FU by that the reservoir should be decreased
+        // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        virtual bool decreaseHormoneLevel(int amount, bool insulin);
+
+        /**
+          *
+          * summarized to above one decreaseHormoneLevel(amount)
+          *
         // decreases insulin level in reservoir when injected to body and
         // returns “True” when done
         //
@@ -146,6 +175,7 @@ public:
         //     needs to be reduced in the reservoir.
         virtual bool decreaseInsulinLevel(float amount);
         virtual bool decreaseGlucagonLevel(float amount);
+*/
 
 /*
  * SIGNALS
