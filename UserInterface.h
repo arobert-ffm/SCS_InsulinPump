@@ -23,13 +23,13 @@ public:
 
 public slots:
     /**
-     * Updates the Insulin amount in the Label
+     * Updates the Insulin amount in the Progressbar
      *
      * @param amount - new insulin amount
      */
     void insulinAmountInReservoirChanged(float amount);
     /**
-     * Updates the Glucagon amount in the Label
+     * Updates the Glucagon amount in the Progressbar
      *
      * @param amount - new glucagon amount
      */
