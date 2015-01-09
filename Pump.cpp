@@ -76,7 +76,7 @@ bool Pump::injectGlucagon(float amount)
 //     reduced in the reservoir. 
 bool Pump::decreaseInsulinLevel(float amount)
 {
-    string err = "Reservoir Insulin too low!";
+    QString err = "Reservoir Insulin too low!";
     if (amount <= this->getInsulinLevel())
     {
             insulinLevel-=amount;
@@ -95,7 +95,7 @@ bool Pump::decreaseInsulinLevel(float amount)
 //     reduced in the reservoir.
 bool Pump::decreaseGlucagonLevel(float amount)
 {
-    string err = "Reservoir Glucagon too low!";
+    QString err = "Reservoir Glucagon too low!";
     if (amount <= this->getGlucagonLevel())
     {
             glucagonLevel-=amount;
@@ -160,7 +160,7 @@ float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSu
 {
     int difference;
     float fictInsUnit=0,fictGlucUnit=0;
-    string err = "Error! No valid hormone found!";
+    QString err = "Error! No valid hormone found!";
     string ins = "insulin";
     string gluc= "glucagon";
 

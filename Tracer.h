@@ -11,12 +11,12 @@
 #ifndef tracer_
 #define tracer_
 
-#include <vector>
-#include <QString>
 #include <iostream>
 #include <QObject>
+#include <QString>
 
-using namespace std;
+#define LOGFILE_NAME "InsulinPump.log"
+
 
 
 class Tracer : public QObject
@@ -24,23 +24,26 @@ class Tracer : public QObject
     Q_OBJECT
 
     public:
-        virtual string& getFilename();
-        virtual void setFilename(string& value);
+        Tracer();
+        Tracer(QString path);
+
+        virtual QString getFilename();
+        virtual void setFilename(QString value);
 
         // Writes the message to the log file. Every Message is signed by date 
         // and time. 
         // When writing to file has finished, “True” is returned!
-        virtual bool writeStatusLog(string& message);
+        virtual bool writeStatusLog(QString message);
 
         // Writes the message to the log file. Every Message is signed by date
         // and time. 
         // When writing to file has finished, “True” is returned!
-        virtual bool writeWarningLog(string& message);
+        virtual bool writeWarningLog(QString message);
 
         // Writes the message to the log file. Every Message is signed by date 
         // and time. 
         // When writing to file has finished, “True” is returned!
-        virtual bool writeCriticalLog(string& message);
+        virtual bool writeCriticalLog(QString message);
 
         // Plays an acoustic sound and returns “True” when done
         virtual bool playAcousticWarning();
@@ -50,26 +53,26 @@ class Tracer : public QObject
 
     private:
         // The complete filename and path will stored here.
-        string filename;
+        QString filename;
 
     signals:
         // Callback for writing status log in the UI.
         //
         // Parameter:
         // - The status log to insert
-        void writeStatusLogInUi(string& message);
+        void writeStatusLogInUi(QString message);
 
         // Callback for writing warning log in the UI.
         //
         // Parameter:
         // - The warning log to insert
-        void writeWarningLogInUi(string& message);
+        void writeWarningLogInUi(QString message);
 
         // Callback for writing critical log in the UI.
         //
         // Parameter:
         // - The critical log to insert
-        void writeCriticalLogInUi(string& message);
+        void writeCriticalLogInUi(QString message);
 
 };
 

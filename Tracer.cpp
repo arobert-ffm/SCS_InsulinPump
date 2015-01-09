@@ -15,9 +15,19 @@ using namespace std;
 
 
 
+Tracer::Tracer()
+{
+    filename = LOGFILE_NAME;
+}
+
+Tracer::Tracer(QString path)
+{
+    filename = path;
+}
+
 // Writes the message to the log file. Every Message is signed by date and time.
 // When writing to file has finished, “True” is returned!
-bool Tracer::writeStatusLog(string& message)
+bool Tracer::writeStatusLog(QString message)
 {
     // Update UI
     emit writeStatusLogInUi(message);
@@ -26,7 +36,7 @@ bool Tracer::writeStatusLog(string& message)
 
 // Writes the message to the log file. Every Message is signed by date and time.
 // When writing to file has finished, “True” is returned!
-bool Tracer::writeWarningLog(string& message)
+bool Tracer::writeWarningLog(QString message)
 {
     // Update UI
     emit writeWarningLogInUi(message);
@@ -35,7 +45,7 @@ bool Tracer::writeWarningLog(string& message)
 
 // Writes the message to the log file. Every Message is signed by date and time.
 // When writing to file has finished, “True” is returned!
-bool Tracer::writeCriticalLog(string& message)
+bool Tracer::writeCriticalLog(QString message)
 {
     // Update UI
     emit writeCriticalLogInUi(message);
@@ -45,19 +55,23 @@ bool Tracer::writeCriticalLog(string& message)
 // Plays an acoustic sound and returns “True” when done
 bool Tracer::playAcousticWarning()
 {
+    cout << "ring-ring...";
+    return true;
 }
 
 // vibrates on a specific event and returns “True” when done
 bool Tracer::vibrationWarning()
 {
+    cout << "vibrating...";
+    return true;
 }
 
-std::string& Tracer::getFilename()
+QString Tracer::getFilename()
 {
     return filename;
 }
 
-void Tracer::setFilename(std::string& value)
+void Tracer::setFilename(QString value)
 {
     filename = value;
 }

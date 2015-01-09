@@ -39,7 +39,7 @@ int ControlSystem::checkOperationHours()
 
     if(OperationTime > (MAX_OPERATION_HOURS*60*1000))
     {
-        string msg = "The maximum operation time is reached.";
+        QString msg = "The maximum operation time is reached.";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
@@ -55,7 +55,7 @@ bool ControlSystem::checkScheduler()
 {
     if(!TheScheduler->getStatus())
     {
-        string msg = "The scheduler is in a critical state.";
+        QString msg = "The scheduler is in a critical state.";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
@@ -70,7 +70,7 @@ bool ControlSystem::checkPump()
 {
     if(!ThePump->getStatus())
     {
-        string msg = "The pump is in a critical state.";
+        QString msg = "The pump is in a critical state.";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
@@ -101,7 +101,7 @@ int ControlSystem::checkBatteryStatus()
 
     if(BatteryStatus < BATTERY_MIN_LOAD)
     {
-        string msg = "The batteries charging state is to low.";
+        QString msg = "The batteries charging state is to low.";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
