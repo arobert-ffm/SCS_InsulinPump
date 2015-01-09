@@ -7,6 +7,14 @@
 //
 // Description: Simulates a body suffering from diabetes and reacting to insulin and/or glucagon.
 
+//
+//  Body.cpp
+//  Body
+//
+//  Created by Johannes Kinzig on 04.01.15.
+//  Copyright (c) 2015 Johannes Kinzig. All rights reserved.
+//
+
 #include "Body.h"
 #include <iostream>
 
@@ -15,7 +23,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <string.h>
+//#include <string.h>
 #include <unistd.h>
 
 #include <thread>
@@ -33,13 +41,12 @@ int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
 int     i; // needed for communication over pipes
 
-//
-//  Body.cpp
-//  Body
-//
-//  Created by Johannes Kinzig on 04.01.15.
-//  Copyright (c) 2015 Johannes Kinzig. All rights reserved.
-//
+
+
+
+
+
+
 
 /****************************************************************
  *               used to store data for transmission             *
@@ -48,7 +55,6 @@ int     i; // needed for communication over pipes
 /**********************************
  * transmit_hormone_injection      *
  **********************************/
-
 struct transmit_injection_hormones {
     float injected_insulin;
     float injected_glucagon;
@@ -57,13 +63,16 @@ struct transmit_injection_hormones {
 /**********************************
  * transmit_bloodsugar      *
  **********************************/
-
 struct transmit_bloodsugar {
     float bloodSugarLevel;
 } BodyStatus; // will be send over pipe: body_to_pump
+/****************************************************************
+ *                          END transmission                    *
+ ****************************************************************/
+
 
 /****************************************************************
- *                          END                                 *
+ *                      Class: Body                             *
  ****************************************************************/
 
 // constructor
@@ -118,14 +127,10 @@ bool Body::changeBloodSugarLevel(float strength, bool increasing, bool use_insul
     }
     return true;
 }
-/******************************************************
- *                     END                            *
- ******************************************************/
-
 
 /******************************************************
  *      declaring getter and setter methods           *
- *      for        private var BloodsugarLevel        *
+ *      for private var BloodsugarLevel               *
  ******************************************************/
 void Body::setBloodSugarLevel(float BSL) {
     this->BloodsugarLevel = BSL;
@@ -134,12 +139,14 @@ void Body::setBloodSugarLevel(float BSL) {
 float Body::getBloodSugarLevel() {
     return this->BloodsugarLevel;
 }
-/******************************************************
- *                     END                            *
- ******************************************************/
 
+/****************************************************************
+ *                          END Body                            *
+ ****************************************************************/
 
 Body body(110.00, 5); // generate Body object
+
+
 
 int main(void) {
     
@@ -166,7 +173,7 @@ int test_thread01(void) {
     cout << "Init value for BloodSugarLevel: ";
 
     
-    while ((iterations--) != 0) {
+    while (true) {
         if (FU > 0) {
             body.changeBloodSugarLevel(1.03, false, true);
             FU--; // just for testing in this case
@@ -178,7 +185,6 @@ int test_thread01(void) {
         
         cout << body.getBloodSugarLevel();
         cout << "\n";
-        
     }
     /******************************************************
      *                     END                            *
