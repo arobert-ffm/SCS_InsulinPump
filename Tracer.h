@@ -60,10 +60,7 @@ class Tracer : public QObject
         QString FileName;
 
         // The representation of the logfile
-        QFile LogFile;
-
-        // TextStream for simply putting strings to the logfile
-        QTextStream TextStream;
+        QFile *LogFile;
 
     signals:
         // Callback for writing status log in the UI.

@@ -22,22 +22,22 @@ Tracer::Tracer()
 {
     FileName = LOGFILE_NAME;
 
-    QFile LogFile(FileName);
-    QTextStream TextStream(&LogFile);
+    LogFile = new QFile(FileName);
+    LogFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
 }
 
 Tracer::~Tracer()
 {
-    TextStream.flush();
-    LogFile.flush();
-    LogFile.close();
+    LogFile->flush();
+    LogFile->close();
 }
 
 // Writes the message to the log file. Every Message is signed by date and time.
 // When writing to file has finished, “True” is returned
 bool Tracer::writeStatusLog(QString message)
 {
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << message;
+    QTextStream TextStream(LogFile);
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " INFO: " << message << endl;
 
     // Update UI
     emit writeStatusLogInUi(message);
@@ -48,7 +48,8 @@ bool Tracer::writeStatusLog(QString message)
 // When writing to file has finished, “True” is returned
 bool Tracer::writeWarningLog(QString message)
 {
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " WARNING: " << message;
+    QTextStream TextStream(LogFile);
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " WARNING: " << message << endl;
 
     // Update UI
     emit writeWarningLogInUi(message);
@@ -59,7 +60,8 @@ bool Tracer::writeWarningLog(QString message)
 // When writing to file has finished, “True” is returned
 bool Tracer::writeCriticalLog(QString message)
 {
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " CRITICAL: " << message;
+    QTextStream TextStream(LogFile);
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " CRITICAL: " << message << endl;
 
     // Update UI
     emit writeCriticalLogInUi(message);
