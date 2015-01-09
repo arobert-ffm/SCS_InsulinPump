@@ -32,45 +32,4 @@ class Body {
     int insulin_constant;
 
 };
-
-//class for communicating with the BSL-generating-Thread
-class thread_controller {
-private:
-    float   ThreadBodyFactor;
-    bool    ThreadRising;
-    bool    ThreadUseGlucagon;
-    bool    ThreadUseInsulin;
-    int     ThreadInsulinUnits;
-    bool    ThreadEndThread;
-    
-public:
-    // constructor , destructor
-    thread_controller();
-    ~thread_controller();
-    
-    // ThreadBodyFactor -- tells the thread the body factor
-    void    setThreadBodyFactor(float factor);
-    float   getThreadBodyFactor(void);
-    
-    // ThreadRising -- tells the thread to rise or fall the BSL level
-    void setThreadRising(bool value);
-    bool getThreadRising(void);
-    
-    // ThreadUseGlucagon -- tells the thread to use glucagon
-    void setThreadUseGlucagon(bool value);
-    bool getThreadUseGlucagon(void);
-    
-    // ThreadUseInsulin -- tells the thread to use insulin
-    void setThreadUseInsulin(bool value);
-    bool getThreadUseInsulin(void);
-    
-    // ThreadUseInsulinUnits -- tells the thread the amount of inuslin units
-    void setThreadInsulinUnits(int units);
-    int getThreadInsulinUnits(void);
-    
-    // ThreadEndThread -- tells the thread to terminate
-    void setThreadEndThread(bool value);
-    void getThreadEndThread(void);
-};
-
 #endif

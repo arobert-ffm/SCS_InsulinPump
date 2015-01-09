@@ -16,6 +16,7 @@
 //
 
 #include "Body.h"
+#include "BodyThreadController.h"
 #include <iostream>
 
 #include <stdio.h>
@@ -23,7 +24,6 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-//#include <string.h>
 #include <unistd.h>
 
 #include <thread>
@@ -42,18 +42,12 @@ int     fdes_pump_to_body; // fildescriptor for Pump --> Body
 int     i; // needed for communication over pipes
 
 
-
-
-
-
-
-
-/****************************************************************
+/*****************************************************************
  *               used to store data for transmission             *
  *****************************************************************/
 
 /**********************************
- * transmit_hormone_injection      *
+ * transmit_hormone_injection     *
  **********************************/
 struct transmit_injection_hormones {
     float injected_insulin;
@@ -61,14 +55,75 @@ struct transmit_injection_hormones {
 } Injecting; // will be send over pipe: pump_to_body
 
 /**********************************
- * transmit_bloodsugar      *
+ *       transmit_bloodsugar      *
  **********************************/
 struct transmit_bloodsugar {
     float bloodSugarLevel;
 } BodyStatus; // will be send over pipe: body_to_pump
 /****************************************************************
- *                          END transmission                    *
+ *                      END transmission                        *
  ****************************************************************/
+
+/*****************************************************************
+ *                   Class: ThreadController                     *
+ *****************************************************************/
+// constructor, destructor
+BodyThreadController::BodyThreadController() {
+}
+BodyThreadController::~BodyThreadController() {
+
+}
+
+//ThreadBodyFactor -- tells the thread the body factor
+void BodyThreadController::setThreadBodyFactor(float factor){
+    this->ThreadBodyFactor = factor;
+}
+float BodyThreadController::getThreadBodyFactor(void) {
+    return this->ThreadBodyFactor;
+}
+
+// ThreadRising -- tells the thread to rise or fall the BSL level
+void BodyThreadController::setThreadRising(bool value) {
+    this->ThreadRising = value;
+}
+bool BodyThreadController::getThreadRising(void) {
+    return this->ThreadRising;
+}
+
+// ThreadUseGlucagon -- tells the thread to use glucagon
+void BodyThreadController::setThreadUseGlucagon(bool value) {
+    this->ThreadUseGlucagon = value;
+}
+
+bool BodyThreadController::getThreadUseGlucagon() {
+    return this->ThreadUseGlucagon;
+}
+
+// ThreadUseInsulin -- tells the thread to use insulin
+void BodyThreadController::setThreadUseInsulin(bool value) {
+    this->ThreadUseInsulin = value;
+}
+bool BodyThreadController::getThreadUseInsulin() {
+    return this->ThreadUseInsulin;
+}
+
+// ThreadUseInsulinUnits -- tells the thread the amount of inuslin units
+void BodyThreadController::setThreadInsulinUnits(int units) {
+    this->ThreadInsulinUnits = units;
+}
+
+int BodyThreadController::getThreadInsulinUnits() {
+    return this->ThreadInsulinUnits;
+}
+
+// ThreadEndThread -- tells the thread to terminate
+void BodyThreadController::setThreadEndThread(bool value) {
+    this->ThreadEndThread = value;
+}
+
+bool BodyThreadController::getThreadEndThread() {
+    return this->ThreadEndThread;
+}
 
 
 /****************************************************************
@@ -79,10 +134,10 @@ struct transmit_bloodsugar {
 Body::Body(float BSL, int constant){
     BloodsugarLevel = BSL; // unit: mg/dL
     insulin_constant = constant; // unit: mg/dL sinking per iteration => one iteration estimated as 0.5 hours
-};
+}
 
 // destructor
-Body::~Body(void){
+Body::~Body(){
     
 }
 
