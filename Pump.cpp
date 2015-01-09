@@ -74,16 +74,13 @@ struct transmit_bloodsugar {
  */
 
 /*
- * SUMMARIZE!
+ * Injects either insulin or glucagon into the body.
+ *
+ * Parameters:
+ * - amount : int       the amount of FU to be injected
+ * - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+ *
  */
-
-
-
-// Injects either insulin or glucagon into the body.
-//
-// Parameters:
-// - amount : int       the amount of FU that should be injected
-// - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
 bool Pump::injectHormone(int amount, bool insulin)
 {
     if (insulin)
@@ -97,81 +94,44 @@ bool Pump::injectHormone(int amount, bool insulin)
 }
 
 
-/**
-  *
-  * summarized to above one injectHormone(amount, insulin)
-  *
-// Injects the insulin into the body.
-// 
-// Parameter:
-// - amount: The amount of insulin which is injected into the body.
-bool Pump::injectInsulin(float amount)
-{
-	return true;
-}
-
-// Injects the glucagon into the body.
-// 
-// Parameter:
-// - amount: The amount of glucagon which is injected into the body.
-bool Pump::injectGlucagon(float amount)
-{
-	return true;
-}
-
-*/
-
+/*
+ * Decreases the hormone level in either the insulin or the glucagon reservoir
+ *
+ * Parameters:
+ * - amount: the amount by that the reservoir is reduced
+ * - insulin: true if the hormone is insulin, false if it is glucagon
+ */
 bool decreaseHormoneLevel(int amount, bool insulin)
 {
-
-}
-
-
-/**
-  *
-  * summarized to the above
-  *
-// decreases insulin level in reservoir when injected to body and returns 
-// “true” when done 
-// 
-// Parameter:
-// - amount: The amount of insulin which is injected into the body needs to be 
-//     reduced in the reservoir. 
-bool Pump::decreaseInsulinLevel(float amount)
-{
-    QString err = "Reservoir Insulin too low!";
-    if (amount <= this->getInsulinLevel())
+    if (insulin)
     {
-            insulinLevel-=amount;
-            emit updateInsulinReservoir(insulinLevel);
-            return true;
+        QString err = "Reservoir Insulin too low!";
+        if (amount <= this->getInsulinLevel())
+        {
+                insulinLevel-=amount;
+                emit updateInsulinReservoir(insulinLevel);
+                return true;
+        }
+        tracer.writeCriticalLog(err);
+        return false;
     }
-    tracer.writeCriticalLog(err);
-    return false;
+    else
+    {
+        QString err = "Reservoir Glucagon too low!";
+        if (amount <= this->getGlucagonLevel())
+        {
+                glucagonLevel-=amount;
+                emit updateGlucagonReservoir(glucagonLevel);
+                return true;
+        }
+        tracer.writeCriticalLog(err);
+        return false;
+    }
+
 }
 
-// decreases glucagon level in reservoir when injected to body and returns
-// “true” when done
-//
-// Parameter:
-// - amount: The amount of glucagon which is injected into the body needs to be
-//     reduced in the reservoir.
-bool Pump::decreaseGlucagonLevel(float amount)
-{
-    QString err = "Reservoir Glucagon too low!";
-    if (amount <= this->getGlucagonLevel())
-    {
-            glucagonLevel-=amount;
-            emit updateGlucagonReservoir(glucagonLevel);
-            return true;
-    }
-    tracer.writeCriticalLog(err);
-    return false;
-}
-*/
-/*
- * END SUMMARIZE!
- */
+
+
 
 
 /*
@@ -183,11 +143,22 @@ bool Pump::decreaseGlucagonLevel(float amount)
 
 /*
  * what happens with non-empty string with value other than insulin or glucagon?
+ *
+ * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ * jenny: just take a bool named 'insulin': true if the hormone is insulin, false if glucagon.
+ * worst thing to happen in case of a bug: insulin is false by default. blood sugar will get higher instead of lower.
+ * not good in long term, but no bug will do good in long term.
+ * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ *
+ * // TODO
+ * we need to take care of the delay. insulin only has an effect after half an hour.
+ * we need to take care of the long term effect. insulin will have an effect over max. 12 hrs
+ *          -> how can we know/remember how much insulin there is in the blood circle?
  */
 float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
 {
     int difference;
-    float fictInsUnit=0,fictGlucUnit=0;
+    float fictInsUnit = 0, fictGlucUnit = 0;
     QString err = "Error! No valid hormone found!";
     string ins = "insulin";
     string gluc= "glucagon";
@@ -222,35 +193,46 @@ float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSu
 /*
  * GETTER
  */
-// Checks the battery status and returns the value in percent.
-// In case of a critical status (level smaller than 15%) the user will be 
-// notified acoustically and the incident will be logged by the tracer. 
+
+/*
+ * Checks the battery status and returns the value in percent.
+ * In case of a critical status (level smaller than 15%) the user will be
+ * notified acoustically and the incident will be logged by the tracer.
+ */
 int Pump::getBatteryStatus()
 {
     return this->batteryPowerLevel;
 }
 
-// Checks the entire pump (reservoir, mechanical parts) and returns “true” when 
-// everything is working fine. 
+/*
+ * Checks the entire pump (reservoir, mechanical parts) and returns “true” when
+ * everything is working fine.
+ */
 bool Pump::getStatus()
 {
 	return true;
 }
 
-// Checks the blood sugar concentration and returns the value.
-// Returns current blood sugar level.
+/*
+ * Checks the blood sugar concentration and returns the value.
+ * Returns current blood sugar level.
+ */
 float Pump::getCurrentBloodSugarLevel()
 {
    return this->currentBloodSugarLevel;
 };
 
-// Returns the insulin level in the reservoir.
+/*
+ * Returns the insulin level in the reservoir.
+ */
 float Pump::getInsulinLevel()
 {
     return this->insulinLevel;
 }
 
-// Returns the glucagon level in the reservoir.
+/*
+ * Returns the glucagon level in the reservoir.
+ */
 float Pump::getGlucagonLevel()
 {
     return this->glucagonLevel;
@@ -263,14 +245,18 @@ float Pump::getGlucagonLevel()
 /*
  * SETTER
  */
-// refills insulin and returns “true” when done
+/*
+ * refills insulin and returns “true” when done
+ */
 void Pump::refillInsulin()
 {
     // Update UI
     emit updateInsulinReservoir(100);
 }
 
-// refills glucagon and returns “true” when done
+/*
+ * refills glucagon and returns “true” when done
+ */
 void Pump::refillGlucagon()
 {
     // Update UI
@@ -284,7 +270,9 @@ void Pump::refillGlucagon()
 /*
  * RUNABLE
  */
-//runable for Pump. Gets triggered by Scheduler.
+/*
+ * runable for Pump. Gets triggered by Scheduler.
+ */
 bool Pump::runPump()
 {
     return true;
