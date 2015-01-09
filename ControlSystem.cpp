@@ -83,13 +83,11 @@ bool ControlSystem::checkPump()
 // Checks the tracer and returns “True” when everything is fine
 bool ControlSystem::checkTracer()
 {
-/*
     if(!TheTracer->getStatus())
     {
         cout << "The tracer is in a critical state.";
-        return false
+        return false;
     }
-*/
 
     return true;
 }

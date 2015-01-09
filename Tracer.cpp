@@ -10,6 +10,7 @@
 //
 // Author:       Sven Sperner, sillyconn@gmail.com
 
+
 #include "Tracer.h"
 
 using namespace std;
@@ -77,6 +78,17 @@ bool Tracer::playAcousticWarning()
 bool Tracer::vibrationWarning()
 {
     cout << "vibrating...";
+    return true;
+}
+
+// Answers ControlSystem’s call for checkTracer()
+bool Tracer::getStatus()
+{
+    if(!LogFile->isOpen() || !LogFile->isWritable())
+    {
+        return false;
+    }
+
     return true;
 }
 

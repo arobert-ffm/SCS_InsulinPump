@@ -51,8 +51,11 @@ class Tracer : public QObject
         // Plays an acoustic sound and returns “True” when done
         virtual bool playAcousticWarning();
 
-        // vibrates on a specific event and returns “True” when done
+        // Vibrates on a specific event and returns “True” when done
         virtual bool vibrationWarning();
+
+        // Answers ControlSystem’s call for checkTracer()
+        virtual bool getStatus();
 
     private:
         // The complete filename and path will stored here.
