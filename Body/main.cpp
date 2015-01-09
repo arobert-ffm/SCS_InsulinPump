@@ -35,7 +35,7 @@ using namespace std;
 
 int     main                        (void);
 int     communication_via_pipes     (void); // is working!
-int     test_thread01               (void); // thread developed right now
+int     BSL_Sim_thread               (void); // thread developed right now
 
 int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
@@ -116,6 +116,10 @@ int BodyThreadController::getThreadInsulinUnits() {
     return this->ThreadInsulinUnits;
 }
 
+void BodyThreadController::minusThreadInsulinUnits(int value) {
+    this->ThreadInsulinUnits = this->ThreadInsulinUnits - value;
+}
+
 // ThreadEndThread -- tells the thread to terminate
 void BodyThreadController::setThreadEndThread(bool value) {
     this->ThreadEndThread = value;
@@ -124,6 +128,9 @@ void BodyThreadController::setThreadEndThread(bool value) {
 bool BodyThreadController::getThreadEndThread() {
     return this->ThreadEndThread;
 }
+/****************************************************************
+ *                  END BodyThreadController                    *
+ ****************************************************************/
 
 
 /****************************************************************
@@ -200,14 +207,22 @@ float Body::getBloodSugarLevel() {
  ****************************************************************/
 
 Body body(110.00, 5); // generate Body object
-
+BodyThreadController communication; // generate object for communication
 
 
 int main(void) {
     
+    // Initialize values
+    communication.setThreadBodyFactor(1.003);
+    communication.setThreadRising(false);
+    communication.setThreadUseGlucagon(false);
+    communication.setThreadInsulinUnits(5);
+    communication.setThreadEndThread(false);
+    
+    
     cout << "Start\n";
     
-    thread first_thread(test_thread01);
+    thread first_thread(BSL_Sim_thread);
     
     first_thread.join();
     
@@ -215,39 +230,43 @@ int main(void) {
     return 0;
 }
 
-// simulating BSL - should be inside a seperate thread
-int test_thread01(void) {
-    cout << "\nThread started\n";
-    /******************************************************
-     *            Vars and values for testing             *
-     ******************************************************/
 
-    int FU = 5; // fictive units of insulin - just for testing in this case
-    int iterations = 15;
+/******************************************************
+ *                  BSL-Simulator                     *
+ ******************************************************/
+int BSL_Sim_thread(void) {
+    cout << "\nThread started\n";
     
     cout << "Init value for BloodSugarLevel: ";
 
     
     while (true) {
-        if (FU > 0) {
-            body.changeBloodSugarLevel(1.03, false, true);
-            FU--; // just for testing in this case
+        
+        // generate BSL graph
+        if ((communication.getThreadInsulinUnits()) > 0) {
+            body.changeBloodSugarLevel(communication.getThreadBodyFactor(), communication.getThreadRising(), true);
+            communication.minusThreadInsulinUnits(1);
         }
         
-        else if (FU == 0) {
-            body.changeBloodSugarLevel(1.03, false, false);
+        else if (communication.getThreadInsulinUnits() == 0) {
+            body.changeBloodSugarLevel(communication.getThreadBodyFactor(), communication.getThreadRising(), false);
         }
         
         cout << body.getBloodSugarLevel();
         cout << "\n";
+        
+        if (communication.getThreadEndThread() == true) {
+            break;
+        }
+
     }
-    /******************************************************
-     *                     END                            *
-     ******************************************************/
     
     cout << "\nThread ended\n";
     return 0;
 }
+/******************************************************
+ *                     END                            *
+ ******************************************************/
 
 // communication via pipes
 int communication_via_pipes (void) {
