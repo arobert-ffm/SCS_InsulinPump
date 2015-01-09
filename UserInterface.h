@@ -2,6 +2,7 @@
 #define USERINTERFACE_H
 
 #include <QMainWindow>
+#include <QString>
 #include <string>
 
 using namespace std;
@@ -38,19 +39,19 @@ public slots:
      *
      * @param message - string message to insert
      */
-    void insertStatusLog(string& message);
+    void insertStatusLog(QString message);
     /**
      * Inserts the warning message in to the QListWidgetItem
      *
      * @param message - string message to insert
      */
-    void insertWarningLog(string& message);
+    void insertWarningLog(QString message);
     /**
      * Inserts the critical message in to the QListWidgetItem
      *
      * @param message - string message to insert
      */
-    void insertCriticalLog(string& message);
+    void insertCriticalLog(QString message);
 
 private slots:
     /**

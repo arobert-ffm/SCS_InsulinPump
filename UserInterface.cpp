@@ -90,9 +90,9 @@ void UserInterface::glucagonAmountInReservoirChanged(float amount)
  *
  * @param message - string message to insert
  */
-void UserInterface::insertStatusLog(string& message)
+void UserInterface::insertStatusLog(QString message)
 {
-    ui->mMessageList->addItem(new QListWidgetItem("Status:\t" + QString::fromStdString(message)));
+    ui->mMessageList->addItem(new QListWidgetItem("Status:\t" + message));
     ui->mMessageList->scrollToBottom();
 }
 
@@ -101,9 +101,9 @@ void UserInterface::insertStatusLog(string& message)
  *
  * @param message - string message to insert
  */
-void UserInterface::insertWarningLog(string& message)
+void UserInterface::insertWarningLog(QString message)
 {
-    QListWidgetItem* item = new QListWidgetItem("Warning:\t" + QString::fromStdString(message));
+    QListWidgetItem* item = new QListWidgetItem("Warning:\t" + message);
     item->setBackgroundColor(Qt::yellow);
     ui->mMessageList->addItem(item);
     ui->mMessageList->scrollToBottom();
@@ -114,9 +114,9 @@ void UserInterface::insertWarningLog(string& message)
  *
  * @param message - string message to insert
  */
-void UserInterface::insertCriticalLog(string& message)
+void UserInterface::insertCriticalLog(QString message)
 {
-    QListWidgetItem* item = new QListWidgetItem("Critical:\t" + QString::fromStdString(message));
+    QListWidgetItem* item = new QListWidgetItem("Critical:\t" + message);
     item->setBackgroundColor(Qt::red);
     ui->mMessageList->addItem(item);
     ui->mMessageList->scrollToBottom();
