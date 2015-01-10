@@ -131,51 +131,22 @@ public:
 /*
  * SETTER
  */
-        // Injects either insulin or glucagon into the body.
+        /* Injects either insulin or glucagon into the body.
         //
         // Parameters:
         // - amount : int       the amount of FU that should be injected
         // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        */
         virtual bool injectHormone(int amount, bool insulin);
 
-        /**
-          * summarized to above one injectHormone(amount, insulin)
-          *
-        // Injects the insulin into the body.
-        //
-        // Parameter:
-        // - amount: The amount of insulin which is injected into the body.
-        virtual bool injectInsulin(float amount);
-
-        // Injects the glucagon into the body.
-        //
-        // Parameter:
-        // - amount: The amount of glucagon which is injected into the body.
-        virtual bool injectGlucagon(float amount);
-        */
-
-
-        // Decreases either the insulin or the glucagon level in the reservoir when a hormone is
+        /* Decreases either the insulin or the glucagon level in the reservoir when a hormone is
         // injected to the body
         //
         // Parameters:
         // - amount : int       the amount of FU by that the reservoir should be decreased
         // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        */
         virtual bool decreaseHormoneLevel(int amount, bool insulin);
-
-        /**
-          *
-          * summarized to above one decreaseHormoneLevel(amount)
-          *
-        // decreases insulin level in reservoir when injected to body and
-        // returns “True” when done
-        //
-        // Parameter:
-        // - amount: The amount of insulin which is injected into the body
-        //     needs to be reduced in the reservoir.
-        virtual bool decreaseInsulinLevel(float amount);
-        virtual bool decreaseGlucagonLevel(float amount);
-*/
 
 /*
  * SIGNALS

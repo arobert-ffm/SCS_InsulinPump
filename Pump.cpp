@@ -101,7 +101,7 @@ bool Pump::injectHormone(int amount, bool insulin)
  * - amount: the amount by that the reservoir is reduced
  * - insulin: true if the hormone is insulin, false if it is glucagon
  */
-bool decreaseHormoneLevel(int amount, bool insulin)
+bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 {
     if (insulin)
     {
