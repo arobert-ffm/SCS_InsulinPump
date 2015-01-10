@@ -19,11 +19,17 @@
 #include "Pump.h"
 
 
+#define CONFIGFILE_NAME "InsulinPump.conf"
+
+
 
 class Scheduler
 {
     public:
+        // The constructor initializes the time measurement
         Scheduler(Pump *ThePump);
+
+        // The constructor initializes the logfile
         ~Scheduler();
 
         // Answers ControlSystem’s call for checkScheduler()
@@ -32,11 +38,24 @@ class Scheduler
         // Answers ControlSystem's call for checkOperationTime()
         virtual qint64 getOperationTime();
 
-    private:
-        int TimerResetValueSec;
+        // Resets the timer and sets the countdown time according to parameter
+        virtual bool resetTimer(int time_min);
 
-        // Timer of the Scheduler for measuring operation hours
+        // Returns the file name of the configuration file
+        virtual QString getConfigFileName();
+
+        // Triggers the pump which then checks the blood sugar level
+        virtual bool triggerPump();
+
+        // Triggers the scheduler to save the systems operation time
+        virtual bool saveOperationTime();
+
+    private:
+        // Timer of the Scheduler for measuring operation time
         QElapsedTimer Timer;
+
+        // File name of the configuration file
+        QString ConfigFileName;
 
         // File for saving total operation time
         QSettings *SaveFile;
@@ -46,24 +65,16 @@ class Scheduler
         // reached.
         qint64 TotalOperationTime;
 
-        // Pump
-        Pump *HormonePump;
+        // A local representation of the hormone pump
+        Pump *ThePump;
 
-        // Triggers the pump which then checks the blood sugar level
-        virtual bool triggerPump();
+        // Starts the counter for operation time and returns “True” when success-
+        // fully started. The value will be read from “TotalOperationHours”.
+        virtual bool startOperationTimeCounter();
 
-        // Resets the timer and sets the countdown time according to parameter
-        virtual bool resetTimer(int time_min);
-
-        // Starts the counter for operation hours and returns “True” when 
-        // successfully started. The value will be written to 
-        // “TotalOperationHours”.  
-        virtual bool startOperationHoursCounter();
-
-        // Stops the counter for operation hours and returns “True” when 
-        // successfully stopped. The value will be written to 
-        // “TotalOperationHours”. 
-        virtual bool stopOperationHoursCounter();
+        // Stops the counter for operation time and returns “True” when success-
+        // fully stopped. The value will be written to “TotalOperationHours”.
+        virtual bool stopOperationTimeCounter();
 
 };
 

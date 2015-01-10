@@ -16,6 +16,8 @@ using namespace std;
 
 
 
+// The constructor instantiates all necessary objects
+// and connects some signals to slot for the user interface
 ControlSystem::ControlSystem(UserInterface* ui)
 {
     ThePump = new Pump();
@@ -30,6 +32,7 @@ ControlSystem::ControlSystem(UserInterface* ui)
     QObject::connect(TheTracer, SIGNAL(writeCriticalLogInUi(QString)), ui, SLOT(insertCriticalLog(QString)));
     QObject::connect(ui, SIGNAL(refillInsulinInPump()), ThePump, SLOT(refillInsulin()));
     QObject::connect(ui, SIGNAL(refillGlucagonInPump()), ThePump, SLOT(refillGlucagon()));
+    //QObject::connect(this, SIGNAL(saveOperationTimeInUi(int)), ui, SLOT(insertOprationTime(int)));
 }
 
 // Checks the operation hours of the system and returns the value in hours
@@ -37,16 +40,20 @@ int ControlSystem::checkOperationHours()
 {
     qint64 OperationTime = TheScheduler->getOperationTime();
 
-    if(OperationTime > (MAX_OPERATION_HOURS*60*1000))
+    if(OperationTime > (MAX_OPERATION_HOURS*60*60*1000))
     {
-        QString msg = "The maximum operation time is reached.";
+        QString msg = "The maximum operation time (" + QString::number(MAX_OPERATION_HOURS)
+                    + "h) is reached (" + QString::number(OperationTime/1000) + "sec).";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
         return EXIT_FAILURE;
     }
 
-    return (OperationTime/60/1000);
+    // Update UI with actual operation time
+    //emit saveOperationTimeInUi(getOperationTime()/60/60/1000);
+
+    return (OperationTime/60/60/1000);
 }
 
 // Checks the scheduler for correct operation and returns “True” when 
@@ -99,7 +106,7 @@ int ControlSystem::checkBatteryStatus()
 
     if(BatteryStatus < BATTERY_MIN_LOAD)
     {
-        QString msg = "The batteries charging state is to low.";
+        QString msg = "The batteries charging state is to low (" + QString::number(BatteryStatus)+ "%).";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
@@ -107,6 +114,12 @@ int ControlSystem::checkBatteryStatus()
     }
 
     return BatteryStatus;
+}
+
+// Returns the used scheduler
+Scheduler* ControlSystem::getScheduler()
+{
+    return TheScheduler;
 }
 
 

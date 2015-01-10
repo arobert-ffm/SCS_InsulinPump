@@ -17,16 +17,19 @@ using namespace std;
 
 
 
+// The constructor initializes the logfile
 Tracer::Tracer()
 {
-    FileName = LOGFILE_NAME;
-
-    LogFile = new QFile(FileName);
+    // Copy the logfile name and open the file
+    LogFileName = LOGFILE_NAME;
+    LogFile = new QFile(LogFileName);
     LogFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
 }
 
+// The destructor closes the logfile
 Tracer::~Tracer()
 {
+    // Flush the logfile buffer and close the file
     LogFile->flush();
     LogFile->close();
 }
@@ -35,11 +38,14 @@ Tracer::~Tracer()
 // When writing to file has finished, “True” is returned
 bool Tracer::writeStatusLog(QString message)
 {
+    // Write status message to logfile
     QTextStream TextStream(LogFile);
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " INFO: " << message << endl;
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss")
+               << " INFO: " << message << endl;
 
-    // Update UI
+    // Update UI with actually sent status message
     emit writeStatusLogInUi(message);
+
     return true;
 }
 
@@ -47,11 +53,14 @@ bool Tracer::writeStatusLog(QString message)
 // When writing to file has finished, “True” is returned
 bool Tracer::writeWarningLog(QString message)
 {
+    // Write warning message to logfile
     QTextStream TextStream(LogFile);
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " WARNING: " << message << endl;
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss")
+               << " WARNING: " << message << endl;
 
-    // Update UI
+    // Update UI with actually sent warning message
     emit writeWarningLogInUi(message);
+
     return true;
 }
 
@@ -59,22 +68,27 @@ bool Tracer::writeWarningLog(QString message)
 // When writing to file has finished, “True” is returned
 bool Tracer::writeCriticalLog(QString message)
 {
+    // Write critical message to logfile
     QTextStream TextStream(LogFile);
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") << " CRITICAL: " << message << endl;
+    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss")
+               << " CRITICAL: " << message << endl;
 
-    // Update UI
+    // Update UI with actually sent critical message
     emit writeCriticalLogInUi(message);
+
     return true;
 }
 
 // Plays an acoustic sound and returns “True” when done
+// When playing a sound has finished, “True” is returned
 bool Tracer::playAcousticWarning()
 {
     QApplication::beep();
     return true;
 }
 
-// vibrates on a specific event and returns “True” when done
+// Vibrates on a specific event and returns “True” when done
+// When vibration has finished, “True” is returned
 bool Tracer::vibrationWarning()
 {
     cout << "vibrating...";
@@ -82,6 +96,7 @@ bool Tracer::vibrationWarning()
 }
 
 // Answers ControlSystem’s call for checkTracer()
+// Everything is fine, if the logfile is opened & writeable
 bool Tracer::getStatus()
 {
     if(!LogFile->isOpen() || !LogFile->isWritable())
@@ -90,6 +105,12 @@ bool Tracer::getStatus()
     }
 
     return true;
+}
+
+// Returns the file name of the logfile
+QString Tracer::getLogFileName()
+{
+    return LogFileName;
 }
 
 

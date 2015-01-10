@@ -30,7 +30,10 @@ class Tracer : public QObject
     Q_OBJECT
 
     public:
+        // The constructor initializes the logfile
         Tracer();
+
+        // The destructor closes the logfile
         ~Tracer();
 
         // Writes the message to the log file.
@@ -57,9 +60,12 @@ class Tracer : public QObject
         // Answers ControlSystem’s call for checkTracer()
         virtual bool getStatus();
 
+        // Returns the file name of the logfile
+        virtual QString getLogFileName();
+
     private:
         // The complete filename and path will stored here.
-        QString FileName;
+        QString LogFileName;
 
         // The representation of the logfile
         QFile *LogFile;

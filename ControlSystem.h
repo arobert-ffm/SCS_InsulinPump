@@ -18,6 +18,7 @@
 #include "Tracer.h"
 #include "Pump.h"
 
+
 #define BATTERY_MIN_LOAD 10
 #define MAX_OPERATION_HOURS 500
 
@@ -26,6 +27,8 @@
 class ControlSystem
 {
     public:
+        // The constructor instantiates all necessary objects
+        // and connects some signals to slot for the user interface
         ControlSystem(UserInterface* ui);
 
         // Checks the operation hours of the mechanical parts (motor) and 
@@ -45,9 +48,17 @@ class ControlSystem
         // Checks the batteries charging state and returns the value in percent
         virtual int checkBatteryStatus();
 
+        // Returns the used scheduler
+        virtual Scheduler *getScheduler();
+
     private:
+        // A local representation of the hormone pump
         Pump *ThePump;
+
+        // A local representation of the scheduler
         Scheduler *TheScheduler;
+
+        // A local representation of the tracer
         Tracer *TheTracer;
 
 };
