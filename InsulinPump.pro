@@ -11,6 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = InsulinPump
 TEMPLATE = app
 
+CONFIG += c++11
+
+LIBS += -pthread
 
 SOURCES +=\
     ControlSystem.cpp \

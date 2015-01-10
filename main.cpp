@@ -4,17 +4,54 @@
 // Date: 07.01.15 16:54
 //
 // Description:  main() routine of insulin pump simulation
+//               Threads for ControlSystem & Scheduler
 //
 // Author:       Sven Sperner, sillyconn@gmail.com
 
 
 #include <QApplication>
+#include <thread>
+#include <unistd.h>
 #include "UserInterface.h"
 #include "ControlSystem.h"
+#include "Scheduler.h"
+
+
+#define CHECK_INTERVAL_SEC 5
+#define RUN_INTERVAL_SEC 5
 
 using namespace std;
 
 
+
+int watch(ControlSystem *ControlSystem)
+{
+    while(true)
+    {
+        ControlSystem->checkBatteryStatus();
+        ControlSystem->checkOperationHours();
+        ControlSystem->checkPump();
+        ControlSystem->checkScheduler();
+        ControlSystem->checkTracer();
+
+        sleep(CHECK_INTERVAL_SEC);
+    }
+
+    return EXIT_SUCCESS;
+}
+
+int schedule(Scheduler *Scheduler)
+{
+    while(true)
+    {
+        Scheduler->triggerPump();
+        Scheduler->saveOperationTime();
+
+        sleep(RUN_INTERVAL_SEC);
+    }
+
+    return EXIT_SUCCESS;
+}
 
 /**
  * Initiation of the Userinterface, Humanbody- and Insulinpumpsimulation.
@@ -30,8 +67,14 @@ int main(int argc, char *argv[])
     QApplication application(argc, argv);
     UserInterface window;
 
-    // Start System
-    ControlSystem controlsystem(&window);
+    // Start Controll System Thread
+    ControlSystem TheControlSystem(&window);
+    thread Controller(watch,&TheControlSystem);
+    Controller.detach();
+
+    // Start Scheduler Thread
+    thread Scheduler(schedule,TheControlSystem.getScheduler());
+    Scheduler.detach();
 
     // Show UI
     window.show();

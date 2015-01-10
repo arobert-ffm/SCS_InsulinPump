@@ -17,33 +17,24 @@ using namespace std;
 
 
 
+// The constructor initializes the time measurement
 Scheduler::Scheduler(Pump *ThePump)
 {
-    startOperationHoursCounter();
-
-    this->HormonePump = ThePump;
+    startOperationTimeCounter();
+    ConfigFileName = CONFIGFILE_NAME;
+    this->ThePump = ThePump;
 }
 
+// The destructor stops the time measurement
 Scheduler::~Scheduler()
 {
-    stopOperationHoursCounter();
-}
-
-// Triggers the pump which then checks the blood sugar level
-bool Scheduler::triggerPump()
-{
-    if(!HormonePump->runPump())
-    {
-        return false;
-    }
-
-    return true;
+    stopOperationTimeCounter();
 }
 
 // Resets the timer and sets the countdown time according to parameter
 bool Scheduler::resetTimer(int time_min)
 {
-    TotalOperationTime = time_min;
+    TotalOperationTime = time_min*60*1000;
     Timer.restart();
 
     return true;
@@ -52,7 +43,7 @@ bool Scheduler::resetTimer(int time_min)
 // Answers ControlSystem’s call for checkScheduler()
 bool Scheduler::getStatus()
 {
-    if(!Timer.isValid() || TotalOperationTime <= 0)
+    if(!Timer.isValid())
     {
         return false;
     }
@@ -66,29 +57,61 @@ qint64 Scheduler::getOperationTime()
     return TotalOperationTime;
 }
 
-// Starts the counter for operation hours and returns “True” when successfully
-// started. The value will be written to “TotalOperationHours”. 
-bool Scheduler::startOperationHoursCounter()
+// Triggers the pump which then checks the blood sugar level
+bool Scheduler::triggerPump()
 {
-    Timer.start();
-
-    SaveFile = new QSettings("InsulinPump.conf", QSettings::NativeFormat);
-    SaveFile->beginGroup( "InsulinPump" );
-    TotalOperationTime = SaveFile->value("TotalOperationTime").toLongLong();
+    if(!ThePump->runPump())
+    {
+        return false;
+    }
 
     return true;
 }
 
-// Stops the counter for operation hours and returns “True” when successfully 
-// stopped. The value will be written to “TotalOperationHours”.
-bool Scheduler::stopOperationHoursCounter()
+// Triggers the scheduler to save the systems operation time
+bool Scheduler::saveOperationTime()
 {
-    TotalOperationTime += Timer.elapsed();
-
-    SaveFile->beginGroup( "InsulinPump" );
-    SaveFile->setValue("TotalOperationTime", TotalOperationTime);
+    stopOperationTimeCounter();
+    startOperationTimeCounter();
 
     return true;
+}
+
+// Starts the counter for operation time and returns “True” when successfully
+// started. The value will be read from “TotalOperationTime”.
+bool Scheduler::startOperationTimeCounter()
+{
+    // Start the timer for measuring the operation time
+    Timer.start();
+
+    // Read the total operation time and copy the value
+    SaveFile = new QSettings(ConfigFileName, QSettings::NativeFormat);
+    SaveFile->beginGroup( "InsulinPump" );
+    TotalOperationTime = SaveFile->value("TotalOperationTime").toLongLong();
+    SaveFile->endGroup();
+
+    return true;
+}
+
+// Stops the counter for operation time and returns “True” when successfully
+// stopped. The value will be written to “TotalOperationHours”.
+bool Scheduler::stopOperationTimeCounter()
+{
+    // Get actual system uptime and add to total operation time
+    TotalOperationTime += Timer.elapsed();
+
+    // Save the total operation time into a file
+    SaveFile->beginGroup( "InsulinPump" );
+    SaveFile->setValue("TotalOperationTime", TotalOperationTime);
+    SaveFile->endGroup();
+
+    return true;
+}
+
+// Returns the file name of the configuration file
+QString Scheduler::getConfigFileName()
+{
+    return ConfigFileName;
 }
 
 
