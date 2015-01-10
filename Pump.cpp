@@ -249,7 +249,6 @@ void Pump::setBatteryPowerLevel(int power)
     {
         this->batteryPowerLevel = power;
     }
-    return EXIT_FAILURE;
     tracer.writeCriticalLog(err);
 }
 
