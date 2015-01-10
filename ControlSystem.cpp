@@ -75,7 +75,7 @@ bool ControlSystem::checkScheduler()
 // Checks the hormone reservoir and returns “True” when everything is fine
 bool ControlSystem::checkPump()
 {
-    if(!ThePump->getStatus())
+    if(!ThePump->getPumpStatus())
     {
         QString msg = "The pump is in a critical state.";
         TheTracer->writeCriticalLog(msg);
@@ -102,7 +102,7 @@ bool ControlSystem::checkTracer()
 // Checks the batteries charging state and returns the value in percent
 int ControlSystem::checkBatteryStatus()
 {
-    int BatteryStatus = ThePump->getBatteryStatus();
+    int BatteryStatus = ThePump->checkPumpBatteryStatus();
 
     if(BatteryStatus < BATTERY_MIN_LOAD)
     {

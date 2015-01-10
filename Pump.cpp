@@ -11,10 +11,10 @@
 //TODO
 /*
  * 1. clean up code.
- * 2. summarize decreaseInsulin and decreaseGlucagon into one.
+ * 2. summarize decreaseInsulin and decreaseGlucagon into one. -> done
  * 3. summarize injectInsulin and injectGlucagon into one.
  * 4. code runable and rest of methods.
- * 5. test calculateNeededHormone for non-empty wrong value strings.
+ * 5. test calculateNeededHormone for non-empty wrong value strings. -> done
  * 6. refactor code. especially code that is redundant.
  * 7. test pump.
  */
@@ -43,9 +43,8 @@ int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
 
 
-/*
- * STRUCTS
- */
+// STRUCTS
+
 /**********************************
  * transmit_hormone_injection      *
  **********************************/
@@ -63,16 +62,9 @@ struct transmit_bloodsugar {
     float bloodSugarLevel;
 } BodyStatus;
 
-/*
- * END STRUCTS
- */
+//END STRUCTS
 
-
-
-/*
- * FUNCTIONS
- */
-
+// FUNCTIONS
 /*
  * Injects either insulin or glucagon into the body.
  *
@@ -80,6 +72,12 @@ struct transmit_bloodsugar {
  * - amount : int       the amount of FU to be injected
  * - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
  *
+ */
+/**
+ * @brief Pump::injectHormone
+ * @param amount
+ * @param insulin
+ * @return true if injection was ok.
  */
 bool Pump::injectHormone(int amount, bool insulin)
 {
@@ -93,13 +91,18 @@ bool Pump::injectHormone(int amount, bool insulin)
     return true;
 }
 
-
 /*
  * Decreases the hormone level in either the insulin or the glucagon reservoir
  *
  * Parameters:
  * - amount: the amount by that the reservoir is reduced
  * - insulin: true if the hormone is insulin, false if it is glucagon
+ */
+/**
+ * @brief Pump::decreaseHormoneLevel
+ * @param amount unit subtracted from reservoir.
+ * @param insulin true if insulin, false if glucagon.
+ * @return false if no decrease happened.
  */
 bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 {
@@ -108,8 +111,8 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
         QString err = "Reservoir Insulin too low!";
         if (amount <= this->getInsulinReservoirLevel())
         {
-                insulinLevel-=amount;
-                emit updateInsulinReservoir(insulinLevel);
+                insulinReservoirLevel-=amount;
+                emit updateInsulinReservoir(insulinReservoirLevel);
                 return true;
         }
         tracer.writeCriticalLog(err);
@@ -120,8 +123,8 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
         QString err = "Reservoir Glucagon too low!";
         if (amount <= this->getGlucagonReservoirLevel())
         {
-                glucagonLevel-=amount;
-                emit updateGlucagonReservoir(glucagonLevel);
+                glucagonReservoirLevel-=amount;
+                emit updateGlucagonReservoir(glucagonReservoirLevel);
                 return true;
         }
         tracer.writeCriticalLog(err);
@@ -130,6 +133,16 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 
 }
 
+int Pump::checkPumpBatteryStatus(void)
+{
+    QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
+    if(this->getBatteryPowerLevel()<=15)
+    {
+//        emit writeWarningLogInUi(warn);
+        tracer.writeWarningLog(warn);
+    }
+    return EXIT_FAILURE;
+}
 /*
  * author: Markus
  * BEGIN SOLUTION <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
@@ -154,6 +167,11 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 /*
  * summarize and refactor method. return value only needs to be calculated from hsf, tBSL and cBSL.
  */
+/**
+ * @brief Pump::calculateNeededHormone
+ * @param targetBloodSugarLevel
+ * @return units of hormone to inject into body
+ */
 int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 {
     int difference, fictInsUnit = 0, fictGlucUnit = 0;
@@ -177,32 +195,32 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
     return EXIT_FAILURE;
 }
 /*
- * END SOLUTIONS
+ * END SOLUTION
  */
 /*
  * END FUNCTIONS
  */
 
 
-/*
- * GETTER
- */
-
+// GETTER
 /*
  * Checks the battery status and returns the value in percent.
  * In case of a critical status (level smaller than 15%) the user will be
  * notified acoustically and the incident will be logged by the tracer.
  */
-int Pump::getBatteryStatus()
+/**
+ * @brief Pump::getBatteryPowerLevel
+ * @return current battery status.
+ */
+int Pump::getBatteryPowerLevel()
 {
     return this->batteryPowerLevel;
 }
-
 /*
  * Checks the entire pump (reservoir, mechanical parts) and returns “true” when
  * everything is working fine.
  */
-bool Pump::getStatus()
+bool Pump::getPumpStatus()
 {
 	return true;
 }
@@ -211,53 +229,78 @@ bool Pump::getStatus()
  * Checks the blood sugar concentration and returns the value.
  * Returns current blood sugar level.
  */
+/**
+ * @brief Pump::getCurrentBloodSugarLevel
+ * @return current blood sugar level.
+ */
 int Pump::getCurrentBloodSugarLevel()
 {
    return this->currentBloodSugarLevel;
-};
+}
 
 /*
  * Returns the insulin level in the reservoir.
  */
-float Pump::getInsulinReservoirLevel()
+/**
+ * @brief Pump::getInsulinReservoirLevel
+ * @return insulinLevel of reservoir
+ */
+int Pump::getInsulinReservoirLevel()
 {
-    return this->insulinLevel;
+    return this->insulinReservoirLevel;
 }
 
 /*
  * Returns the glucagon level in the reservoir.
  */
-float Pump::getGlucagonReservoirLevel()
+/**
+ * @brief Pump::getGlucagonReservoirLevel
+ * @return
+ */
+int Pump::getGlucagonReservoirLevel()
 {
-    return this->glucagonLevel;
+    return this->glucagonReservoirLevel;
 }
-/*
- * END GETTER
- */
+
+// END GETTER
 
 
-/*
- * SETTER
- */
+// SETTER
 /*
  * recharge battery.
  */
-void Pump::setBatteryPowerLevel(int power)
+/**
+ * @brief Pump::rechargeBatteryPower
+ * @param charge
+ */
+void Pump::rechargeBatteryPower(int charge)
 {
     QString err = "Insufficient Power! Battery not charged!";
-    if(power >=batteryPowerLevel)
+    if(charge >=batteryPowerLevel)
     {
-        this->batteryPowerLevel = power;
+        this->batteryPowerLevel = charge;
     }
     tracer.writeCriticalLog(err);
 }
 
 /*
- * END SETTER
+ * drains power from battery.
  */
+/**
+ * @brief Pump::setBatteryPowerLevel
+ * @param powerdrain
+ */
+void Pump::setBatteryPowerLevel(int powerdrain)
+{
+    if(powerdrain>0 && powerdrain<=batteryPowerLevel)
+        batteryPowerLevel-=powerdrain;
+}
 
 /*
  * refills insulin and returns “true” when done
+ */
+/**
+ * @brief Pump::refillInsulin
  */
 void Pump::refillInsulin()
 {
@@ -268,21 +311,25 @@ void Pump::refillInsulin()
 /*
  * refills glucagon and returns “true” when done
  */
+/**
+ * @brief Pump::refillGlucagon
+ */
 void Pump::refillGlucagon()
 {
     // Update UI
     emit updateGlucagonReservoir(100);
 }
-/*
- * END SETTER
- */
+
+// END SETTER
 
 
-/*
- * RUNABLE
- */
+// RUNABLE
 /*
  * runable for Pump. Gets triggered by Scheduler.
+ */
+/**
+ * @brief Pump::runPump
+ * @return true on exit if everything is ok.
  */
 bool Pump::runPump()
 {
@@ -332,9 +379,8 @@ bool Pump::runPump()
     // TODO!!
     return true;
 }
-/*
- * END RUNABLE
- */
+
+// END RUNABLE
 
 
 
