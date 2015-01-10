@@ -22,6 +22,7 @@
 #include "Pump.h"
 
 #include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -92,6 +93,7 @@ bool Pump::injectHormone(int amount, bool insulin)
     return true;
 }
 
+
 /*
  * Decreases the hormone level in either the insulin or the glucagon reservoir
  *
@@ -99,12 +101,12 @@ bool Pump::injectHormone(int amount, bool insulin)
  * - amount: the amount by that the reservoir is reduced
  * - insulin: true if the hormone is insulin, false if it is glucagon
  */
-bool Pump::decreaseHormoneLevel(int amount, bool insulin)
+bool decreaseHormoneLevel(int amount, bool insulin)
 {
     if (insulin)
     {
         QString err = "Reservoir Insulin too low!";
-        if (amount <= this->getInsulinReservoirLevel())
+        if (amount <= this->getInsulinLevel())
         {
                 insulinLevel-=amount;
                 emit updateInsulinReservoir(insulinLevel);
@@ -116,7 +118,7 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
     else
     {
         QString err = "Reservoir Glucagon too low!";
-        if (amount <= this->getGlucagonReservoirLevel())
+        if (amount <= this->getGlucagonLevel())
         {
                 glucagonLevel-=amount;
                 emit updateGlucagonReservoir(glucagonLevel);
@@ -152,9 +154,6 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
  * we need to take care of the delay. insulin only has an effect after half an hour.
  * we need to take care of the long term effect. insulin will have an effect over max. 12 hrs
  *          -> how can we know/remember how much insulin there is in the blood circle?
- */
-/*
- * summarize calculation, because absolute value only differs by minus sign. so FUs are calculated to cBSL and tBSL
  */
 float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
 {
@@ -226,7 +225,7 @@ float Pump::getCurrentBloodSugarLevel()
 /*
  * Returns the insulin level in the reservoir.
  */
-float Pump::getInsulinReservoirLevel()
+float Pump::getInsulinLevel()
 {
     return this->insulinLevel;
 }
@@ -234,7 +233,7 @@ float Pump::getInsulinReservoirLevel()
 /*
  * Returns the glucagon level in the reservoir.
  */
-float Pump::getGlucagonReservoirLevel()
+float Pump::getGlucagonLevel()
 {
     return this->glucagonLevel;
 }
@@ -273,9 +272,6 @@ void Pump::refillGlucagon()
  */
 /*
  * runable for Pump. Gets triggered by Scheduler.
- */
-/*
- * starts pump. measures, calculates,and injects hormones.
  */
 bool Pump::runPump()
 {
