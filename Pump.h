@@ -124,9 +124,9 @@ public:
  * GETTER
  */
         // Returns the insulin level in the reservoir.
-        virtual float getInsulinLevel();
+        virtual float getInsulinReservoirLevel();
         // Returns the glucagon level in the reservoir.
-        virtual float getGlucagonLevel();
+        virtual float getGlucagonReservoirLevel();
         // Checks the blood sugar concentration and returns the value.
         virtual int getCurrentBloodSugarLevel();
 
@@ -149,6 +149,13 @@ public:
         // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
         */
         virtual bool decreaseHormoneLevel(int amount, bool insulin);
+/*
+ * END GETTER
+ */
+
+/*
+ * SETTER
+ */
 
 /*
  * SIGNALS

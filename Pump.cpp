@@ -106,7 +106,7 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
     if (insulin)
     {
         QString err = "Reservoir Insulin too low!";
-        if (amount <= this->getInsulinLevel())
+        if (amount <= this->getInsulinReservoirLevel())
         {
                 insulinLevel-=amount;
                 emit updateInsulinReservoir(insulinLevel);
@@ -118,7 +118,7 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
     else
     {
         QString err = "Reservoir Glucagon too low!";
-        if (amount <= this->getGlucagonLevel())
+        if (amount <= this->getGlucagonReservoirLevel())
         {
                 glucagonLevel-=amount;
                 emit updateGlucagonReservoir(glucagonLevel);
@@ -152,12 +152,11 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
  *          -> how can we know/remember how much insulin there is in the blood circle?
  */
 /*
- * summarize and refactor mehtod. return value only needs to be calculated from tBSL and cBSL.
+ * summarize and refactor method. return value only needs to be calculated from tBSL and cBSL.
  */
 int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 {
-    int difference;
-    float fictInsUnit = 0, fictGlucUnit = 0;
+    int difference, fictInsUnit = 0, fictGlucUnit = 0;
     QString err = "Error! No valid hormone found!";
     string ins = "insulin";
     string gluc= "glucagon";
@@ -222,7 +221,7 @@ int Pump::getCurrentBloodSugarLevel()
 /*
  * Returns the insulin level in the reservoir.
  */
-float Pump::getInsulinLevel()
+float Pump::getInsulinReservoirLevel()
 {
     return this->insulinLevel;
 }
@@ -230,7 +229,7 @@ float Pump::getInsulinLevel()
 /*
  * Returns the glucagon level in the reservoir.
  */
-float Pump::getGlucagonLevel()
+float Pump::getGlucagonReservoirLevel()
 {
     return this->glucagonLevel;
 }
