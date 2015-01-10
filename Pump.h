@@ -22,10 +22,11 @@ class Pump : public QObject
     Q_OBJECT
 
     public:
-        // Checks the battery status and returns the value in percent.
+        /* Checks the battery status and returns the value in percent.
         // In case of a critical status (level smaller than 15%) the user will 
         // be notified acoustically and the incident will be logged by the 
-        // tracer. 
+        // tracer.
+        */
         virtual int getBatteryStatus();
 
         // Checks the entire pump (reservoir, mechanical parts) and returns
@@ -47,9 +48,10 @@ class Pump : public QObject
         void refillGlucagon();
 
     private:
-        // When pump is active injecting insulin the value will be 1, when 
+        /* When pump is active injecting insulin the value will be 1, when
         // injecting glucagon the value will be 2 and when inactive the value 
-        // will be 0. 
+        // will be 0.
+        */
         int active;
         float insulinLevel;
         float glucagonLevel;
@@ -64,36 +66,11 @@ class Pump : public QObject
  * FUNCTIONS
  */
 
-        // Calculates the amount of insulin needed based on the blood sugar levels.
-        // Returns calculated fictional Units of insulin when done.
-        //
-        // Parameter:
-        // - targetInsValue:            predefined vale to reduce blood sugar level  to, e.g. 110mg/dl
-        //
-        // - currentBloodSugarLevel:    current value of BSL, e.g. 160mg/dl
-        //
-        // - isf:                       insulin sensitivity factor. Factor which indicates how much blood sugar
-        //                              one unit of insulin reduces, e.g. 1:5 -> 1 unit insulin reduces 5mg/dl glucose
-        virtual float calculateNeededInsulin(int targetInsValue, float currentBloodSugarLevel, int isf);
-
-        // Calculates the amount of glucagon needed based on the blood sugar levels.
-        // Returns calculated fictional Units of glucagon when done.
-        //
-        // Parameter:
-        // - targetGlucValue:           predefined vale to raise blood sugar level  to, e.g. 80mg/dl
-        //
-        // - currentBloodSugarLevel:    current value of BSL, e.g. 60mg/dl
-        //
-        // - gsf:                       glucagon sensitivity factor. Factor which indicates how much blood sugar
-        //                              one unit of glucagon , e.g. 1:5 -> 1 unit glucagon raises 5mg/dl glucose
-        virtual float calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf);
-
-
 /*
  * author: Markus
  * BEGIN <<<<< meine bevorzugte loesung
  */
-        // Calculates the amount of hormone needed based on the blood sugar levels.
+        /* Calculates the amount of hormone needed based on the blood sugar levels.
         // Returns fictional Units of specified hormone, see parameters.
         //
         // Parameter:
@@ -112,6 +89,7 @@ class Pump : public QObject
         //                              called insulin that is true when insulin should be injected and false in
         //                              case of glucagon.
         // - insulin:                   true when insulin should be injected, false when glucagon should be injected
+        */
 public:
         virtual float calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone);
 /*
@@ -152,15 +130,17 @@ public:
  * SIGNALS
  */
 signals:
-    // Callback for updating Insulin Reservoir in the UI.
+    /* Callback for updating Insulin Reservoir in the UI.
     //
     // Parameter:
     // - The current amount of insulin in the reservoir
+    */
     void updateInsulinReservoir(float amount);
-    // Callback for updating Glucagon Reservoir in the UI.
+    /* Callback for updating Glucagon Reservoir in the UI.
     //
     // Parameter:
     // - The current amount of glucagon in the reservoir
+    */
     void updateGlucagonReservoir(float amount);
 
 };
