@@ -12,5 +12,6 @@ include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    Body.h
+    Body.h \
+    BodyThreadController.h
 
