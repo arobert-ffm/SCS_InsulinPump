@@ -130,10 +130,6 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 
 }
 
-
-
-
-
 /*
  * author: Markus
  * BEGIN <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
@@ -154,6 +150,9 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
  * we need to take care of the delay. insulin only has an effect after half an hour.
  * we need to take care of the long term effect. insulin will have an effect over max. 12 hrs
  *          -> how can we know/remember how much insulin there is in the blood circle?
+ */
+/*
+ * summarize and refactor mehtod. return value only needs to be calculated from tBSL and cBSL.
  */
 float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
 {
