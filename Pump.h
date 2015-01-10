@@ -57,11 +57,35 @@ class Pump : public QObject
         float glucagonLevel;
 
         // current level
-        float currentBloodSugarLevel;
+        int currentBloodSugarLevel;
+
+        // the blood sugar level in the latest cycle
+        int latestBloodSugarLevel;
+
+        // maximal healthy blood sugar level
+        int maxBloodSugarLevel;
+
+        // minimum healthy blood sugar level
+        int minBloodSugarLevel;
+
+        // target to decrease blood sugar level with insulin injection
+        int upperTargetBloodSugarLevel;
+
+        // target to increase blood sugar level with glucagon injection
+        int lowerTargetBloodSugarLevel;
+
+        // inject insulin or glucagon, true when insuling
+        bool insulin;
+        // true if there was an injection in the last cycle
+        bool delay;
+
         // current battery power level
         int batteryPowerLevel;
         //for logging purposes
         Tracer tracer;
+
+        // hormone sensitivity factor
+        int hsf;
 /*
  * FUNCTIONS
  */
@@ -91,7 +115,7 @@ class Pump : public QObject
         // - insulin:                   true when insulin should be injected, false when glucagon should be injected
         */
 public:
-        virtual float calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone);
+        virtual int calculateNeededHormone(int targetBloodSugarLevel);
 /*
  * END
  */
@@ -104,7 +128,7 @@ public:
         // Returns the glucagon level in the reservoir.
         virtual float getGlucagonLevel();
         // Checks the blood sugar concentration and returns the value.
-        virtual float getCurrentBloodSugarLevel();
+        virtual int getCurrentBloodSugarLevel();
 
 /*
  * SETTER

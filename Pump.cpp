@@ -154,7 +154,7 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 /*
  * summarize and refactor mehtod. return value only needs to be calculated from tBSL and cBSL.
  */
-float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone)
+int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 {
     int difference;
     float fictInsUnit = 0, fictGlucUnit = 0;
@@ -162,22 +162,20 @@ float Pump::calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSu
     string ins = "insulin";
     string gluc= "glucagon";
 
-    if (!hormone.empty())
+    if(insulin)
     {
-        if(hormone == ins)
-        {
-            difference = currentBloodSugarLevel - targetBloodSugarLevel;
-            fictInsUnit = difference / hsf;
-            return fictInsUnit;
-        }
-
-        else if(hormone == gluc)
-        {
-            difference = targetBloodSugarLevel - currentBloodSugarLevel;
-            fictInsUnit = difference / hsf;
-            return fictGlucUnit;
-        }
+        difference = currentBloodSugarLevel - targetBloodSugarLevel;
+        fictInsUnit = difference / hsf;
+        return fictInsUnit;
     }
+
+    else
+    {
+        difference = targetBloodSugarLevel - currentBloodSugarLevel;
+        fictInsUnit = difference / hsf;
+        return fictGlucUnit;
+    }
+
     tracer.writeCriticalLog(err);
     return -1;
 }
@@ -216,7 +214,7 @@ bool Pump::getStatus()
  * Checks the blood sugar concentration and returns the value.
  * Returns current blood sugar level.
  */
-float Pump::getCurrentBloodSugarLevel()
+int Pump::getCurrentBloodSugarLevel()
 {
    return this->currentBloodSugarLevel;
 };
@@ -274,6 +272,50 @@ void Pump::refillGlucagon()
  */
 bool Pump::runPump()
 {
+    latestBloodSugarLevel = currentBloodSugarLevel;
+    currentBloodSugarLevel = getCurrentBloodSugarLevel();
+
+    // inject insulin
+    if (currentBloodSugarLevel > maxBloodSugarLevel)
+    {
+        if (currentBloodSugarLevel > latestBloodSugarLevel)
+        {
+            insulin = true;
+            if (delay)
+            {
+                // TODO
+                calculateNeededHormone(latestBloodSugarLevel);
+            }
+            else
+            {
+                // TODO
+                calculateNeededHormone(upperTargetBloodSugarLevel);
+            }
+        }
+    }
+
+    // inject glucagon
+    if (currentBloodSugarLevel < minBloodSugarLevel)
+    {
+        if (currentBloodSugarLevel < latestBloodSugarLevel)
+        {
+            insulin = false;
+            if (delay)
+            {
+                // TODO
+                calculateNeededHormone(latestBloodSugarLevel);
+            }
+            else
+            {
+                // TODO
+                calculateNeededHormone(lowerTargetBloodSugarLevel);
+            }
+        }
+    }
+
+
+
+    // TODO!!
     return true;
 }
 /*
