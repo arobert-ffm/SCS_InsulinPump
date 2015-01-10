@@ -22,18 +22,21 @@ class Pump : public QObject
     Q_OBJECT
 
     public:
-        // Checks the battery status and returns the value in percent.
+        /* Checks the battery status and returns the value in percent.
         // In case of a critical status (level smaller than 15%) the user will 
         // be notified acoustically and the incident will be logged by the 
-        // tracer. 
+        // tracer.
+        */
         virtual int getBatteryStatus();
 
-        // Checks the entire pump (reservoir, mechanical parts) and returns
-        // “True” when everything is working fine. 
+        /* Checks the entire pump (reservoir, mechanical parts) and returns
+        // “True” when everything is working fine.
+        */
         virtual bool getStatus();
 
-        // "main"-function for pump
+        /* "main"-function for pump
         // triggered by Scheduler.
+        */
         virtual bool runPump();
 
     public slots:
@@ -47,9 +50,10 @@ class Pump : public QObject
         void refillGlucagon();
 
     private:
-        // When pump is active injecting insulin the value will be 1, when 
+        /* When pump is active injecting insulin the value will be 1, when
         // injecting glucagon the value will be 2 and when inactive the value 
-        // will be 0. 
+        // will be 0.
+        */
         int active;
         float insulinLevel;
         float glucagonLevel;
@@ -64,36 +68,11 @@ class Pump : public QObject
  * FUNCTIONS
  */
 
-        // Calculates the amount of insulin needed based on the blood sugar levels.
-        // Returns calculated fictional Units of insulin when done.
-        //
-        // Parameter:
-        // - targetInsValue:            predefined vale to reduce blood sugar level  to, e.g. 110mg/dl
-        //
-        // - currentBloodSugarLevel:    current value of BSL, e.g. 160mg/dl
-        //
-        // - isf:                       insulin sensitivity factor. Factor which indicates how much blood sugar
-        //                              one unit of insulin reduces, e.g. 1:5 -> 1 unit insulin reduces 5mg/dl glucose
-        virtual float calculateNeededInsulin(int targetInsValue, float currentBloodSugarLevel, int isf);
-
-        // Calculates the amount of glucagon needed based on the blood sugar levels.
-        // Returns calculated fictional Units of glucagon when done.
-        //
-        // Parameter:
-        // - targetGlucValue:           predefined vale to raise blood sugar level  to, e.g. 80mg/dl
-        //
-        // - currentBloodSugarLevel:    current value of BSL, e.g. 60mg/dl
-        //
-        // - gsf:                       glucagon sensitivity factor. Factor which indicates how much blood sugar
-        //                              one unit of glucagon , e.g. 1:5 -> 1 unit glucagon raises 5mg/dl glucose
-        virtual float calculateNeededGlucagon(int targetGlucValue, float currentBloodSugarLevel, int gsf);
-
-
 /*
  * author: Markus
  * BEGIN <<<<< meine bevorzugte loesung
  */
-        // Calculates the amount of hormone needed based on the blood sugar levels.
+        /* Calculates the amount of hormone needed based on the blood sugar levels.
         // Returns fictional Units of specified hormone, see parameters.
         //
         // Parameter:
@@ -112,6 +91,7 @@ class Pump : public QObject
         //                              called insulin that is true when insulin should be injected and false in
         //                              case of glucagon.
         // - insulin:                   true when insulin should be injected, false when glucagon should be injected
+        */
 public:
         virtual float calculateNeededHormone(int targetBloodSugarLevel, int currentBloodSugarLevel, int hsf, string hormone);
 /*
@@ -122,74 +102,47 @@ public:
  * GETTER
  */
         // Returns the insulin level in the reservoir.
-        virtual float getInsulinLevel();
+        virtual float getInsulinReservoirLevel();
         // Returns the glucagon level in the reservoir.
-        virtual float getGlucagonLevel();
+        virtual float getGlucagonReservoirLevel();
         // Checks the blood sugar concentration and returns the value.
         virtual float getCurrentBloodSugarLevel();
 
 /*
  * SETTER
  */
-        // Injects either insulin or glucagon into the body.
+        /* Injects either insulin or glucagon into the body.
         //
         // Parameters:
         // - amount : int       the amount of FU that should be injected
         // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        */
         virtual bool injectHormone(int amount, bool insulin);
 
-        /**
-          * summarized to above one injectHormone(amount, insulin)
-          *
-        // Injects the insulin into the body.
-        //
-        // Parameter:
-        // - amount: The amount of insulin which is injected into the body.
-        virtual bool injectInsulin(float amount);
-
-        // Injects the glucagon into the body.
-        //
-        // Parameter:
-        // - amount: The amount of glucagon which is injected into the body.
-        virtual bool injectGlucagon(float amount);
-        */
-
-
-        // Decreases either the insulin or the glucagon level in the reservoir when a hormone is
+        /* Decreases either the insulin or the glucagon level in the reservoir when a hormone is
         // injected to the body
         //
         // Parameters:
         // - amount : int       the amount of FU by that the reservoir should be decreased
         // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        */
         virtual bool decreaseHormoneLevel(int amount, bool insulin);
-
-        /**
-          *
-          * summarized to above one decreaseHormoneLevel(amount)
-          *
-        // decreases insulin level in reservoir when injected to body and
-        // returns “True” when done
-        //
-        // Parameter:
-        // - amount: The amount of insulin which is injected into the body
-        //     needs to be reduced in the reservoir.
-        virtual bool decreaseInsulinLevel(float amount);
-        virtual bool decreaseGlucagonLevel(float amount);
-*/
 
 /*
  * SIGNALS
  */
 signals:
-    // Callback for updating Insulin Reservoir in the UI.
+    /* Callback for updating Insulin Reservoir in the UI.
     //
     // Parameter:
     // - The current amount of insulin in the reservoir
+    */
     void updateInsulinReservoir(float amount);
-    // Callback for updating Glucagon Reservoir in the UI.
+    /* Callback for updating Glucagon Reservoir in the UI.
     //
     // Parameter:
     // - The current amount of glucagon in the reservoir
+    */
     void updateGlucagonReservoir(float amount);
 
 };
