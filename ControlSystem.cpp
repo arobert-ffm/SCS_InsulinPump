@@ -30,8 +30,8 @@ ControlSystem::ControlSystem(UserInterface* ui)
     QObject::connect(TheTracer, SIGNAL(writeStatusLogInUi(QString)), ui, SLOT(insertStatusLog(QString)));
     QObject::connect(TheTracer, SIGNAL(writeWarningLogInUi(QString)), ui, SLOT(insertWarningLog(QString)));
     QObject::connect(TheTracer, SIGNAL(writeCriticalLogInUi(QString)), ui, SLOT(insertCriticalLog(QString)));
-    QObject::connect(ui, SIGNAL(refillInsulinInPump()), ThePump, SLOT(refillInsulin()));
-    QObject::connect(ui, SIGNAL(refillGlucagonInPump()), ThePump, SLOT(refillGlucagon()));
+    QObject::connect(ui, SIGNAL(refillInsulinInPump()), ThePump, SLOT(refillInsulinReservoir()));
+    QObject::connect(ui, SIGNAL(refillGlucagonInPump()), ThePump, SLOT(refillGlucagonReservoir()));
     //QObject::connect(this, SIGNAL(saveOperationTimeInUi(int)), ui, SLOT(insertOprationTime(int)));
 }
 

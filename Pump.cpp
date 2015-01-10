@@ -197,9 +197,9 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 /*
  * END SOLUTION
  */
-/*
- * END FUNCTIONS
- */
+
+// END FUNCTIONS
+
 
 
 // GETTER
@@ -276,7 +276,7 @@ int Pump::getGlucagonReservoirLevel()
 void Pump::rechargeBatteryPower(int charge)
 {
     QString err = "Insufficient Power! Battery not charged!";
-    if(charge >=batteryPowerLevel)
+    if(charge >=batteryPowerLevel && charge <= MAX_BATTERY_CHARGE)
     {
         this->batteryPowerLevel = charge;
     }
@@ -302,7 +302,7 @@ void Pump::setBatteryPowerLevel(int powerdrain)
 /**
  * @brief Pump::refillInsulin
  */
-void Pump::refillInsulin()
+void Pump::refillInsulinReservoir()
 {
     // Update UI
     emit updateInsulinReservoir(100);
@@ -314,7 +314,7 @@ void Pump::refillInsulin()
 /**
  * @brief Pump::refillGlucagon
  */
-void Pump::refillGlucagon()
+void Pump::refillGlucagonReservoir()
 {
     // Update UI
     emit updateGlucagonReservoir(100);

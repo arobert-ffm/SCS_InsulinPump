@@ -12,6 +12,8 @@
 #ifndef pump_
 #define pump_
 
+#define MAX_BATTERY_CHARGE  100
+
 #include "Tracer.h"
 #include <QObject>
 
@@ -51,13 +53,14 @@ private:
         // target to increase blood sugar level with glucagon injection
         int lowerTargetBloodSugarLevel;
 
-        // inject insulin or glucagon, true when insuling
+        // inject insulin or glucagon, true when insulin
         bool insulin;
         // true if there was an injection in the last cycle
         bool delay;
 
         // current battery power level
         int batteryPowerLevel;
+
         //for logging purposes
         Tracer tracer;
 
@@ -171,11 +174,11 @@ public slots:
         /**
          * Refills the Insulin in the Reservoir of the Pump
          */
-        void refillInsulin();
+        void refillInsulinReservoir();
         /**
          * Refills the Glucagon in the Reservoir of the Pump
          */
-        void refillGlucagon();
+        void refillGlucagonReservoir();
 
 // END SLOTS
 
