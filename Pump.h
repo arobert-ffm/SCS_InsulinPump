@@ -156,6 +156,16 @@ public:
 /*
  * SETTER
  */
+        /*
+         * recharges battery up to 100% of charge.
+         *
+         * Parameters:
+         * - power: level of recharge energy.
+         */
+        virtual void setBatteryPowerLevel(int power);
+/*
+ * END SETTER
+ */
 
 /*
  * SIGNALS

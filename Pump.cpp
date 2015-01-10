@@ -132,11 +132,11 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 
 /*
  * author: Markus
- * BEGIN <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
+ * BEGIN SOLUTION <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
+ *
+ * see header!
+ * clean up! refactor code!
  */
-//see header!
-//clean up! refactor code!
-
 /*
  * what happens with non-empty string with value other than insulin or glucagon?
  *
@@ -152,14 +152,12 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
  *          -> how can we know/remember how much insulin there is in the blood circle?
  */
 /*
- * summarize and refactor method. return value only needs to be calculated from tBSL and cBSL.
+ * summarize and refactor method. return value only needs to be calculated from hsf, tBSL and cBSL.
  */
 int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 {
     int difference, fictInsUnit = 0, fictGlucUnit = 0;
     QString err = "Error! No valid hormone found!";
-    string ins = "insulin";
-    string gluc= "glucagon";
 
     if(insulin)
     {
@@ -176,10 +174,10 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
     }
 
     tracer.writeCriticalLog(err);
-    return -1;
+    return EXIT_FAILURE;
 }
 /*
- * END
+ * END SOLUTIONS
  */
 /*
  * END FUNCTIONS
@@ -241,6 +239,24 @@ float Pump::getGlucagonReservoirLevel()
 /*
  * SETTER
  */
+/*
+ * recharge battery.
+ */
+void Pump::setBatteryPowerLevel(int power)
+{
+    QString err = "Insufficient Power! Battery not charged!";
+    if(power >=batteryPowerLevel)
+    {
+        this->batteryPowerLevel = power;
+    }
+    return EXIT_FAILURE;
+    tracer.writeCriticalLog(err);
+}
+
+/*
+ * END SETTER
+ */
+
 /*
  * refills insulin and returns “true” when done
  */
