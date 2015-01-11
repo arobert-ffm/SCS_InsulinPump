@@ -12,11 +12,20 @@
 /*
  * 1. clean up code.
  * 2. summarize decreaseInsulin and decreaseGlucagon into one. -> done
- * 3. summarize injectInsulin and injectGlucagon into one.
+ * 3. summarize injectInsulin and injectGlucagon into one. -> done
  * 4. code runable and rest of methods.
  * 5. test calculateNeededHormone for non-empty wrong value strings. -> done
  * 6. refactor code. especially code that is redundant.
  * 7. test pump.
+ * 8. check for TODOs.
+ * 9. check methods for correctness.
+ * A.
+ * B.
+ * C.
+ * D.
+ * E.
+ * F.
+ * 0.
  */
 
 #include "Pump.h"
@@ -278,8 +287,10 @@ void Pump::rechargeBatteryPower(int charge)
     QString err = "Insufficient Power! Battery not charged!";
     if(charge >=batteryPowerLevel && charge <= MAX_BATTERY_CHARGE)
     {
+        //TODO! <- check for correctness.
         this->batteryPowerLevel = charge;
     }
+//    emit writeCriticalLogInUi(err);
     tracer.writeCriticalLog(err);
 }
 
@@ -293,7 +304,12 @@ void Pump::rechargeBatteryPower(int charge)
 void Pump::setBatteryPowerLevel(int powerdrain)
 {
     if(powerdrain>0 && powerdrain<=batteryPowerLevel)
+    {
+        //TODO! <- check for correctness.
         batteryPowerLevel-=powerdrain;
+    }
+//    emit writeCriticalLogInUi(err);
+    tracer.writeCriticalLog(err);
 }
 
 /*
