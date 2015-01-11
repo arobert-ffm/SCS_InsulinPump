@@ -416,7 +416,7 @@ QProgressBar::chunk {
       <rect>
        <x>30</x>
        <y>120</y>
-       <width>541</width>
+       <width>521</width>
        <height>21</height>
       </rect>
      </property>
@@ -424,7 +424,7 @@ QProgressBar::chunk {
       <string notr="true">QSlider::groove:horizontal {
      border: 1px solid rgb(0, 0, 0);
      height: 7px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
-     background: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:1, stop:0 rgba(255, 0, 0, 255), stop:0.350236 rgba(255, 0, 0, 255), stop:0.354953 rgba(0, 255, 0, 255), stop:0.596507 rgba(0, 255, 0, 255), stop:0.601103 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 0, 255));
+     background: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:1, stop:0 rgba(255, 0, 0, 255), stop:0.206677 rgba(255, 0, 0, 255), stop:0.209857 rgba(0, 255, 0, 255), stop:0.345133 rgba(0, 255, 0, 255), stop:0.347546 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 0, 255));
      margin: 2px 0;
  }
 
@@ -437,7 +437,7 @@ QProgressBar::chunk {
  }</string>
      </property>
      <property name="maximum">
-      <number>200</number>
+      <number>350</number>
      </property>
      <property name="value">
       <number>0</number>
@@ -452,9 +452,9 @@ QProgressBar::chunk {
     <widget class="QListWidget" name="mBloodsugarLog">
      <property name="geometry">
       <rect>
-       <x>600</x>
+       <x>580</x>
        <y>30</y>
-       <width>201</width>
+       <width>215</width>
        <height>121</height>
       </rect>
      </property>

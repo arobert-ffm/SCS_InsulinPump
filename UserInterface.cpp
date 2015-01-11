@@ -163,3 +163,32 @@ void UserInterface::updateClock()
     QString text = time.toString("hh:mm:ss");
     ui->mTimeValue->setText(text);
 }
+
+/**
+ * Updates the Bloodsugar in the UI
+ *
+ * @param amount - current bloodsugar
+ */
+void UserInterface::updateBloodsugarLevel(int bloodsugarLevel, int hormone, int amountInjected)
+{
+    // Timestamp
+    QTime time = QTime::currentTime();
+    QString text = time.toString("hh:mm:ss");
+    // Insert Message
+    if (hormone == INSULIN)
+    {
+        ui->mBloodsugarLog->addItem(new QListWidgetItem(text + "  injected " + QString::number(amount) + " units Insulin"));
+        ui->mBloodsugarLog->scrollToBottom();
+    } else if(hormone == GLUCAGON)
+    {
+        ui->mBloodsugarLog->addItem(new QListWidgetItem(text + "  injected " + QString::number(amount) + " units Glucagon"));
+        ui->mBloodsugarLog->scrollToBottom();
+    }
+    // Remove oldest item if count is above 25
+    if (ui->mBloodsugarLog->count() > 26)
+    {
+        ui->mBloodsugarLog->takeItem(0);
+        //delete item;
+    }
+    ui->mBloodSugarValue->setValue(bloodsugarLevel);
+}

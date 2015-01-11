@@ -21,6 +21,9 @@ public:
     explicit UserInterface(QWidget *parent = 0);
     ~UserInterface();
 
+    static const int INSULIN    = 1;
+    static const int GLUCAGON   = 2;
+
 public slots:
     /**
      * Updates the Insulin amount in the Progressbar
@@ -52,6 +55,13 @@ public slots:
      * @param message - string message to insert
      */
     void insertCriticalLog(QString message);
+
+    /**
+     * Updates the Bloodsugar in the UI
+     *
+     * @param amount - current bloodsugar
+     */
+    void updateBloodsugarLevel(int bloodsugarLevel, int hormone, int amountInjected);
 
 private slots:
     /**
