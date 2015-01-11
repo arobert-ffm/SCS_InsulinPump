@@ -92,7 +92,11 @@ void UserInterface::glucagonAmountInReservoirChanged(float amount)
  */
 void UserInterface::insertStatusLog(QString message)
 {
-    ui->mMessageList->addItem(new QListWidgetItem("Status:\t" + message));
+    // Create Timestamp
+    QTime time = QTime::currentTime();
+    QString text = time.toString("hh:mm:ss");
+    // Add Message and scroll to bottom
+    ui->mMessageList->addItem(new QListWidgetItem(text + "\tStatus:\t" + message));
     ui->mMessageList->scrollToBottom();
 }
 
@@ -103,7 +107,11 @@ void UserInterface::insertStatusLog(QString message)
  */
 void UserInterface::insertWarningLog(QString message)
 {
-    QListWidgetItem* item = new QListWidgetItem("Warning:\t" + message);
+    // Create Timestamp
+    QTime time = QTime::currentTime();
+    QString text = time.toString("hh:mm:ss");
+    // Add Message and scroll to bottom
+    QListWidgetItem* item = new QListWidgetItem(text + "\tWarning:\t" + message);
     item->setBackgroundColor(Qt::yellow);
     ui->mMessageList->addItem(item);
     ui->mMessageList->scrollToBottom();
@@ -116,7 +124,11 @@ void UserInterface::insertWarningLog(QString message)
  */
 void UserInterface::insertCriticalLog(QString message)
 {
-    QListWidgetItem* item = new QListWidgetItem("Critical:\t" + message);
+    // Create Timestamp
+    QTime time = QTime::currentTime();
+    QString text = time.toString("hh:mm:ss");
+    // Add Message and scroll to bottom
+    QListWidgetItem* item = new QListWidgetItem(text + "\tCritical:\t" + message);
     item->setBackgroundColor(Qt::red);
     ui->mMessageList->addItem(item);
     ui->mMessageList->scrollToBottom();
