@@ -219,8 +219,8 @@ int main(void) {
     
     // Initialize values
     communication.setThreadBodyFactor(1.03);
-    communication.setThreadRising(false);
-    communication.setThreadInsulinUnits(5);
+    communication.setThreadRising(true);
+    communication.setThreadInsulinUnits(0);
     communication.setThreadGlucagonUnits(0);
     communication.setThreadEndThread(false);
     
