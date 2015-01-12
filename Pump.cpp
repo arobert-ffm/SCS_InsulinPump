@@ -163,14 +163,12 @@ int Pump::checkPumpBatteryStatus(void)
 }
 
 // >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
-/*
- * author: Markus
+/* author: Markus
  * BEGIN SOLUTION <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
  *
  * clean up! refactor code!
  */
-/*
- * what happens with non-empty string with value other than insulin or glucagon?
+/*  what happens with non-empty string with value other than insulin or glucagon?
  *
  * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
  * jenny: just take a bool named 'insulin': true if the hormone is insulin, false if glucagon.
@@ -183,8 +181,7 @@ int Pump::checkPumpBatteryStatus(void)
  * we need to take care of the long term effect. insulin will have an effect over max. 12 hrs
  *          -> how can we know/remember how much insulin there is in the blood circle?
  */
-/*
- * summarize and refactor method. return value only needs to be calculated from hsf, tBSL and cBSL.
+/* summarize and refactor method. return value only needs to be calculated from hsf, tBSL and cBSL.
  * absolute value for return. how to achieve?
  */
 /* see header!
