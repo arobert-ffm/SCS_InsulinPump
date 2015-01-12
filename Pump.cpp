@@ -68,7 +68,6 @@ struct transmit_bloodsugar {
 } BodyStatus;
 
 
-// TODO return makes no sense
 /**
  * @brief   Pump::injectHormone
  *          Injects either insulin or glucagon into the body.
@@ -99,8 +98,7 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
     return false;
 }
 
-// >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
-// >>>>>>>>>>>>>>> how? <<<<<<<<<<<<<<<<<<<<<
+
 /**
  * @brief   Pump::decreaseHormoneLevel
  *          Decreases the hormone level in either the insulin or the glucagon reservoir
@@ -144,8 +142,10 @@ bool Pump::decreaseHormoneReservoire(int amount, bool insulin)
 }
 
 
-/*
- * check Battery Status.
+/**
+ * @brief Pump::checkPumpBatteryStatus
+ *        checks battery status of pump. emits warning on battery status below 15%
+ * @return 1 on failed call.
  */
 int Pump::checkPumpBatteryStatus(void)
 {

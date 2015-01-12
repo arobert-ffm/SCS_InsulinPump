@@ -101,14 +101,14 @@ private:
         * Parameters:
         * - amount : int       the amount of FU that should be injected
         * - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
-        * - return : bool      returns true if injection was ok.
+        * - return : bool      returns false if injection failed.
         */
         /**
          * @brief injectHormone
          * @param targetBloodSugarLevel
          * @param insulin
          * @param amount
-         * @return
+         * @return false on failed injection
          */
         bool injectHormone(int targetBloodSugarLevel, bool insulin, int amount);
 
@@ -124,7 +124,7 @@ private:
          * @brief decreaseHormoneLevel
          * @param amount
          * @param insulin
-         * @return
+         * @return true on successful decrease
          */
         bool decreaseHormoneReservoire(int amount, bool insulin);
 
@@ -183,8 +183,6 @@ public:
          */
         int getTargetBloodSugarLevel(void) const;
 
-//private: // <--- Ist das notwendig?
-
          /* Returns the insulin level in the reservoir.
          */
         int getInsulinReservoirLevel() const;
@@ -235,7 +233,6 @@ public:
 
 
 // SETTER
-//public: //<<<---
          /* sets power level. power is decreasing due to usage of pump. only decreases when pump is in use.
          *
          * Parameters:
