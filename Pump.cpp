@@ -79,7 +79,7 @@ struct transmit_bloodsugar {
  * @param   insulin
  *          true if the hormone to inject is insulin, false if it is glucagon
  *
- * @return  true if injection was ok.
+ * @return  false if injection failed.
  */
 bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
 {
@@ -96,7 +96,7 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
         emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::GLUCAGON, amount);
     }
     tracer.writeCriticalLog(err);
-    return true;
+    return false;
 }
 
 // >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
