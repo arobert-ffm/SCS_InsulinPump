@@ -20,8 +20,8 @@
  * 8. check for TODOs.
  * 9. check methods for correctness.
  * A.
- * B.
- * C.
+ * B. see TODO tags!
+ * C. setter and getter for all attributes!
  * D.
  * E.
  * F.
@@ -44,8 +44,7 @@
 
 using namespace std;
 
-#define BUFLEN  100
-#define EXIT__FAILURE   -1
+#define BUFLEN  100 //<---- sizeof(struct)
 
 int     i;
 int     main (void);

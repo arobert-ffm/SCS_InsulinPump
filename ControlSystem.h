@@ -27,38 +27,48 @@
 class ControlSystem
 {
     public:
-        // The constructor instantiates all necessary objects
-        // and connects some signals to slot for the user interface
+        /* The constructor instantiates all necessary objects
+        * and connects some signals to slot for the user interface
+        */
         ControlSystem(UserInterface* ui);
 
-        // Checks the operation hours of the mechanical parts (motor) and 
-        // returns the value in hours
+        /* Checks the operation hours of the mechanical parts (motor) and
+        * returns the value in hours
+        */
         virtual int checkOperationHours();
 
-        // Checks the scheduler for correct operation and returns “True” when 
-        // everything is working fine
+        /* Checks the scheduler for correct operation and returns “True” when
+        * everything is working fine
+        */
         virtual bool checkScheduler();
 
-        // Checks the hormone reservoir and returns “True” when everything is fine
+        /* Checks the hormone reservoir and returns “True” when everything is fine
+         */
         virtual bool checkPump();
 
-        // Checks the tracer and returns “True” when everything is fine
+        /* Checks the tracer and returns “True” when everything is fine
+         */
         virtual bool checkTracer();
 
-        // Checks the batteries charging state and returns the value in percent
+        /* Checks the batteries charging state and returns the value in percent
+         */
         virtual int checkBatteryStatus();
 
-        // Returns the used scheduler
+        /* Returns the used scheduler
+         */
         virtual Scheduler *getScheduler();
 
     private:
-        // A local representation of the hormone pump
+        /* A local representation of the hormone pump
+         */
         Pump *ThePump;
 
-        // A local representation of the scheduler
+        /* A local representation of the scheduler
+         */
         Scheduler *TheScheduler;
 
-        // A local representation of the tracer
+        /* A local representation of the tracer
+         */
         Tracer *TheTracer;
 
 };

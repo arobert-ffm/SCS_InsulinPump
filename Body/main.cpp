@@ -24,7 +24,7 @@
 
 using namespace std;
 
-#define BUFLEN          100
+#define BUFLEN          100 //<--- sizeof(struct) inststead of hard coded valuew
 #define EXIT__FAILURE   -1
 
 int     main                        (void);

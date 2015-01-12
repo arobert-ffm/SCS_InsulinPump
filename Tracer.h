@@ -36,19 +36,22 @@ class Tracer : public QObject
         // The destructor closes the logfile
         ~Tracer();
 
-        // Writes the message to the log file.
-        // Every Message is signed by date and time.
-        // When writing to file has finished, “True” is returned
+        /* Writes the message to the log file.
+        * Every Message is signed by date and time.
+        * When writing to file has finished, “True” is returned
+        */
         virtual bool writeStatusLog(QString message);
 
-        // Writes the message to the log file.
-        // Every Message is signed by date and time.
-        // When writing to file has finished, “True” is returned
+        /* Writes the message to the log file.
+        * Every Message is signed by date and time.
+        * When writing to file has finished, “True” is returned
+        */
         virtual bool writeWarningLog(QString message);
 
-        // Writes the message to the log file.
-        // Every Message is signed by date and time.
-        // When writing to file has finished, “True” is returned
+        /* Writes the message to the log file.
+        * Every Message is signed by date and time.
+        * When writing to file has finished, “True” is returned
+        */
         virtual bool writeCriticalLog(QString message);
 
         // Plays an acoustic sound and returns “True” when done
@@ -71,22 +74,25 @@ class Tracer : public QObject
         QFile *LogFile;
 
     signals:
-        // Callback for writing status log in the UI.
-        //
-        // Parameter:
-        // - The status log to insert
+        /* Callback for writing status log in the UI.
+        *
+        * Parameter:
+        * - The status log to insert
+        */
         void writeStatusLogInUi(QString message);
 
-        // Callback for writing warning log in the UI.
-        //
-        // Parameter:
-        // - The warning log to insert
+        /* Callback for writing warning log in the UI.
+        *
+        * Parameter:
+        * - The warning log to insert
+        */
         void writeWarningLogInUi(QString message);
 
-        // Callback for writing critical log in the UI.
-        //
-        // Parameter:
-        // - The critical log to insert
+        /* Callback for writing critical log in the UI.
+        *
+        * Parameter:
+        * - The critical log to insert
+        */
         void writeCriticalLogInUi(QString message);
 
 };
