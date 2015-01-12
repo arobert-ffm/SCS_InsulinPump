@@ -59,8 +59,8 @@ int     fdes_pump_to_body; // fildescriptor for Pump --> Body
  **********************************/
 
 struct transmit_injection_hormones {
-    float injected_insulin;
-    float injected_glucagon;
+    int injected_insulin;
+    int injected_glucagon;
 } Injecting;
 
 /**********************************
@@ -68,7 +68,7 @@ struct transmit_injection_hormones {
  **********************************/
 
 struct transmit_bloodsugar {
-    float bloodSugarLevel;
+    int bloodSugarLevel;
 } BodyStatus;
 
 //END STRUCTS
@@ -115,9 +115,15 @@ bool Pump::injectHormone(int amount, bool insulin)
  */
 bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 {
+    QString str_hormone, str_insulin="Insulin", str_glucagon="Glucagon";
+
+    //set str_hormone to "Insulin" or "Glucagon". ternary operator!
+    str_hormone = insulin? str_insulin:str_glucagon;
+
+    QString err = "Reservoir "+ str_hormone +" too low!";
+
     if (insulin)
     {
-        QString err = "Reservoir Insulin too low!";
         if (amount <= this->getInsulinReservoirLevel())
         {
                 insulinReservoirLevel-=amount;
@@ -129,7 +135,6 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
     }
     else
     {
-        QString err = "Reservoir Glucagon too low!";
         if (amount <= this->getGlucagonReservoirLevel())
         {
                 glucagonReservoirLevel-=amount;
@@ -142,6 +147,9 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 
 }
 
+/*
+ * check Battery Status.
+ */
 int Pump::checkPumpBatteryStatus(void)
 {
     QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
@@ -175,6 +183,7 @@ int Pump::checkPumpBatteryStatus(void)
  */
 /*
  * summarize and refactor method. return value only needs to be calculated from hsf, tBSL and cBSL.
+ * absolute value for return. how to achieve?
  */
 /**
  * @brief Pump::calculateNeededHormone
@@ -183,26 +192,38 @@ int Pump::checkPumpBatteryStatus(void)
  */
 int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 {
-    int difference, fictInsUnit = 0, fictGlucUnit = 0;
-    QString err = "Error! No valid hormone found!";
+     QString err = "Error! No valid hormone found!";
 
     if(insulin)
     {
-        difference = currentBloodSugarLevel - targetBloodSugarLevel;
-        fictInsUnit = difference / hsf;
-        return fictInsUnit;
+        return calcHormUnits(targetBloodSugarLevel);
     }
 
     else
     {
-        difference = targetBloodSugarLevel - currentBloodSugarLevel;
-        fictInsUnit = difference / hsf;
-        return fictGlucUnit;
+        return calcHormUnits(targetBloodSugarLevel);
     }
 
     tracer.writeCriticalLog(err);
     return EXIT_FAILURE;
 }
+
+/*
+ * calculate units of hormone taking absolute value of difference.
+ */
+/**
+ * @brief Pump::calcHormUnits
+ * @param targetBloodSugarLevel
+ * @return calculated units of hormone, either insulin or glucagon.
+ */
+int Pump::calcHormUnits(int targetBloodSugarLevel)
+{
+    int difference; int fictHormUnit;
+    difference = abs(currentBloodSugarLevel - targetBloodSugarLevel);
+    fictHormUnit = difference / hsf;
+    return fictHormUnit;
+}
+
 /*
  * END SOLUTION
  */

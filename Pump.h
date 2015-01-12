@@ -99,6 +99,13 @@ private:
         */
         virtual bool decreaseHormoneLevel(int amount, bool insulin);
 
+        /*
+         * Calculate units of needed hormone.
+         *
+         * Parameters:
+         * - targetBloodSugarLevel: predefined value of blood sugar, set by user.
+         */
+        int calcHormUnits(int targetBloodSugarLevel);
  /*
  * author: Markus
  * BEGIN <<<<< meine bevorzugte loesung
