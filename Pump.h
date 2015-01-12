@@ -80,7 +80,6 @@ private:
 
         // hormone sensitivity factor
         int hormoneSensitivityFactor;
-
 // END ATTRBUTES
 
 
@@ -127,19 +126,8 @@ private:
          * @param insulin
          * @return
          */
-        bool decreaseHormoneLevel(int amount, bool insulin);
+        bool decreaseHormoneReservoire(int amount, bool insulin);
 
-        /* Calculate units of needed hormone.
-         *
-         * Parameters:
-         * - targetBloodSugarLevel: predefined value of blood sugar, set by user.
-         */
-        /**
-         * @brief calcHormUnits
-         * @param targetBloodSugarLevel
-         * @return
-         */
-        int calcHormUnits(int targetBloodSugarLevel);
  /*
  * author: Markus
  */

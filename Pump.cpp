@@ -1,4 +1,3 @@
-// 
 // File: Pump.cpp
 // 
 // Date: 24.12.14 17:11
@@ -8,13 +7,14 @@
 // Description:
 
 
+
 //TODO
 /*
  * 1. clean up code.
- * 2. summarize decreaseInsulin and decreaseGlucagon into one. -> done
- * 3. summarize injectInsulin and injectGlucagon into one. -> done
- * 4. code runable and rest of methods.
- * 5. test calculateNeededHormone for non-empty wrong value strings. -> done
+ * 2. check return values of functions
+ * 3.
+ * 4.
+ * 5.
  * 6. refactor code. especially code that is redundant.
  * 7. test pump.
  * 8. check for TODOs.
@@ -52,12 +52,9 @@ int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
 
 
-// STRUCTS
-
 /**********************************
  * transmit_hormone_injection      *
  **********************************/
-
 struct transmit_injection_hormones {
     int injected_insulin;
     int injected_glucagon;
@@ -66,27 +63,23 @@ struct transmit_injection_hormones {
 /**********************************
  * transmit_bloodsugar      *
  **********************************/
-
 struct transmit_bloodsugar {
     int bloodSugarLevel;
 } BodyStatus;
 
-//END STRUCTS
 
-// FUNCTIONS
-/*
- * Injects either insulin or glucagon into the body.
- *
- * Parameters:
- * - amount : int       the amount of FU to be injected
- * - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
- *
- */
+// TODO return makes no sense
 /**
- * @brief Pump::injectHormone
- * @param amount
- * @param insulin
- * @return true if injection was ok.
+ * @brief   Pump::injectHormone
+ *          Injects either insulin or glucagon into the body.
+ *
+ * @param   amount
+ *          the amount of FU to be injected
+ *
+ * @param   insulin
+ *          true if the hormone to inject is insulin, false if it is glucagon
+ *
+ * @return  true if injection was ok.
  */
 bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
 {
@@ -94,10 +87,12 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
     if (insulin)
     {
         // inject insulin here
+        // next line: nonsense TODO: call body!
         emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::INSULIN, amount);
     } else
     {
         // inject glucagon here
+        // next line: nonsense TODO: call body!
         emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::GLUCAGON, amount);
     }
     tracer.writeCriticalLog(err);
@@ -106,20 +101,19 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
 
 // >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
 // >>>>>>>>>>>>>>> how? <<<<<<<<<<<<<<<<<<<<<
-/*
- * Decreases the hormone level in either the insulin or the glucagon reservoir
- *
- * Parameters:
- * - amount: the amount by that the reservoir is reduced
- * - insulin: true if the hormone is insulin, false if it is glucagon
- */
 /**
- * @brief Pump::decreaseHormoneLevel
- * @param amount unit subtracted from reservoir.
- * @param insulin true if insulin, false if glucagon.
- * @return false if no decrease happened.
+ * @brief   Pump::decreaseHormoneLevel
+ *          Decreases the hormone level in either the insulin or the glucagon reservoir
+ *
+ * @param   amount
+ *          the amount by that the reservoir is reduced
+ *
+ * @param   insulin
+ *          true if the hormone is insulin, false if it is glucagon
+ *
+ * @return  true if a decrease happened.
  */
-bool Pump::decreaseHormoneLevel(int amount, bool insulin)
+bool Pump::decreaseHormoneReservoire(int amount, bool insulin)
 {
     QString str_hormone, str_insulin="Insulin", str_glucagon="Glucagon";
     QString err = "Reservoir "+ str_hormone +" too low!";
@@ -131,24 +125,22 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
     {
         if (amount <= this->getInsulinReservoirLevel() && amount!=0)
         {
-            insulinReservoirLevel-=amount;
+            insulinReservoirLevel -= amount;
             emit updateInsulinReservoir(insulinReservoirLevel);
             return true;
         }
-        tracer.writeCriticalLog(err);
-        return false;
     }
     else
     {
         if (amount <= this->getGlucagonReservoirLevel() && amount !=0)
         {
-            glucagonReservoirLevel-=amount;
+            glucagonReservoirLevel -= amount;
             emit updateGlucagonReservoir(glucagonReservoirLevel);
             return true;
         }
-        tracer.writeCriticalLog(err);
-        return false;
     }
+    tracer.writeCriticalLog(err);
+    return false;
 }
 
 
@@ -165,76 +157,77 @@ int Pump::checkPumpBatteryStatus(void)
     return EXIT_FAILURE;
 }
 
-// >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
-/*
- * author: Markus
- * BEGIN SOLUTION <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
- *
- * see header!
- * clean up! refactor code!
- */
-/*
- * what happens with non-empty string with value other than insulin or glucagon?
- *
- * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
- * jenny: just take a bool named 'insulin': true if the hormone is insulin, false if glucagon.
- * worst thing to happen in case of a bug: insulin is false by default. blood sugar will get higher instead of lower.
- * not good in long term, but no bug will do good in long term.
- * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
- *
- * // TODO
- * we need to take care of the delay. insulin only has an effect after half an hour.
- * we need to take care of the long term effect. insulin will have an effect over max. 12 hrs
- *          -> how can we know/remember how much insulin there is in the blood circle?
- */
-/*
- * summarize and refactor method. return value only needs to be calculated from hsf, tBSL and cBSL.
- * absolute value for return. how to achieve?
- */
+
 /**
- * @brief Pump::calculateNeededHormone
- * @param targetBloodSugarLevel
- * @return units of hormone to inject into body
+ * @brief   Pump::calculateNeededHormone
+ *          calculates the amount of hormones to inject
+ *
+ * @param   targetBloodSugarLevel
+ *          the blood sugar level that should be reached
+ *
+ * @return  units of hormone to inject into body
  */
 int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 {
-     QString err = "Error! No valid hormone found!";
-
-    if(insulin)
-    {
-        return calcHormUnits(targetBloodSugarLevel);
-    }
-
-    else
-    {
-        return calcHormUnits(targetBloodSugarLevel);
-    }
-
-    tracer.writeCriticalLog(err);
-    return EXIT_FAILURE;
-}
-
-/*
- * calculate units of hormone taking absolute value of difference.
- */
-/**
- * @brief Pump::calcHormUnits
- * @param targetBloodSugarLevel
- * @return calculated units of hormone, either insulin or glucagon.
- */
-int Pump::calcHormUnits(int targetBloodSugarLevel)
-{
     int difference; int fictHormUnit;
     difference = abs(currentBloodSugarLevel - targetBloodSugarLevel);
-    fictHormUnit = difference / hormoneSensitivityFactor;
+    fictHormUnit = ceil(difference / hormoneSensitivityFactor);
     return fictHormUnit;
 }
 
-/*
- * END SOLUTION
- */
 
-// END FUNCTIONS
+/**
+ * @brief   Pump::runPump
+ *          gets triggered by scheduler every once in a while
+ *
+ * @return  true on exit if everything is ok.
+ */
+bool Pump::runPump()
+{
+    latestBloodSugarLevel = currentBloodSugarLevel;
+    currentBloodSugarLevel = getCurrentBloodSugarLevel();
+    int hormonesToInject;
+
+    // inject insulin
+    if (currentBloodSugarLevel > maxBloodSugarLevel)
+    {
+        if (currentBloodSugarLevel > latestBloodSugarLevel)
+        {
+            insulin = true;
+            if (delay)
+            {
+                hormonesToInject = calculateNeededHormone(latestBloodSugarLevel);
+            }
+            else
+            {
+                hormonesToInject = calculateNeededHormone(upperTargetBloodSugarLevel);
+            }
+        }
+    }
+    // inject glucagon
+    else if (currentBloodSugarLevel < minBloodSugarLevel)
+    {
+        if (currentBloodSugarLevel < latestBloodSugarLevel)
+        {
+            insulin = false;
+            if (delay)
+            {
+                hormonesToInject = calculateNeededHormone(latestBloodSugarLevel);
+            }
+            else
+            {
+                hormonesToInject = calculateNeededHormone(lowerTargetBloodSugarLevel);
+            }
+        }
+    }
+    // inject nothing
+    else
+    {
+        hormonesToInject = 0;
+    }
+
+    return injectHormone(targetBloodSugarLevel, insulin, hormonesToInject);
+}
 
 
 
@@ -252,6 +245,7 @@ int Pump::getBatteryPowerLevel() const
 {
     return this->batteryPowerLevel;
 }
+
 /*
  * Checks the entire pump (reservoir, mechanical parts) and returns “true” when
  * everything is working fine.
@@ -311,40 +305,47 @@ int Pump::getLowerTargetBloodSugarLevel() const
 {
     return lowerTargetBloodSugarLevel;
 }
+
 int Pump::getUpperTargetBloodSugarLevel() const
 {
     return upperTargetBloodSugarLevel;
 }
+
 int Pump::getMinBloodSugarLevel() const
 {
     return minBloodSugarLevel;
 }
+
 int Pump::getMaxBloodSugarLevel() const
 {
     return maxBloodSugarLevel;
 }
+
 int Pump::getLatestBloodSugarLevel() const
 {
     return latestBloodSugarLevel;
 }
+
 int Pump::getActive() const
 {
     return active;
 }
+
 int Pump::getHormoneSensitivityFactor() const
 {
     return hormoneSensitivityFactor;
 }
+
 bool Pump::getDelay() const
 {
     return delay;
 }
+
 bool Pump::getInsulin() const
 {
     return insulin;
 }
 // END GETTER
-
 
 // SETTER
 /*
@@ -431,98 +432,44 @@ void Pump::setHormoneSensitivityFactor(int value)
 {
     hormoneSensitivityFactor = value;
 }
+
 void Pump::setDelay(bool value)
 {
     delay = value;
 }
+
 void Pump::setInsulin(bool value)
 {
     insulin = value;
 }
+
 void Pump::setActive(int value)
 {
     active = value;
 }
+
 void Pump::setLowerTargetBloodSugarLevel(int value)
 {
     lowerTargetBloodSugarLevel = value;
 }
+
 void Pump::setUpperTargetBloodSugarLevel(int value)
 {
     upperTargetBloodSugarLevel = value;
 }
+
 void Pump::setLatestBloodSugarLevel(int value)
 {
     latestBloodSugarLevel = value;
 }
+
 void Pump::setMaxBloodSugarLevel(int value)
 {
     maxBloodSugarLevel = value;
 }
+
 void Pump::setMinBloodSugarLevel(int value)
 {
     minBloodSugarLevel = value;
 }
 // END SETTER
-
-
-// RUNABLE
-/*
- * runable for Pump. Gets triggered by Scheduler.
- */
-/**
- * @brief Pump::runPump
- * @return true on exit if everything is ok.
- */
-
-bool Pump::runPump()
-{
-    latestBloodSugarLevel = currentBloodSugarLevel;
-    currentBloodSugarLevel = getCurrentBloodSugarLevel();
-
-    // inject insulin
-    if (currentBloodSugarLevel > maxBloodSugarLevel)
-    {
-        if (currentBloodSugarLevel > latestBloodSugarLevel)
-        {
-            insulin = true;
-            if (delay)
-            {
-                // TODO
-                calculateNeededHormone(latestBloodSugarLevel);
-            }
-            else
-            {
-                // TODO
-                calculateNeededHormone(upperTargetBloodSugarLevel);
-            }
-        }
-    }
-
-    // inject glucagon
-    if (currentBloodSugarLevel < minBloodSugarLevel)
-    {
-        if (currentBloodSugarLevel < latestBloodSugarLevel)
-        {
-            insulin = false;
-            if (delay)
-            {
-                // TODO
-                calculateNeededHormone(latestBloodSugarLevel);
-            }
-            else
-            {
-                // TODO
-                calculateNeededHormone(lowerTargetBloodSugarLevel);
-            }
-        }
-    }
-
-    // TODO!!
-    return true;
-} // END RUNABLE
-
-
-
-
-
