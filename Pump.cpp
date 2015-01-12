@@ -74,8 +74,7 @@ struct transmit_bloodsugar {
 //END STRUCTS
 
 // FUNCTIONS
-/*
- * Injects either insulin or glucagon into the body.
+/* Injects either insulin or glucagon into the body.
  *
  * Parameters:
  * - amount : int       the amount of FU to be injected
@@ -106,8 +105,7 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
 
 // >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
 // >>>>>>>>>>>>>>> how? <<<<<<<<<<<<<<<<<<<<<
-/*
- * Decreases the hormone level in either the insulin or the glucagon reservoir
+/* Decreases the hormone level in either the insulin or the glucagon reservoir
  *
  * Parameters:
  * - amount: the amount by that the reservoir is reduced
@@ -152,8 +150,7 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 }
 
 
-/*
- * check Battery Status.
+/* check Battery Status.
  */
 int Pump::checkPumpBatteryStatus(void)
 {
@@ -170,7 +167,6 @@ int Pump::checkPumpBatteryStatus(void)
  * author: Markus
  * BEGIN SOLUTION <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
  *
- * see header!
  * clean up! refactor code!
  */
 /*
@@ -190,6 +186,8 @@ int Pump::checkPumpBatteryStatus(void)
 /*
  * summarize and refactor method. return value only needs to be calculated from hsf, tBSL and cBSL.
  * absolute value for return. how to achieve?
+ */
+/* see header!
  */
 /**
  * @brief Pump::calculateNeededHormone
@@ -214,8 +212,7 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
     return EXIT_FAILURE;
 }
 
-/*
- * calculate units of hormone taking absolute value of difference.
+/* calculate units of hormone taking absolute value of difference.
  */
 /**
  * @brief Pump::calcHormUnits
@@ -230,17 +227,13 @@ int Pump::calcHormUnits(int targetBloodSugarLevel)
     return fictHormUnit;
 }
 
-/*
- * END SOLUTION
+/* END SOLUTION
  */
-
 // END FUNCTIONS
 
 
-
 // GETTER
-/*
- * Checks the battery status and returns the value in percent.
+/* Checks the battery status and returns the value in percent.
  * In case of a critical status (level smaller than 15%) the user will be
  * notified acoustically and the incident will be logged by the tracer.
  */
@@ -252,8 +245,7 @@ int Pump::getBatteryPowerLevel() const
 {
     return this->batteryPowerLevel;
 }
-/*
- * Checks the entire pump (reservoir, mechanical parts) and returns “true” when
+/* Checks the entire pump (reservoir, mechanical parts) and returns “true” when
  * everything is working fine.
  */
 bool Pump::getPumpStatus() const
@@ -261,16 +253,14 @@ bool Pump::getPumpStatus() const
     return true;
 }
 
-/*
- * Return the target blood sugar level.
+/* Return the target blood sugar level.
  */
 int Pump::getTargetBloodSugarLevel() const
 {
     return this->targetBloodSugarLevel;
 }
 
-/*
- * Checks the blood sugar concentration and returns the value.
+/* Checks the blood sugar concentration and returns the value.
  * Returns current blood sugar level.
  */
 /**
@@ -282,8 +272,7 @@ int Pump::getCurrentBloodSugarLevel() const
    return this->currentBloodSugarLevel;
 }
 
-/*
- * Returns the insulin level in the reservoir.
+/* Returns the insulin level in the reservoir.
  */
 /**
  * @brief Pump::getInsulinReservoirLevel
@@ -294,8 +283,7 @@ int Pump::getInsulinReservoirLevel() const
     return this->insulinReservoirLevel;
 }
 
-/*
- * Returns the glucagon level in the reservoir.
+/* Returns the glucagon level in the reservoir.
  */
 /**
  * @brief Pump::getGlucagonReservoirLevel
@@ -347,8 +335,7 @@ bool Pump::getInsulin() const
 
 
 // SETTER
-/*
- * recharge battery.
+/* recharge battery.
  */
 /**
  * @brief Pump::rechargeBatteryPower
@@ -365,8 +352,7 @@ void Pump::rechargeBatteryPower(int charge)
     tracer.writeCriticalLog(err);
 }
 
-/*
- * drains power from battery.
+/* drains power from battery.
  */
 /**
  * @brief Pump::setBatteryPowerLevel
@@ -384,8 +370,7 @@ void Pump::setBatteryPowerLevel(int powerdrain)
     tracer.writeCriticalLog(err);
 }
 
-/*
- * set target blood sugar level.
+/* set target blood sugar level.
  */
 /**
  * @brief Pump::setTargetBloodSugarLevel
@@ -402,8 +387,7 @@ void Pump::setTargetBloodSugarLevel(int tbsl)
     tracer.writeCriticalLog(err);
 }
 
-/*
- * refills insulin and returns “true” when done
+/* refills insulin and returns “true” when done
  */
 /**
  * @brief Pump::refillInsulin
@@ -414,8 +398,7 @@ void Pump::refillInsulinReservoir()
     emit updateInsulinReservoir(100);
 }
 
-/*
- * refills glucagon and returns “true” when done
+/* refills glucagon and returns “true” when done
  */
 /**
  * @brief Pump::refillGlucagon
@@ -467,8 +450,7 @@ void Pump::setMinBloodSugarLevel(int value)
 
 
 // RUNABLE
-/*
- * runable for Pump. Gets triggered by Scheduler.
+/* runable for Pump. Gets triggered by Scheduler.
  */
 /**
  * @brief Pump::runPump
