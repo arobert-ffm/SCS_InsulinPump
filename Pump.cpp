@@ -306,47 +306,39 @@ int Pump::getGlucagonReservoirLevel() const
     return this->glucagonReservoirLevel;
 }
 
-//<<<< auto generated getter
+//>>>> auto generated getter
 int Pump::getLowerTargetBloodSugarLevel() const
 {
     return lowerTargetBloodSugarLevel;
 }
-
 int Pump::getUpperTargetBloodSugarLevel() const
 {
     return upperTargetBloodSugarLevel;
 }
-
 int Pump::getMinBloodSugarLevel() const
 {
     return minBloodSugarLevel;
 }
-
 int Pump::getMaxBloodSugarLevel() const
 {
     return maxBloodSugarLevel;
 }
-
 int Pump::getLatestBloodSugarLevel() const
 {
     return latestBloodSugarLevel;
 }
-
 int Pump::getActive() const
 {
     return active;
 }
-
 int Pump::getHormoneSensitivityFactor() const
 {
     return hormoneSensitivityFactor;
 }
-
 bool Pump::getDelay() const
 {
     return delay;
 }
-
 bool Pump::getInsulin() const
 {
     return insulin;
@@ -439,42 +431,34 @@ void Pump::setHormoneSensitivityFactor(int value)
 {
     hormoneSensitivityFactor = value;
 }
-
 void Pump::setDelay(bool value)
 {
     delay = value;
 }
-
 void Pump::setInsulin(bool value)
 {
     insulin = value;
 }
-
 void Pump::setActive(int value)
 {
     active = value;
 }
-
 void Pump::setLowerTargetBloodSugarLevel(int value)
 {
     lowerTargetBloodSugarLevel = value;
 }
-
 void Pump::setUpperTargetBloodSugarLevel(int value)
 {
     upperTargetBloodSugarLevel = value;
 }
-
 void Pump::setLatestBloodSugarLevel(int value)
 {
     latestBloodSugarLevel = value;
 }
-
 void Pump::setMaxBloodSugarLevel(int value)
 {
     maxBloodSugarLevel = value;
 }
-
 void Pump::setMinBloodSugarLevel(int value)
 {
     minBloodSugarLevel = value;
@@ -534,13 +518,9 @@ bool Pump::runPump()
         }
     }
 
-
-
     // TODO!!
     return true;
-}
-
-// END RUNABLE
+} // END RUNABLE
 
 
 
