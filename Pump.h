@@ -47,6 +47,9 @@ private:
         // minimum healthy blood sugar level
         int minBloodSugarLevel;
 
+        // target blood sugar level
+        int targetBloodSugarLevel;
+
         // target to decrease blood sugar level with insulin injection
         int upperTargetBloodSugarLevel;
 
@@ -55,6 +58,7 @@ private:
 
         // inject insulin or glucagon, true when insulin
         bool insulin;
+
         // true if there was an injection in the last cycle
         bool delay;
 
@@ -76,10 +80,12 @@ public:
         // triggered by Scheduler.
         */
         virtual bool runPump();
+
         /*
          * Checks the battery status and returns the value in percent.
          */
         int checkPumpBatteryStatus(void);
+
 
 private:
         /* Injects either insulin or glucagon into the body.
@@ -88,7 +94,7 @@ private:
         // - amount : int       the amount of FU that should be injected
         // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
         */
-        virtual bool injectHormone(int amount, bool insulin);
+        virtual bool injectHormone(int targetBloodSugarLevel, bool insulin, int amount);
 
         /* Decreases either the insulin or the glucagon level in the reservoir when a hormone is
         // injected to the body
@@ -108,7 +114,6 @@ private:
         int calcHormUnits(int targetBloodSugarLevel);
  /*
  * author: Markus
- * BEGIN <<<<< meine bevorzugte loesung
  */
         /* Calculates the amount of hormone needed based on the blood sugar levels.
         // Returns fictional Units of specified hormone, see parameters.
@@ -131,6 +136,7 @@ private:
         // - insulin:                   true when insulin should be injected, false when glucagon should be injected
         */
         virtual int calculateNeededHormone(int targetBloodSugarLevel);
+
         /*
          * recharges battery up to 100% of charge.
          *
@@ -148,6 +154,12 @@ public:
         // “True” when everything is working fine.
         */
         virtual bool getPumpStatus();
+
+        /*
+         * Returns target blood sugar value.
+         */
+         int getTargetBloodSugarLevel(void);
+
 private:
         // Returns the insulin level in the reservoir.
         virtual int getInsulinReservoirLevel();
@@ -162,11 +174,13 @@ private:
         */
         virtual int getBatteryPowerLevel();
 
+
 // END GETTER
 
 
 // SETTER
-        /*
+public:
+         /*
          * sets power level. power is decreasing due to usage of pump. only decreases when pump is in use.
          *
          * Parameters:
@@ -174,9 +188,22 @@ private:
          */
          void setBatteryPowerLevel(int powerdrain);
 
+         /*
+          * set target blood sugar level.
+          *
+          * Parameter:
+          * - tbsl: int predefined value for target BSL.
+          */
+         /**
+          * @brief setTargetBloodSugarLevel
+          * @param tbsl
+          */
+         void setTargetBloodSugarLevel(int tbsl);
+
 // END SETTER
 
-         // SLOTS
+// SLOTS
+
 public slots:
         /**
          * Refills the Insulin in the Reservoir of the Pump
@@ -205,6 +232,11 @@ signals:
     // - The current amount of glucagon in the reservoir
     */
     void updateGlucagonReservoir(float amount);
+
+    /*
+     * Callback for updating BSL in UI.
+     */
+    void updateBloodSugarLevel(int bsl, int hormone, int injectHormUnits);
 
 // END SIGNALS
 }; //END HEADER

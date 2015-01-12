@@ -29,6 +29,7 @@
  */
 
 #include "Pump.h"
+#include "UserInterface.h"
 
 #include <iostream>
 
@@ -88,18 +89,23 @@ struct transmit_bloodsugar {
  * @param insulin
  * @return true if injection was ok.
  */
-bool Pump::injectHormone(int amount, bool insulin)
+bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
 {
+    QString err = "Injection aborted! No Hormone injected!";
     if (insulin)
     {
         // inject insulin here
+        emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::INSULIN, amount);
     } else
     {
         // inject glucagon here
+        emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::GLUCAGON, amount);
     }
+    tracer.writeCriticalLog(err);
     return true;
 }
 
+// >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
 /*
  * Decreases the hormone level in either the insulin or the glucagon reservoir
  *
@@ -124,28 +130,28 @@ bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 
     if (insulin)
     {
-        if (amount <= this->getInsulinReservoirLevel())
+        if (amount <= this->getInsulinReservoirLevel() && amount!=0)
         {
-                insulinReservoirLevel-=amount;
-                emit updateInsulinReservoir(insulinReservoirLevel);
-                return true;
+            insulinReservoirLevel-=amount;
+            emit updateInsulinReservoir(insulinReservoirLevel);
+            return true;
         }
         tracer.writeCriticalLog(err);
         return false;
     }
     else
     {
-        if (amount <= this->getGlucagonReservoirLevel())
+        if (amount <= this->getGlucagonReservoirLevel() && amount !=0)
         {
-                glucagonReservoirLevel-=amount;
-                emit updateGlucagonReservoir(glucagonReservoirLevel);
-                return true;
+            glucagonReservoirLevel-=amount;
+            emit updateGlucagonReservoir(glucagonReservoirLevel);
+            return true;
         }
         tracer.writeCriticalLog(err);
         return false;
     }
-
 }
+
 
 /*
  * check Battery Status.
@@ -155,11 +161,12 @@ int Pump::checkPumpBatteryStatus(void)
     QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
     if(this->getBatteryPowerLevel()<=15)
     {
-//        emit writeWarningLogInUi(warn);
         tracer.writeWarningLog(warn);
     }
     return EXIT_FAILURE;
 }
+
+// >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
 /*
  * author: Markus
  * BEGIN SOLUTION <<<<< meine bevorzugte loesung. mit sicherheit noch buggy!
@@ -252,7 +259,15 @@ int Pump::getBatteryPowerLevel()
  */
 bool Pump::getPumpStatus()
 {
-	return true;
+    return true;
+}
+
+/*
+ * Return the target blood sugar level.
+ */
+int Pump::getTargetBloodSugarLevel()
+{
+    return this->targetBloodSugarLevel;
 }
 
 /*
@@ -311,7 +326,6 @@ void Pump::rechargeBatteryPower(int charge)
         //TODO! <- check for correctness.
         this->batteryPowerLevel = charge;
     }
-//    emit writeCriticalLogInUi(err);
     tracer.writeCriticalLog(err);
 }
 
@@ -325,12 +339,30 @@ void Pump::rechargeBatteryPower(int charge)
 void Pump::setBatteryPowerLevel(int powerdrain)
 {
     QString err = "Power drainage too high!";
+
     if(powerdrain>0 && powerdrain<=batteryPowerLevel)
     {
         //TODO! <- check for correctness.
         batteryPowerLevel-=powerdrain;
     }
-//    emit writeCriticalLogInUi(err);
+    tracer.writeCriticalLog(err);
+}
+
+/*
+ * set target blood sugar level.
+ */
+/**
+ * @brief Pump::setTargetBloodSugarLevel
+ * @param tbsl  int-value for target blood sugar level.
+ */
+void Pump::setTargetBloodSugarLevel(int tbsl)
+{
+    QString err = "Target Blood Sugar Level not within limits!";
+
+    if(tbsl>70 && tbsl<120)
+    {
+        this->targetBloodSugarLevel=tbsl;
+    }
     tracer.writeCriticalLog(err);
 }
 
