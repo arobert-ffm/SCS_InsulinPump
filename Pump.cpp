@@ -303,6 +303,7 @@ void Pump::rechargeBatteryPower(int charge)
  */
 void Pump::setBatteryPowerLevel(int powerdrain)
 {
+    QString err = "Power drainage too high!";
     if(powerdrain>0 && powerdrain<=batteryPowerLevel)
     {
         //TODO! <- check for correctness.

@@ -177,11 +177,11 @@ void UserInterface::updateBloodsugarLevel(int bloodsugarLevel, int hormone, int 
     // Insert Message
     if (hormone == INSULIN)
     {
-        ui->mBloodsugarLog->addItem(new QListWidgetItem(text + "  injected " + QString::number(amount) + " units Insulin"));
+        ui->mBloodsugarLog->addItem(new QListWidgetItem(text + "  injected " + QString::number(amountInjected) + " units Insulin"));
         ui->mBloodsugarLog->scrollToBottom();
     } else if(hormone == GLUCAGON)
     {
-        ui->mBloodsugarLog->addItem(new QListWidgetItem(text + "  injected " + QString::number(amount) + " units Glucagon"));
+        ui->mBloodsugarLog->addItem(new QListWidgetItem(text + "  injected " + QString::number(amountInjected) + " units Glucagon"));
         ui->mBloodsugarLog->scrollToBottom();
     }
     // Remove oldest item if count is above 25
