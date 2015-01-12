@@ -21,8 +21,8 @@
  * 9. check methods for correctness.
  * A.
  * B. see TODO tags!
- * C. setter and getter for all attributes!
- * D.
+ * C. setter and getter for all attributes! <--- auto generated!
+ * D. fill getter and setter with life!
  * E.
  * F.
  * 0.
@@ -105,6 +105,7 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
 }
 
 // >>>>>>>>>>>>>>> TODO: refactor this -v- <<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>> how? <<<<<<<<<<<<<<<<<<<<<
 /*
  * Decreases the hormone level in either the insulin or the glucagon reservoir
  *
@@ -121,11 +122,10 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
 bool Pump::decreaseHormoneLevel(int amount, bool insulin)
 {
     QString str_hormone, str_insulin="Insulin", str_glucagon="Glucagon";
+    QString err = "Reservoir "+ str_hormone +" too low!";
 
     //set str_hormone to "Insulin" or "Glucagon". ternary operator!
-    str_hormone = insulin? str_insulin:str_glucagon;
-
-    QString err = "Reservoir "+ str_hormone +" too low!";
+    str_hormone = insulin? str_insulin : str_glucagon;
 
     if (insulin)
     {
@@ -226,7 +226,7 @@ int Pump::calcHormUnits(int targetBloodSugarLevel)
 {
     int difference; int fictHormUnit;
     difference = abs(currentBloodSugarLevel - targetBloodSugarLevel);
-    fictHormUnit = difference / hsf;
+    fictHormUnit = difference / hormoneSensitivityFactor;
     return fictHormUnit;
 }
 
@@ -248,7 +248,7 @@ int Pump::calcHormUnits(int targetBloodSugarLevel)
  * @brief Pump::getBatteryPowerLevel
  * @return current battery status.
  */
-int Pump::getBatteryPowerLevel()
+int Pump::getBatteryPowerLevel() const
 {
     return this->batteryPowerLevel;
 }
@@ -256,7 +256,7 @@ int Pump::getBatteryPowerLevel()
  * Checks the entire pump (reservoir, mechanical parts) and returns “true” when
  * everything is working fine.
  */
-bool Pump::getPumpStatus()
+bool Pump::getPumpStatus() const
 {
     return true;
 }
@@ -264,7 +264,7 @@ bool Pump::getPumpStatus()
 /*
  * Return the target blood sugar level.
  */
-int Pump::getTargetBloodSugarLevel()
+int Pump::getTargetBloodSugarLevel() const
 {
     return this->targetBloodSugarLevel;
 }
@@ -277,7 +277,7 @@ int Pump::getTargetBloodSugarLevel()
  * @brief Pump::getCurrentBloodSugarLevel
  * @return current blood sugar level.
  */
-int Pump::getCurrentBloodSugarLevel()
+int Pump::getCurrentBloodSugarLevel() const
 {
    return this->currentBloodSugarLevel;
 }
@@ -289,7 +289,7 @@ int Pump::getCurrentBloodSugarLevel()
  * @brief Pump::getInsulinReservoirLevel
  * @return insulinLevel of reservoir
  */
-int Pump::getInsulinReservoirLevel()
+int Pump::getInsulinReservoirLevel() const
 {
     return this->insulinReservoirLevel;
 }
@@ -301,11 +301,56 @@ int Pump::getInsulinReservoirLevel()
  * @brief Pump::getGlucagonReservoirLevel
  * @return
  */
-int Pump::getGlucagonReservoirLevel()
+int Pump::getGlucagonReservoirLevel() const
 {
     return this->glucagonReservoirLevel;
 }
 
+//<<<< auto generated getter
+int Pump::getLowerTargetBloodSugarLevel() const
+{
+    return lowerTargetBloodSugarLevel;
+}
+
+int Pump::getUpperTargetBloodSugarLevel() const
+{
+    return upperTargetBloodSugarLevel;
+}
+
+int Pump::getMinBloodSugarLevel() const
+{
+    return minBloodSugarLevel;
+}
+
+int Pump::getMaxBloodSugarLevel() const
+{
+    return maxBloodSugarLevel;
+}
+
+int Pump::getLatestBloodSugarLevel() const
+{
+    return latestBloodSugarLevel;
+}
+
+int Pump::getActive() const
+{
+    return active;
+}
+
+int Pump::getHormoneSensitivityFactor() const
+{
+    return hormoneSensitivityFactor;
+}
+
+bool Pump::getDelay() const
+{
+    return delay;
+}
+
+bool Pump::getInsulin() const
+{
+    return insulin;
+}
 // END GETTER
 
 
@@ -389,6 +434,51 @@ void Pump::refillGlucagonReservoir()
     emit updateGlucagonReservoir(100);
 }
 
+//>>>> auto generated setter
+void Pump::setHormoneSensitivityFactor(int value)
+{
+    hormoneSensitivityFactor = value;
+}
+
+void Pump::setDelay(bool value)
+{
+    delay = value;
+}
+
+void Pump::setInsulin(bool value)
+{
+    insulin = value;
+}
+
+void Pump::setActive(int value)
+{
+    active = value;
+}
+
+void Pump::setLowerTargetBloodSugarLevel(int value)
+{
+    lowerTargetBloodSugarLevel = value;
+}
+
+void Pump::setUpperTargetBloodSugarLevel(int value)
+{
+    upperTargetBloodSugarLevel = value;
+}
+
+void Pump::setLatestBloodSugarLevel(int value)
+{
+    latestBloodSugarLevel = value;
+}
+
+void Pump::setMaxBloodSugarLevel(int value)
+{
+    maxBloodSugarLevel = value;
+}
+
+void Pump::setMinBloodSugarLevel(int value)
+{
+    minBloodSugarLevel = value;
+}
 // END SETTER
 
 
@@ -400,6 +490,7 @@ void Pump::refillGlucagonReservoir()
  * @brief Pump::runPump
  * @return true on exit if everything is ok.
  */
+
 bool Pump::runPump()
 {
     latestBloodSugarLevel = currentBloodSugarLevel;

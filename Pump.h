@@ -9,6 +9,16 @@
 //
 // Authors: Jenny Kreger and Markus Ernst
 
+/* abbreviations:
+ *
+ * HSF/hsf  =   Hormone Sensitivity Factor;
+ * BSL      =   Blood Sugar Level;
+ * cBSL     =   current Blood Sugar Level;
+ * tBSL     =   target Blood Sugar Level;
+ *
+ *
+ */
+
 #ifndef pump_
 #define pump_
 
@@ -27,15 +37,18 @@ class Pump : public QObject
 
 // ATTRIBUTES
 private:
+        //for logging purposes
+        Tracer tracer;
+
         /* When pump is active injecting insulin the value will be 1, when
         // injecting glucagon the value will be 2 and when inactive the value
         // will be 0.
         */
         int active;
-        float insulinReservoirLevel;
-        float glucagonReservoirLevel;
+        int insulinReservoirLevel;
+        int glucagonReservoirLevel;
 
-        // current level
+        // current blood sugar level
         int currentBloodSugarLevel;
 
         // the blood sugar level in the latest cycle
@@ -65,11 +78,8 @@ private:
         // current battery power level
         int batteryPowerLevel;
 
-        //for logging purposes
-        Tracer tracer;
-
         // hormone sensitivity factor
-        int hsf;
+        int hormoneSensitivityFactor;
 
 // END ATTRBUTES
 
@@ -77,7 +87,7 @@ private:
 // FUNCTIONS
 public:
         /* "main"-function for pump
-        // triggered by Scheduler.
+        * triggered by Scheduler.
         */
         bool runPump();
 
@@ -88,11 +98,19 @@ public:
 
 private:
         /* Injects either insulin or glucagon into the body.
-        //
-        // Parameters:
-        // - amount : int       the amount of FU that should be injected
-        // - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        *
+        * Parameters:
+        * - amount : int       the amount of FU that should be injected
+        * - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        * - return : bool      returns true if injection was ok.
         */
+        /**
+         * @brief injectHormone
+         * @param targetBloodSugarLevel
+         * @param insulin
+         * @param amount
+         * @return
+         */
         bool injectHormone(int targetBloodSugarLevel, bool insulin, int amount);
 
         /* Decreases either the insulin or the glucagon level in the reservoir when a hormone is
@@ -101,7 +119,14 @@ private:
         * Parameters:
         * - amount : int       the amount of FU by that the reservoir should be decreased
         * - insulin : bool     true if the hormone to inject is insulin, false if it is glucagon
+        * - return : bool      returns true, if decrease was ok.
         */
+        /**
+         * @brief decreaseHormoneLevel
+         * @param amount
+         * @param insulin
+         * @return
+         */
         bool decreaseHormoneLevel(int amount, bool insulin);
 
         /* Calculate units of needed hormone.
@@ -109,30 +134,40 @@ private:
          * Parameters:
          * - targetBloodSugarLevel: predefined value of blood sugar, set by user.
          */
+        /**
+         * @brief calcHormUnits
+         * @param targetBloodSugarLevel
+         * @return
+         */
         int calcHormUnits(int targetBloodSugarLevel);
  /*
  * author: Markus
  */
         /* Calculates the amount of hormone needed based on the blood sugar levels.
-        // Returns fictional Units of specified hormone, see parameters.
-        //
-        // Parameter:
-        // - targetBloodSugarLevel:     predefined value to raise or reduce blood sugar level to,
-        //                              e.g. 90mg/dl -> targetBloodSugarLevel = 90;
-        //
-        // - currentBloodSugarLevel:    current value of BSL, e.g. 160mg/dl -> currentBloodSugarLevel = 160;
-        //
-        // - hsf:                       hormon sensitivity factor. Factor which indicates how much blood sugar
-        //                              one unit of used hormone raises or reduces , e.g. 1:5 -> 1 unit hormone
-        //                              raises/reduces 5mg/dl glucose -> hsf = 5;
-        //
-        // - hormone:                   what sort of hormone is used, e.g. insulin or glucagon.
-        //
-        // >> jenny's solution <<       strings as parameters are bad. really bad. so lets just use a bool
-        //                              called insulin that is true when insulin should be injected and false in
-        //                              case of glucagon.
-        // - insulin:                   true when insulin should be injected, false when glucagon should be injected
+        * Returns fictional Units of specified hormone, see parameters.
+        *
+        * Parameter:
+        * - targetBloodSugarLevel:     predefined value to raise or reduce blood sugar level to,
+        *                              e.g. 90mg/dl -> targetBloodSugarLevel = 90;
+        *
+        * - currentBloodSugarLevel:    current value of BSL, e.g. 160mg/dl -> currentBloodSugarLevel = 160;
+        *
+        * - hormoneSensitivityFactor:  hormone sensitivity factor. Factor which indicates how much blood sugar
+        *                              one unit of used hormone raises or reduces , e.g. 1:5 -> 1 unit hormone
+        *                              raises/reduces 5mg/dl glucose -> hsf = 5;
+        *
+        * - hormone:                   what sort of hormone is used, e.g. insulin or glucagon.
+        *
+        * >> jenny's solution <<       strings as parameters are bad. really bad. so lets just use a bool
+        *                              called insulin that is true when insulin should be injected and false in
+        *                              case of glucagon.
+        * - insulin:                   true when insulin should be injected, false when glucagon should be injected
         */
+        /**
+         * @brief calculateNeededHormone
+         * @param targetBloodSugarLevel
+         * @return units of hormone
+         */
         int calculateNeededHormone(int targetBloodSugarLevel);
 
         /* recharges battery up to 100% of charge.
@@ -140,6 +175,10 @@ private:
          * Parameters:
          * - power: level of recharge energy.
          */
+        /**
+          * @brief rechargeBatteryPower
+          * @param charge
+          */
          void rechargeBatteryPower(int charge);
 
 // END FUNCTIONS
@@ -148,41 +187,76 @@ private:
 // GETTER
 public:
         /* Checks the entire pump (reservoir, mechanical parts) and returns
-        // “True” when everything is working fine.
+        * “True” when everything is working fine.
         */
-        bool getPumpStatus();
+        bool getPumpStatus() const;
 
         /* Returns target blood sugar value.
          */
-         int getTargetBloodSugarLevel(void);
+        int getTargetBloodSugarLevel(void) const;
 
-private: // Ist das notwendig?
-        /* Returns the insulin level in the reservoir.
+//private: // <--- Ist das notwendig?
+
+         /* Returns the insulin level in the reservoir.
          */
-        int getInsulinReservoirLevel();
+        int getInsulinReservoirLevel() const;
+
         /* Returns the glucagon level in the reservoir.
         */
-        int getGlucagonReservoirLevel();
+        int getGlucagonReservoirLevel() const;
+
         /* Checks the blood sugar concentration and returns the value.
          */
-        int getCurrentBloodSugarLevel();
+        int getCurrentBloodSugarLevel() const;
+
         /* returns battery power level
         // In case of a critical status (level smaller than 15%) the user will
         // be notified acoustically and the incident will be logged by the
         // tracer.
         */
-        int getBatteryPowerLevel();
+        int getBatteryPowerLevel() const;
+
+        /* returns pump status active*/
+        int getActive() const;
+
+        /* returns latest blood sugar level*/
+        int getLatestBloodSugarLevel() const;
+
+        /* returns HSF*/
+        int getHormoneSensitivityFactor() const;
+
+        /* returns true if delay flag is set*/
+        bool getDelay() const;
+
+        /* returns true if hormone is insulin, false if glucagon */
+        bool getInsulin() const;
+
+        /* returns lower threshold of blood sugar level */
+        int getLowerTargetBloodSugarLevel() const;
+
+        /* returns upper threshold of BSL */
+        int getUpperTargetBloodSugarLevel() const;
+
+        /* returns minimum blood sugar level */
+        int getMinBloodSugarLevel() const;
+
+        /* returns maximum blood sugar level */
+        int getMaxBloodSugarLevel() const;
 
 // END GETTER
 
 
 // SETTER
-public:
+//public: //<<<---
          /* sets power level. power is decreasing due to usage of pump. only decreases when pump is in use.
          *
          * Parameters:
          * - powerdrain: int    amount of power drained from battery.
          */
+        /**
+          * @brief setBatteryPowerLevel
+          * @param powerdrain
+          */
          void setBatteryPowerLevel(int powerdrain);
 
          /* set target blood sugar level.
@@ -195,13 +269,76 @@ public:
           * @param tbsl
           */
          void setTargetBloodSugarLevel(int tbsl);
+         /* set pump on active.
+          */
+         /**
+          * @brief setActive
+          * @param value
+          */
+         void setActive(int value);
+
+         /*sets latest blood sugar level
+          */
+         /**
+          * @brief setLatestBloodSugarLevel
+          * @param value
+          */
+         void setLatestBloodSugarLevel(int value);
+
+         /* set HSF*/
+         /**
+          * @brief setHormoneSensitivityFactor
+          * @param value
+          */
+         void setHormoneSensitivityFactor(int value);
+
+         /* set delay flag*/
+         /**
+          * @brief setDelay
+          * @param value
+          */
+         void setDelay(bool value);
+
+         /* set insulin value true if insulin*/
+         /**
+          * @brief setInsulin
+          * @param value
+          */
+         void setInsulin(bool value);
+
+         /* set lower BSL*/
+         /**
+          * @brief setLowerTargetBloodSugarLevel
+          * @param value
+          */
+         void setLowerTargetBloodSugarLevel(int value);
+
+         /* set upper BSL*/
+         /**
+          * @brief setUpperTargetBloodSugarLevel
+          * @param value
+          */
+         void setUpperTargetBloodSugarLevel(int value);
+
+         /* set minimum BSL*/
+         /**
+          * @brief setMinBloodSugarLevel
+          * @param value
+          */
+         void setMinBloodSugarLevel(int value);
+
+         /* set maximum BSL*/
+         /**
+          * @brief setMaxBloodSugarLevel
+          * @param value
+          */
+         void setMaxBloodSugarLevel(int value);
 
 // END SETTER
 
 // SLOTS
-
 public slots:
-        /**
+         /**
          * Refills the Insulin in the Reservoir of the Pump
          */
         void refillInsulinReservoir();
@@ -214,7 +351,6 @@ public slots:
 
 
 // SIGNALS
-
 signals:
     /* Callback for updating Insulin Reservoir in the UI.
     *
