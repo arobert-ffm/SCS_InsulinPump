@@ -1,12 +1,16 @@
-//
-// File: Scheduler.h
-//
-// Date: 07.01.15 16:54
-//
-// Description:  main() routine of insulin pump simulation
-//               Threads for ControlSystem & Scheduler
-//
-// Author:       Sven Sperner, sillyconn@gmail.com
+/**
+ * @file:   Scheduler.h
+ *
+ * @author: Sven Sperner, sillyconn@gmail.com
+ *
+ * @date:   13.01.2015
+ * Created: 07.01.15 16:54 with Idatto, version 1.3
+ *
+ * @brief:  Main() routine for InsulinPump Simulation
+ *          Static thread functions for ControlSystem & Scheduler
+ *
+ * Copyright (c) 2015 All Rights Reserved
+ */
 
 
 #include <QApplication>
