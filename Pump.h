@@ -133,6 +133,28 @@ private:
          */
         bool decreaseHormoneReservoire(int amount, bool insulin);
 
+        /**
+         * @brief   Pump::readBloodSugarSensor
+         *          Reads the current blood sugar level via pipe from body
+         *
+         * @return  the current blood sugar level
+         */
+        int readBloodSugarSensor();
+
+        /**
+         * @brief   Pump::injectHormoneToBody
+         *          Injects the calculated amount of hormones to the body via pipe
+         *
+         * @param   amount
+         *          the amount of hormones to inject
+         *
+         * @param   insulin
+         *          true if insulin, false if glucagon
+         *
+         * @return  true if anything is ok
+         */
+        bool injectHormoneToBody(int amount, bool insulin);
+
  /*
  * author: Markus
  */

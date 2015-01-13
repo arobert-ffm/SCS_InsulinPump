@@ -12,7 +12,7 @@
 /*
  * 1. clean up code.
  * 2. check return values of functions
- * 3.
+ * 3. check initial values!
  * 4.
  * 5.
  * 6. refactor code. especially code that is redundant.
@@ -69,6 +69,72 @@ struct transmit_bloodsugar {
 
 
 /**
+ * @brief   Pump::readBloodSugarSensor
+ *          Reads the current blood sugar level via pipe from body
+ *
+ * @return  the current blood sugar level
+ */
+int Pump::readBloodSugarSensor()
+{
+    int result;
+
+    // open pipe Body --> Pump
+    if((fdes_body_to_pump=open("body_to_pump",O_RDONLY))==(-1)) {
+        printf("Failure 'open pipe'");
+        exit(-1);
+    }
+
+    // read Body --> Pump
+    read(fdes_body_to_pump, &BodyStatus, BUFLEN);
+    result = BodyStatus.bloodSugarLevel;
+    close(fdes_body_to_pump);
+
+    return result;
+}
+
+
+/**
+ * @brief   Pump::injectHormoneToBody
+ *          Injects the calculated amount of hormones to the body via pipe
+ *
+ * @param   amount
+ *          the amount of hormones to inject
+ *
+ * @param   insulin
+ *          true if insulin, false if glucagon
+ *
+ * @return  true if anything is ok
+ */
+bool Pump::injectHormoneToBody(int amount, bool insulin)
+{
+    // open pipe Pump --> Body
+    if((fdes_pump_to_body=open("pump_to_body",O_WRONLY))==(-1)) {
+        printf("Failure 'open pipe'");
+        return false;
+    }
+
+    if (insulin)
+    {
+        Injecting.injected_insulin = amount;
+        Injecting.injected_glucagon = 0;
+    }
+    else
+    {
+        Injecting.injected_insulin = 0;
+        Injecting.injected_glucagon = amount;
+    }
+
+    // write Pump --> Body
+    if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
+        printf("Fehler 'write-call'");
+        return false;
+    }
+    close(fdes_pump_to_body);
+    return true;
+}
+
+
+/**
  * @brief   Pump::injectHormone
  *          Injects either insulin or glucagon into the body.
  *
@@ -81,21 +147,31 @@ struct transmit_bloodsugar {
  * @return  false if injection failed.
  */
 bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
-{
-    QString err = "Injection aborted! No Hormone injected!";
-    if (insulin)
+{   
+    // inject to body
+    if (injectHormoneToBody(amount, insulin))
     {
-        // inject insulin here
-        // next line: nonsense TODO: call body!
-        emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::INSULIN, amount);
-    } else
-    {
-        // inject glucagon here
-        // next line: nonsense TODO: call body!
-        emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::GLUCAGON, amount);
+        // call gui
+        if (insulin)
+        {
+            emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::INSULIN, amount);
+            return true;
+        } else
+        {
+            emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::GLUCAGON, amount);
+            return true;
+        }
+
+        QString err = "Injection aborted! No GUI detected";
+        tracer.writeCriticalLog(err);
+        return false;
     }
-    tracer.writeCriticalLog(err);
-    return false;
+    else
+    {
+        QString err = "Injection aborted! No body detected!";
+        tracer.writeCriticalLog(err);
+        return false;
+    }
 }
 
 
@@ -192,8 +268,9 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
  */
 bool Pump::runPump()
 {
+    // TODO first iteration? predefined value?
     latestBloodSugarLevel = currentBloodSugarLevel;
-    currentBloodSugarLevel = getCurrentBloodSugarLevel();
+    currentBloodSugarLevel = readBloodSugarSensor();
     int hormonesToInject;
 
     // inject insulin
