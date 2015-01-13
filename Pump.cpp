@@ -154,7 +154,7 @@ int Pump::checkPumpBatteryStatus(void)
 
 //   QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
     QString okm = "INFO! Battery ok! Charge at: " + batteryPowerLevel;
-    if(powerlevel<=15)
+    if(!powerlevel<=15)
     {
         //tracer.writeWarningLog(warn);
     }
