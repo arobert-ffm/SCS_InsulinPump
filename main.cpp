@@ -24,6 +24,13 @@ using namespace std;
 
 
 
+/**
+ * Static function for the Control Systems watcher Thread
+ *
+ * @brief Checks all System Components
+ * @param Pointer to the representation of the ControlSystem object
+ * @return EXIT_SUCCESS
+ */
 int watch(ControlSystem *ControlSystem)
 {
     while(true)
@@ -40,6 +47,14 @@ int watch(ControlSystem *ControlSystem)
     return EXIT_SUCCESS;
 }
 
+/**
+ * Static function for the Scheduler scheduling Thread
+ *
+ * @brief Triggers the Pump for getting information from the Body
+ *        Holds track of the Operation Time
+ * @param Pointer to the representation of the Scheduler object
+ * @return EXIT_SUCCESS
+ */
 int schedule(Scheduler *Scheduler)
 {
     while(true)
@@ -52,6 +67,7 @@ int schedule(Scheduler *Scheduler)
 
     return EXIT_SUCCESS;
 }
+
 
 /**
  * Initiation of the Userinterface, Humanbody- and Insulinpumpsimulation.
