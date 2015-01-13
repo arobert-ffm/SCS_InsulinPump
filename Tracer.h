@@ -30,10 +30,12 @@ class Tracer : public QObject
     Q_OBJECT
 
     public:
-        // The constructor initializes the logfile
+        /* The constructor initializes the logfile
+         */
         Tracer();
 
-        // The destructor closes the logfile
+        /* The destructor closes the logfile
+         */
         ~Tracer();
 
         /* Writes the message to the log file.
@@ -54,17 +56,22 @@ class Tracer : public QObject
         */
         virtual bool writeCriticalLog(QString message);
 
-        // Plays an acoustic sound and returns “True” when done
+        /* Plays an acoustic sound and returns “True” when done
+         */
         virtual bool playAcousticWarning();
 
-        // Vibrates on a specific event and returns “True” when done
+        /* Vibrates on a specific event and returns “True” when done
+         */
         virtual bool vibrationWarning();
 
-        // Answers ControlSystem’s call for checkTracer()
+        /* Answers ControlSystem’s call for checkTracer()
+         */
         virtual bool getStatus();
 
-        // Returns the file name of the logfile
-        virtual QString getLogFileName();
+        /* Getter & Setter for the file name of the logfile
+         */
+        virtual QString getLogFileName() const;
+        virtual void setLogFileName(QString value);
 
     private:
         // The complete filename and path will stored here.

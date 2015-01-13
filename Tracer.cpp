@@ -17,7 +17,8 @@ using namespace std;
 
 
 
-// The constructor initializes the logfile
+/* The constructor initializes the logfile
+ */
 Tracer::Tracer()
 {
     // Copy the logfile name and open the file
@@ -26,7 +27,8 @@ Tracer::Tracer()
     LogFile->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
 }
 
-// The destructor closes the logfile
+/* The destructor closes the logfile
+ */
 Tracer::~Tracer()
 {
     // Flush the logfile buffer and close the file
@@ -34,8 +36,9 @@ Tracer::~Tracer()
     LogFile->close();
 }
 
-// Writes the message to the log file. Every Message is signed by date and time.
-// When writing to file has finished, “True” is returned
+/* Writes the message to the log file. Every Message is signed by date and time.
+ * When writing to file has finished, “True” is returned
+ */
 bool Tracer::writeStatusLog(QString message)
 {
     // Write status message to logfile
@@ -53,8 +56,9 @@ bool Tracer::writeStatusLog(QString message)
     return true;
 }
 
-// Writes the message to the log file. Every Message is signed by date and time.
-// When writing to file has finished, “True” is returned
+/* Writes the message to the log file. Every Message is signed by date and time.
+ * When writing to file has finished, “True” is returned
+ */
 bool Tracer::writeWarningLog(QString message)
 {
     // Write warning message to logfile
@@ -72,8 +76,9 @@ bool Tracer::writeWarningLog(QString message)
     return true;
 }
 
-// Writes the message to the log file. Every Message is signed by date and time.
-// When writing to file has finished, “True” is returned
+/* Writes the message to the log file. Every Message is signed by date and time.
+ * When writing to file has finished, “True” is returned
+ */
 bool Tracer::writeCriticalLog(QString message)
 {
     // Write critical message to logfile
@@ -91,24 +96,27 @@ bool Tracer::writeCriticalLog(QString message)
     return true;
 }
 
-// Plays an acoustic sound and returns “True” when done
-// When playing a sound has finished, “True” is returned
+/* Plays an acoustic sound and returns “True” when done
+ * When playing a sound has finished, “True” is returned
+ */
 bool Tracer::playAcousticWarning()
 {
     QApplication::beep();
     return true;
 }
 
-// Vibrates on a specific event and returns “True” when done
-// When vibration has finished, “True” is returned
+/* Vibrates on a specific event and returns “True” when done
+ * When vibration has finished, “True” is returned
+ */
 bool Tracer::vibrationWarning()
 {
     cout << "vibrating..." << endl;
     return true;
 }
 
-// Answers ControlSystem’s call for checkTracer()
-// Everything is fine, if the logfile is opened & writeable
+/* Answers ControlSystem’s call for checkTracer()
+ * Everything is fine, if the logfile is opened & writeable
+ */
 bool Tracer::getStatus()
 {
     if(!LogFile->isOpen() || !LogFile->isWritable())
@@ -119,10 +127,17 @@ bool Tracer::getStatus()
     return true;
 }
 
-// Returns the file name of the logfile
-QString Tracer::getLogFileName()
+
+/* Getter & Setter for the file name of the logfile
+ */
+QString Tracer::getLogFileName() const
 {
     return LogFileName;
+}
+
+void Tracer::setLogFileName(QString value)
+{
+    LogFileName = value;
 }
 
 
