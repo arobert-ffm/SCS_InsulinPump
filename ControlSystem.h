@@ -32,89 +32,149 @@ class ControlSystem
 {
     public:
         /**
-         * @brief: The constructor instantiates all necessary objects
-         *         and connects some signals to slot for the user interface
+         * @name:   Control System
+         * @brief:  Control Systems Constructor
+         *
+         *  The constructor instantiates all necessary objects
+         *  and connects some signals to slots for the user interface
+         *
+         * @param:  A pointer to the user interface for callbacks
          */
         ControlSystem(UserInterface* ui);
 
         /**
-         * Checks the operation hours of the mechanical parts (motor) and
-         * returns the value in hours
+         * @name:   Check Operation Hours
+         * @brief:  Check systems total operation time in hours
+         *
+         *  Gets the systems total operation time in hours from the
+         *  scheduler and compares it with the absolute maximum,
+         *  which depends on mechanical & electrical parts
+         *
+         * @return: The systems total operation time in hours
          */
         virtual int checkOperationHours();
 
         /**
-         * Checks the scheduler for correct operation and returns “True” when
-         * everything is working fine
+         * @name:   Check Scheduler
+         * @brief:  Check scheduler for availability
+         *
+         *  Checks the scheduler for correct operation, which depends
+         *  on the implementation of the scheduler itself
+         *
+         * @return: When everything is working fine, 'true' is returned
          */
         virtual bool checkScheduler();
 
         /**
-         * Checks the hormone reservoir and returns “True” when everything is fine
+         * @name:   Check Pump
+         * @brief:  Checks the insulin pump for availability
+         *
+         *  Checks the insulin pump for correct operation, which depends
+         *  on the implementation of the insulin pump itself
+         *
+         * @return: When everything is working fine, 'true' is returned
          */
         virtual bool checkPump();
 
         /**
-         * Checks the tracer and returns “True” when everything is fine
+         * @name:   Check Tracer
+         * @brief:  Checks the tracer for availability
+         *
+         *  Checks the tracer for correct operation, which depends
+         *  on the implementation of the tracer itself
+         *
+         * @return: When everything is working fine, 'true' is returned
          */
         virtual bool checkTracer();
 
         /**
-         * Checks the batteries charging state and returns the value in percent
+         * @name:   Check Battery Status
+         * @brief:  Checks the batteries charging state in percent
+         *
+         *  Gets the insulin pumps battery charging state from the
+         *  insulin pump and compares it with the absolute maximum,
+         *  which depends on the used bettery technology
+         *
+         * @return: The systems total operation time in hours
          */
         virtual int checkBatteryStatus();
 
         /**
-         * Returns the used scheduler
+         * @name:   Get Scheduler
+         * @brief:  Get the used scheduler
+         *
+         * @return: A pointer to the used scheduler
          */
         virtual Scheduler *getScheduler();
 
         /**
-         * Getter & Setter for minumum Bettery load level in percent
+         * @name:   Get/Set Bettery Minimum Load
+         * @brief:  Get/Set the minimum battery load level in percent
+         *
+         * @param:  The batteries minimum load level in percent
+         * @return: The batteries minimum load level in percent
          */
         virtual int getBatteryMinLoad() const;
         virtual void setBatteryMinLoad(int value);
 
         /**
-         * Getter & Setter for maximum operation time in hours
+         * @name:   Get/Set Maximum Operation Hours
+         * @brief:  Get/Set the maximum operation time in hours
+         *
+         * @param:  The maximum operation time in hours
+         * @return: The maximum operation time in hours
          */
         virtual int getMaxOperationHours() const;
         virtual void setMaxOperationHours(int value);
 
         /**
-         * Getter & Setter for Flag that thread should run periodically
+         * @name:   Get/Set Should Run
+         * @brief:  Get/Set the should run flag for the thread
+         *
+         * @param:  'true' if the thread should run
+         * @return: When the thread should run, 'true' is returned
          */
         virtual bool getSchouldRun() const;
         virtual void setSchouldRun(bool value);
 
 private:
         /**
-         * A local representation of the hormone pump
+         * @name:   The Pump
+         * @brief:  A local representation of the Insulin Pump
          */
         Pump *ThePump;
 
         /**
-         * A local representation of the scheduler
+         * @name:   The Scheduler
+         * @brief:  A local representation of the Scheduler
          */
         Scheduler *TheScheduler;
 
         /**
-         * A local representation of the tracer
+         * @name:   The Tracer
+         * @brief:  A local representation of the Tracer
          */
         Tracer *TheTracer;
 
         /**
-         * Minumum Bettery load level in percent
+         * @name:   Minumum Battery Load
+         * @brief:  Minumum battery load level in percent
          */
         int BatteryMinLoad;
 
         /**
-         * Maximum operation time in hours
+         * @name:   Maximum Operation Hours
+         * @brief:  Maximum operation time in hours
          */
         int MaxOperationHours;
 
         /**
-         * Flag for the Thread method to check system health periodically
+         * @name:   Schould Run
+         * @brief:  Flag for the thread method
+         *
+         *  A flag for the thread method to check system health periodically
+         *  If 'SchoulRun' is true, the control system thread loop will run
+         *  If 'ShouldRun' is flase, the thread stops the periodic checking
          */
         bool SchouldRun;
 

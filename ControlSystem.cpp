@@ -45,7 +45,8 @@ ControlSystem::ControlSystem(UserInterface* ui)
     //QObject::connect(this, SIGNAL(saveOperationTimeInUi(int)), ui, SLOT(insertOprationTime(int)));
 }
 
-/* Checks the operation hours of the system and returns the value in hours
+
+/* Checks the operation hours of the system
  */
 int ControlSystem::checkOperationHours()
 {
@@ -67,8 +68,7 @@ int ControlSystem::checkOperationHours()
     return (OperationTime/60/60/1000);
 }
 
-/* Checks the scheduler for correct operation and returns “True” when
- * everything is working fine
+/* Checks the scheduler for correct operation
  */
 bool ControlSystem::checkScheduler()
 {
@@ -84,7 +84,7 @@ bool ControlSystem::checkScheduler()
     return true;
 }
 
-/* Checks the hormone reservoir and returns “True” when everything is fine
+/* Checks the hormone reservoir
  */
 bool ControlSystem::checkPump()
 {
@@ -100,7 +100,7 @@ bool ControlSystem::checkPump()
     return true;
 }
 
-/* Checks the tracer and returns “True” when everything is fine
+/* Checks the tracer
  */
 bool ControlSystem::checkTracer()
 {
@@ -113,7 +113,7 @@ bool ControlSystem::checkTracer()
     return true;
 }
 
-/* Checks the batteries charging state and returns the value in percent
+/* Checks the batteries charging state
  */
 int ControlSystem::checkBatteryStatus()
 {

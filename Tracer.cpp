@@ -39,8 +39,8 @@ Tracer::~Tracer()
     LogFile->close();
 }
 
-/* Writes the message to the log file. Every Message is signed by date and time.
- * When writing to file has finished, “True” is returned
+
+/* Writes a signed status message to the log file
  */
 bool Tracer::writeStatusLog(QString message)
 {
@@ -59,8 +59,7 @@ bool Tracer::writeStatusLog(QString message)
     return true;
 }
 
-/* Writes the message to the log file. Every Message is signed by date and time.
- * When writing to file has finished, “True” is returned
+/* Writes a signed warning message to the log file
  */
 bool Tracer::writeWarningLog(QString message)
 {
@@ -79,8 +78,7 @@ bool Tracer::writeWarningLog(QString message)
     return true;
 }
 
-/* Writes the message to the log file. Every Message is signed by date and time.
- * When writing to file has finished, “True” is returned
+/* Writes a signed critical message to the log file
  */
 bool Tracer::writeCriticalLog(QString message)
 {
@@ -99,8 +97,7 @@ bool Tracer::writeCriticalLog(QString message)
     return true;
 }
 
-/* Plays an acoustic sound and returns “True” when done
- * When playing a sound has finished, “True” is returned
+/* Plays an acoustic sound
  */
 bool Tracer::playAcousticWarning()
 {
@@ -108,8 +105,7 @@ bool Tracer::playAcousticWarning()
     return true;
 }
 
-/* Vibrates on a specific event and returns “True” when done
- * When vibration has finished, “True” is returned
+/* Simulates vibration
  */
 bool Tracer::vibrationWarning()
 {
@@ -118,7 +114,6 @@ bool Tracer::vibrationWarning()
 }
 
 /* Answers ControlSystem’s call for checkTracer()
- * Everything is fine, if the logfile is opened & writeable
  */
 bool Tracer::getStatus()
 {

@@ -36,7 +36,8 @@ Scheduler::~Scheduler()
     stopOperationTimeCounter();
 }
 
-/* Resets the timer and sets the countdown time according to parameter
+
+/* Resets the timer and sets the new startvalue
  */
 bool Scheduler::resetTimer(int time_min)
 {
@@ -87,8 +88,7 @@ bool Scheduler::saveOperationTime()
     return true;
 }
 
-/* Starts the counter for operation time and returns “True” when successfully
- * started. The value will be read from “TotalOperationTime”.
+/* Starts the counter for operation time
  */
 bool Scheduler::startOperationTimeCounter()
 {
@@ -104,8 +104,7 @@ bool Scheduler::startOperationTimeCounter()
     return true;
 }
 
-/* Stops the counter for operation time and returns “True” when successfully
- * stopped. The value will be written to “TotalOperationHours”.
+/* Stops the counter for operation time
  */
 bool Scheduler::stopOperationTimeCounter()
 {
