@@ -76,7 +76,7 @@ private:
         bool delay;
 
         // current battery power level
-        int batteryPowerLevel;
+        int batteryPowerLevel=MAX_BATTERY_CHARGE;
 
         // hormone sensitivity factor
         int hormoneSensitivityFactor;
