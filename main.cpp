@@ -19,7 +19,7 @@
 #include "UserInterface.h"
 #include "ControlSystem.h"
 #include "Scheduler.h"
-
+#include "Pump.h"
 
 #define CHECK_INTERVAL_SEC 5
 #define RUN_INTERVAL_SEC 5
@@ -83,6 +83,10 @@ int schedule(Scheduler *Scheduler)
  */
 int main(int argc, char *argv[])
 {
+    //Init battery
+
+
+
     // Create User Interface
     QApplication application(argc, argv);
     UserInterface window;

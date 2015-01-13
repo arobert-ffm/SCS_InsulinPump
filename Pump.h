@@ -76,7 +76,7 @@ private:
         bool delay;
 
         // current battery power level
-        int batteryPowerLevel=MAX_BATTERY_CHARGE;
+        int batteryPowerLevel=100;
 
         // hormone sensitivity factor
         int hormoneSensitivityFactor;
@@ -85,8 +85,7 @@ private:
 
 // FUNCTIONS
 public:
-        /* "main"-function for pump
-        * triggered by Scheduler.
+        /* "main"-function for pump triggered by Scheduler.
         */
         bool runPump();
 
@@ -94,6 +93,12 @@ public:
          */
         int checkPumpBatteryStatus(void);
 
+        /* Drains power from battery.
+         *
+         * Parameters:
+         * - powerdrain : int   amount of powerdrainage.
+         */
+        void drainBatteryPower(int powerdrain);
 
 private:
         /* Injects either insulin or glucagon into the body.
@@ -321,7 +326,7 @@ public:
 
 // END SETTER
 
-// SLOTS
+         // SLOTS
 public slots:
          /**
          * Refills the Insulin in the Reservoir of the Pump

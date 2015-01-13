@@ -145,14 +145,22 @@ bool Pump::decreaseHormoneReservoire(int amount, bool insulin)
 /**
  * @brief Pump::checkPumpBatteryStatus
  *        checks battery status of pump. emits warning on battery status below 15%
- * @return 1 on failed call.
+ * @return 1 on success.
  */
 int Pump::checkPumpBatteryStatus(void)
 {
-    QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
-    if(this->getBatteryPowerLevel()<=15)
+    int powerlevel=100;
+    setBatteryPowerLevel(powerlevel);
+
+//   QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
+    QString okm = "INFO! Battery ok! Charge at: " + batteryPowerLevel;
+    if(powerlevel<=15)
     {
-        tracer.writeWarningLog(warn);
+        //tracer.writeWarningLog(warn);
+    }
+    else
+    {
+        tracer.writeStatusLog(okm);
     }
     return EXIT_FAILURE;
 }
@@ -368,12 +376,15 @@ void Pump::rechargeBatteryPower(int charge)
 
 /*
  * drains power from battery.
+ *
+ * Parameters:
+ * - powerdrain : int   amount of power drained from battery.
  */
 /**
- * @brief Pump::setBatteryPowerLevel
+ * @brief Pump::drainBatteryPower
  * @param powerdrain
  */
-void Pump::setBatteryPowerLevel(int powerdrain)
+void Pump::drainBatteryPower(int powerdrain)
 {
     QString err = "Power drainage too high!";
 
@@ -383,6 +394,18 @@ void Pump::setBatteryPowerLevel(int powerdrain)
         batteryPowerLevel-=powerdrain;
     }
     tracer.writeCriticalLog(err);
+}
+
+/*
+ * sets power for battery.
+ */
+/**
+ * @brief Pump::setBatteryPowerLevel
+ * @param powerdrain
+ */
+void Pump::setBatteryPowerLevel(int powerlevel=100)
+{
+    batteryPowerLevel=powerlevel;
 }
 
 /*
