@@ -22,6 +22,8 @@
 
 #include <thread>
 
+#include <fstream>
+
 using namespace std;
 
 #define BUFLEN          100 //<--- sizeof(struct) inststead of hard coded valuew
@@ -29,7 +31,8 @@ using namespace std;
 
 int     main                        (void);
 int     communication_via_pipes     (void); // is working!
-int     BSL_Sim_thread               (void); // thread developed right now
+int     BSL_Sim_thread              (void); // is working
+int     Sim_Controll_Thread         (void); // implemented right now
 
 int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
@@ -211,7 +214,12 @@ float Body::getBloodSugarLevel() {
  *                          END Body                            *
  ****************************************************************/
 
-Body body(110.00, 5, 2); // generate Body object - natural BSL, insulin constant, glucagon constant
+
+/******************************************************
+ *                       Main                         *
+ ******************************************************/
+
+Body body(110.00, 5, 5); // generate Body object - natural BSL, insulin constant, glucagon constant
 BodyThreadController communication; // generate object for communication
 
 
@@ -219,7 +227,7 @@ int main(void) {
     
     // Initialize values
     communication.setThreadBodyFactor(1.03);
-    communication.setThreadRising(true);
+    communication.setThreadRising(false);
     communication.setThreadInsulinUnits(0);
     communication.setThreadGlucagonUnits(0);
     communication.setThreadEndThread(false);
@@ -227,13 +235,52 @@ int main(void) {
     
     cout << "Start\n";
     
-    thread first_thread(BSL_Sim_thread);
+    thread first_thread(Sim_Controll_Thread);
+    thread second_thread(BSL_Sim_thread);
     
     first_thread.join();
+    second_thread.join();
     
     cout << "End\n";
     return 0;
 }
+/******************************************************
+ *                      END main                      *
+ ******************************************************/
+
+
+
+/******************************************************
+ *              Simulation-Controller                 *
+ ******************************************************/
+int Sim_Controll_Thread(void) {
+    
+    int user_bsl_ris_fal;
+    
+    while (true) {
+        cout << "Please set:\n 1: BSL rising\n 2: BSL falling\n 3: Quit\n";
+        cin >> user_bsl_ris_fal;
+    
+        if (user_bsl_ris_fal == 1) {
+            communication.setThreadRising(true);
+        }
+        else if (user_bsl_ris_fal == 2) {
+            communication.setThreadRising(false);
+        }
+        else if (user_bsl_ris_fal == 3) {
+            communication.setThreadEndThread(true);
+            break;
+        }
+    }
+    
+    return 0;
+}
+
+
+
+/******************************************************
+ *            END Simulation-Controller               *
+ ******************************************************/
 
 
 /******************************************************
@@ -241,6 +288,8 @@ int main(void) {
  ******************************************************/
 int BSL_Sim_thread(void) {
     cout << "\nThread started\n";
+    
+    ofstream logfile;
     
     cout << "Init value for BloodSugarLevel: ";
 
@@ -263,21 +312,22 @@ int BSL_Sim_thread(void) {
             communication.minusThreadGlucagonUnits(1);
         }
         
-        
-        cout << body.getBloodSugarLevel();
-        cout << "\n";
+        logfile.open("log.txt", ios::out | ios::app);
+        logfile << body.getBloodSugarLevel();
+        logfile << "\n";
+        logfile.close();
+        usleep(1000000);
         
         if (communication.getThreadEndThread() == true) {
             break;
         }
 
     }
-    
     cout << "\nThread ended\n";
     return 0;
 }
 /******************************************************
- *                     END                            *
+ *                 END BSL-Simulator                  *
  ******************************************************/
 
 // communication via pipes
