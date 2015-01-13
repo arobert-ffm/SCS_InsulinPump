@@ -12,7 +12,7 @@
 /*
  * 1. clean up code.
  * 2. check return values of functions
- * 3.
+ * 3. check initial values!
  * 4.
  * 5.
  * 6. refactor code. especially code that is redundant.
@@ -260,8 +260,9 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
  */
 bool Pump::runPump()
 {
+    // TODO first iteration? predefined value?
     latestBloodSugarLevel = currentBloodSugarLevel;
-    currentBloodSugarLevel = getCurrentBloodSugarLevel();
+    currentBloodSugarLevel = readBloodSugarSensor();
     int hormonesToInject;
 
     // inject insulin
