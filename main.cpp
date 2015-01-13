@@ -57,7 +57,7 @@ int watch(ControlSystem *ControlSystem)
  */
 int schedule(Scheduler *Scheduler)
 {
-    while(true)
+    while(Scheduler->getSchouldRun())
     {
         Scheduler->triggerPump();
         Scheduler->saveOperationTime();

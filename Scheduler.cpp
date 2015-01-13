@@ -108,10 +108,29 @@ bool Scheduler::stopOperationTimeCounter()
     return true;
 }
 
-// Returns the file name of the configuration file
-QString Scheduler::getConfigFileName()
+
+/* Getter & Setter for the file name of the configuration file
+ */
+QString Scheduler::getConfigFileName() const
 {
     return ConfigFileName;
+}
+
+void Scheduler::setConfigFileName(QString value)
+{
+    ConfigFileName = value;
+}
+
+/* Getter & Setter for Flag that thread should run periodically
+ */
+bool Scheduler::getSchouldRun() const
+{
+    return SchouldRun;
+}
+
+void Scheduler::setSchouldRun(bool value)
+{
+    SchouldRun = value;
 }
 
 

@@ -60,18 +60,18 @@ class ControlSystem
 
         /* Getter & Setter for minumum Bettery load level in percent
          */
-        int getBatteryMinLoad() const;
-        void setBatteryMinLoad(int value);
+        virtual int getBatteryMinLoad() const;
+        virtual void setBatteryMinLoad(int value);
 
         /* Getter & Setter for maximum operation time in hours
          */
-        int getMaxOperationHours() const;
-        void setMaxOperationHours(int value);
+        virtual int getMaxOperationHours() const;
+        virtual void setMaxOperationHours(int value);
 
         /* Getter & Setter for Flag that thread should run periodically
          */
-        bool getSchouldRun() const;
-        void setSchouldRun(bool value);
+        virtual bool getSchouldRun() const;
+        virtual void setSchouldRun(bool value);
 
 private:
         /* A local representation of the hormone pump

@@ -41,16 +41,23 @@ class Scheduler
         // Resets the timer and sets the countdown time according to parameter
         virtual bool resetTimer(int time_min);
 
-        // Returns the file name of the configuration file
-        virtual QString getConfigFileName();
-
         // Triggers the pump which then checks the blood sugar level
         virtual bool triggerPump();
 
         // Triggers the scheduler to save the systems operation time
         virtual bool saveOperationTime();
 
-    private:
+        /* Getter & Setter for the file name of the configuration file
+         */
+        virtual QString getConfigFileName() const;
+        virtual void setConfigFileName(QString value);
+
+        /* Getter & Setter for Flag that thread should run periodically
+         */
+        virtual bool getSchouldRun() const;
+        virtual void setSchouldRun(bool value);
+
+private:
         // Timer of the Scheduler for measuring operation time
         QElapsedTimer Timer;
 
@@ -76,6 +83,9 @@ class Scheduler
         // fully stopped. The value will be written to “TotalOperationHours”.
         virtual bool stopOperationTimeCounter();
 
+        /* Flag for the Thread method to trigger the pump periodically
+         */
+        bool SchouldRun;
 };
 
 #endif
