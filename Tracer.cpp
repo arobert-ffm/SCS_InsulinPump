@@ -40,8 +40,12 @@ bool Tracer::writeStatusLog(QString message)
 {
     // Write status message to logfile
     QTextStream TextStream(LogFile);
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss")
-               << " INFO: " << message << endl;
+
+    // Add Timestamp and Tag
+    QString prefix = QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") + " INFO: ";
+
+    // Write to logfile
+    TextStream << prefix << message  << endl;
 
     // Update UI with actually sent status message
     emit writeStatusLogInUi(message);
@@ -55,8 +59,12 @@ bool Tracer::writeWarningLog(QString message)
 {
     // Write warning message to logfile
     QTextStream TextStream(LogFile);
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss")
-               << " WARNING: " << message << endl;
+
+    // Add Timestamp and Tag
+    QString prefix = QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") + " WARNING: ";
+
+    // Write to logfile
+    TextStream << prefix << message  << endl;
 
     // Update UI with actually sent warning message
     emit writeWarningLogInUi(message);
@@ -70,8 +78,12 @@ bool Tracer::writeCriticalLog(QString message)
 {
     // Write critical message to logfile
     QTextStream TextStream(LogFile);
-    TextStream << QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss")
-               << " CRITICAL: " << message << endl;
+
+    // Add Timestamp and Tag
+    QString prefix = QDateTime::currentDateTime().toString("yyyy.MM.dd-HH:mm:ss") + " CRITICAL: ";
+
+    // Write to logfile
+    TextStream << prefix << message  << endl;
 
     // Update UI with actually sent critical message
     emit writeCriticalLogInUi(message);
@@ -91,7 +103,7 @@ bool Tracer::playAcousticWarning()
 // When vibration has finished, “True” is returned
 bool Tracer::vibrationWarning()
 {
-    cout << "vibrating...";
+    cout << "vibrating..." << endl;
     return true;
 }
 
