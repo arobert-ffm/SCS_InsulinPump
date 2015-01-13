@@ -255,8 +255,23 @@ int main(void) {
  ******************************************************/
 int Sim_Controll_Thread(void) {
     
+    int user_bsl_ris_fal;
     
+    while (true) {
+        cout << "Please set:\n 1: BSL rising\n 2: BSL falling\n 3: Quit\n";
+        cin >> user_bsl_ris_fal;
     
+        if (user_bsl_ris_fal == 1) {
+            communication.setThreadRising(true);
+        }
+        else if (user_bsl_ris_fal == 2) {
+            communication.setThreadRising(false);
+        }
+        else if (user_bsl_ris_fal == 3) {
+            communication.setThreadEndThread(true);
+            break;
+        }
+    }
     
     return 0;
 }
