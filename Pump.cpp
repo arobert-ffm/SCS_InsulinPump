@@ -226,17 +226,17 @@ bool Pump::decreaseHormoneReservoire(int amount, bool insulin)
 int Pump::checkPumpBatteryStatus(void)
 {
     int powerlevel=100;
-    setBatteryPowerLevel(powerlevel);
 
 //   QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
-    QString okm = "INFO! Battery ok! Charge at: " + batteryPowerLevel;
-    if(!powerlevel<=15)
+//    QString okm = "INFO! Battery ok! Charge at: " + batteryPowerLevel;
+    if(this->getBatteryPowerLevel()<=15)
     {
-        //tracer.writeWarningLog(warn);
+        setBatteryPowerLevel(powerlevel);
     }
     else
     {
-        tracer.writeStatusLog(okm);
+        setBatteryPowerLevel(powerlevel);
+//        tracer.writeStatusLog(okm);
     }
     return EXIT_FAILURE;
 }
