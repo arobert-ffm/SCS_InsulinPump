@@ -127,7 +127,7 @@ bool Pump::injectHormoneToBody(int amount, bool insulin)
     // write Pump --> Body
     if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
         printf("Fehler 'write-call'");
-        exit(EXIT__FAILURE);
+        return false;
     }
     close(fdes_pump_to_body);
     return true;
