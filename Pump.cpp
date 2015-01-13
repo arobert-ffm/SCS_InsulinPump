@@ -225,20 +225,28 @@ bool Pump::decreaseHormoneReservoire(int amount, bool insulin)
  */
 int Pump::checkPumpBatteryStatus(void)
 {
-    int powerlevel=100;
+    int powerlevel= getBatteryPowerLevel();
 
-//   QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
-//    QString okm = "INFO! Battery ok! Charge at: " + batteryPowerLevel;
-    if(this->getBatteryPowerLevel()<=15)
+    QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
+    QString okm = "INFO! Battery ok! Charge at: " + batteryPowerLevel;
+    QString err = "CRITICAL! Battery critical! Charge at: " + batteryPowerLevel;
+
+    if(powerlevel<=15)
     {
-        setBatteryPowerLevel(powerlevel);
+        tracer.writeStatusLog(warn);
     }
-    else
+    else if (powerlevel>15 && powerlevel <= 100)
     {
-        setBatteryPowerLevel(powerlevel);
-//        tracer.writeStatusLog(okm);
+        tracer.writeStatusLog(okm);
+        return getBatteryPowerLevel();
     }
-    return EXIT_FAILURE;
+    else if (powerlevel==0)
+    {
+        tracer.writeCriticalLog(err);
+        return EXIT_FAILURE;
+    }
+    setBatteryPowerLevel(powerlevel);
+    return getBatteryPowerLevel()+ 42; //<<--- random bogus value. battery power level minus 42
 }
 
 
@@ -271,7 +279,7 @@ bool Pump::runPump()
     // TODO first iteration? predefined value?
     latestBloodSugarLevel = currentBloodSugarLevel;
     currentBloodSugarLevel = readBloodSugarSensor();
-    int hormonesToInject;
+    int hormonesToInject=111; //<<---init with bogus value.
 
     // inject insulin
     if (currentBloodSugarLevel > maxBloodSugarLevel)
@@ -478,7 +486,7 @@ void Pump::drainBatteryPower(int powerdrain)
  */
 /**
  * @brief Pump::setBatteryPowerLevel
- * @param powerdrain
+ * @param powerlevel
  */
 void Pump::setBatteryPowerLevel(int powerlevel=100)
 {

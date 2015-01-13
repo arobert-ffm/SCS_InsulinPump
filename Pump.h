@@ -223,9 +223,9 @@ public:
         int getCurrentBloodSugarLevel() const;
 
         /* returns battery power level
-        // In case of a critical status (level smaller than 15%) the user will
-        // be notified acoustically and the incident will be logged by the
-        // tracer.
+        * In case of a critical status (level smaller than 15%) the user will
+        * be notified acoustically and the incident will be logged by the
+        * tracer.
         */
         int getBatteryPowerLevel() const;
 
@@ -267,9 +267,9 @@ public:
          */
         /**
           * @brief setBatteryPowerLevel
-          * @param powerdrain
+          * @param powerlevel
           */
-         void setBatteryPowerLevel(int powerdrain);
+         void setBatteryPowerLevel(int powerlevel);
 
          /* set target blood sugar level.
           *
