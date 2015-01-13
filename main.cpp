@@ -33,7 +33,7 @@ using namespace std;
  */
 int watch(ControlSystem *ControlSystem)
 {
-    while(true)
+    while(ControlSystem->getSchouldRun())
     {
         ControlSystem->checkBatteryStatus();
         ControlSystem->checkOperationHours();

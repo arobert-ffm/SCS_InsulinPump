@@ -58,7 +58,22 @@ class ControlSystem
          */
         virtual Scheduler *getScheduler();
 
-    private:
+        /* Getter & Setter for minumum Bettery load level in percent
+         */
+        int getBatteryMinLoad() const;
+        void setBatteryMinLoad(int value);
+
+        /* Getter & Setter for maximum operation time in hours
+         */
+        int getMaxOperationHours() const;
+        void setMaxOperationHours(int value);
+
+        /* Getter & Setter for Flag that thread should run periodically
+         */
+        bool getSchouldRun() const;
+        void setSchouldRun(bool value);
+
+private:
         /* A local representation of the hormone pump
          */
         Pump *ThePump;
@@ -70,6 +85,18 @@ class ControlSystem
         /* A local representation of the tracer
          */
         Tracer *TheTracer;
+
+        /* Minumum Bettery load level in percent
+         */
+        int BatteryMinLoad;
+
+        /* Maximum operation time in hours
+         */
+        int MaxOperationHours;
+
+        /* Flag for the Thread method to check system health periodically
+         */
+        bool SchouldRun;
 
 };
 

@@ -20,6 +20,10 @@ using namespace std;
 // and connects some signals to slot for the user interface
 ControlSystem::ControlSystem(UserInterface* ui)
 {
+    SchouldRun = true;
+    BatteryMinLoad = BATTERY_MIN_LOAD;
+    MaxOperationHours = MAX_OPERATION_HOURS;
+
     ThePump = new Pump();
     TheScheduler = new Scheduler(ThePump);
     TheTracer = new Tracer();
@@ -41,7 +45,7 @@ int ControlSystem::checkOperationHours()
 {
     qint64 OperationTime = TheScheduler->getOperationTime();
 
-    if(OperationTime > (MAX_OPERATION_HOURS*60*60*1000))
+    if(OperationTime > (MaxOperationHours*60*60*1000))
     {
         QString msg = "The maximum operation time (" + QString::number(MAX_OPERATION_HOURS)
                     + "h) is reached (" + QString::number(OperationTime/1000) + "sec).";
@@ -105,7 +109,7 @@ int ControlSystem::checkBatteryStatus()
 {
     int BatteryStatus = ThePump->checkPumpBatteryStatus();
 
-    if(BatteryStatus < BATTERY_MIN_LOAD)
+    if(BatteryStatus < BatteryMinLoad)
     {
         QString msg = "The batteries charging state is to low (" + QString::number(BatteryStatus)+ "%).";
         TheTracer->writeCriticalLog(msg);
@@ -121,6 +125,43 @@ int ControlSystem::checkBatteryStatus()
 Scheduler* ControlSystem::getScheduler()
 {
     return TheScheduler;
+}
+
+
+/* Getter & Setter for minumum Bettery load level in percent
+ */
+int ControlSystem::getBatteryMinLoad() const
+{
+    return BatteryMinLoad;
+}
+
+void ControlSystem::setBatteryMinLoad(int value)
+{
+    BatteryMinLoad = value;
+}
+
+/* Getter & Setter for maximum operation time in hours
+ */
+int ControlSystem::getMaxOperationHours() const
+{
+    return MaxOperationHours;
+}
+
+void ControlSystem::setMaxOperationHours(int value)
+{
+    MaxOperationHours = value;
+}
+
+/* Getter & Setter for Flag that thread should run periodically
+ */
+bool ControlSystem::getSchouldRun() const
+{
+    return SchouldRun;
+}
+
+void ControlSystem::setSchouldRun(bool value)
+{
+    SchouldRun = value;
 }
 
 
