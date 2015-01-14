@@ -235,12 +235,12 @@ int Pump::checkPumpBatteryStatus(void)
 
     if(powerlevel<=15 && powerlevel >0)
     {
-        tracer.writeCriticalLog(warn);
+        tracer.writeWarningLog(warn);
         return getBatteryPowerLevel();
     }
     else if (powerlevel>15 && powerlevel <= 100)
     {
-        tracer.writeCriticalLog(okm);
+        tracer.writeStatusLog(okm);
         return getBatteryPowerLevel();
     }
     else if (powerlevel==0)
