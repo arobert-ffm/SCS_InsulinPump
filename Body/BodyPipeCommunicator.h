@@ -10,17 +10,17 @@
 //
 
 #ifndef bodyPipeCommunicator_
-#define bodyPipecommunicator_
+#define bodyPipeCommunicator_
 
 #include <vector>
 #include <string>
 
-class bodyPipeCommunicator {
+class BodyPipeCommunicator {
 
     public:
     // constructor - destructor
-    bodyPipeCommunicator();
-    ~bodyPipeCommunicator();
+    BodyPipeCommunicator();
+    ~BodyPipeCommunicator();
     
     // getter - setter methods
     void setSendBSL(int BSL);
@@ -38,4 +38,5 @@ class bodyPipeCommunicator {
     int RecvGlucagon;
     int RecvInsulin;
 
-}
+};
+#endif

@@ -11,6 +11,8 @@
 
 #include "Body.h"
 #include "BodyThreadController.h"
+#include "BodyPipeCommunicator.h"
+
 #include <iostream>
 
 #include <stdio.h>
@@ -28,7 +30,7 @@ using namespace std;
 #define EXIT__FAILURE   -1
 
 int     main                        (void);
-//int     communication_via_pipes     (void); // is working!   <--- Can be removed when class BodyPipeCommunicator is working properly
+int     communication_via_pipes     (void); // is working!   <--- Can be removed when class BodyPipeCommunicator is working properly
 int     BSL_Sim_thread              (void); // is working
 int     Sim_Controll_Thread         (void); // implemented right now
 
@@ -213,11 +215,35 @@ float Body::getBloodSugarLevel() {
  ****************************************************************/
 
 
-
 /******************************************************
  *            Class for pipe communication            *
  ******************************************************/
-class BodyPipeCommunicator {
+BodyPipeCommunicator::BodyPipeCommunicator(void){
+};
+BodyPipeCommunicator::~BodyPipeCommunicator(void) {
+};
+// getter - setter methods
+void BodyPipeCommunicator::setSendBSL(int BSL) {
+    this->SendBSL = BSL;
+}
+int BodyPipeCommunicator::getSendBSL(void) {
+    return this->SendBSL;
+}
+
+void BodyPipeCommunicator::setRecvGlucagon(int gluc) {
+    this->RecvGlucagon = gluc;
+}
+int BodyPipeCommunicator::getRecvGlucagon(void) {
+    return this->RecvGlucagon;
+}
+
+void BodyPipeCommunicator::setRecvInsulin(int insl) {
+    this->RecvInsulin = insl;
+}
+int BodyPipeCommunicator::getRecvInsulin(void) {
+    return this->RecvInsulin;
+}
+
 
 int communication_via_pipes (void) {
     
