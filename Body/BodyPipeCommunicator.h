@@ -32,11 +32,15 @@ class BodyPipeCommunicator {
     void setRecvInsulin(int insl);
     int getRecvInsulin(void);
     
+    // methods for sending and receiving from pipe
+    void sendBSL();
+    void recvAgents();
+    
     
     private:
-    int SendBSL;
-    int RecvGlucagon;
-    int RecvInsulin;
+    int SendBSLVar;
+    int RecvGlucagonVar;
+    int RecvInsulinVar;
 
 };
 #endif

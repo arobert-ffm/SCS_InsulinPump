@@ -30,7 +30,6 @@ using namespace std;
 #define EXIT__FAILURE   -1
 
 int     main                        (void);
-int     communication_via_pipes     (void); // is working!   <--- Can be removed when class BodyPipeCommunicator is working properly
 int     BSL_Sim_thread              (void); // is working
 int     Sim_Controll_Thread         (void); // implemented right now
 
@@ -218,35 +217,7 @@ float Body::getBloodSugarLevel() {
 /******************************************************
  *            Class for pipe communication            *
  ******************************************************/
-BodyPipeCommunicator::BodyPipeCommunicator(void){
-};
-BodyPipeCommunicator::~BodyPipeCommunicator(void) {
-};
-// getter - setter methods
-void BodyPipeCommunicator::setSendBSL(int BSL) {
-    this->SendBSL = BSL;
-}
-int BodyPipeCommunicator::getSendBSL(void) {
-    return this->SendBSL;
-}
-
-void BodyPipeCommunicator::setRecvGlucagon(int gluc) {
-    this->RecvGlucagon = gluc;
-}
-int BodyPipeCommunicator::getRecvGlucagon(void) {
-    return this->RecvGlucagon;
-}
-
-void BodyPipeCommunicator::setRecvInsulin(int insl) {
-    this->RecvInsulin = insl;
-}
-int BodyPipeCommunicator::getRecvInsulin(void) {
-    return this->RecvInsulin;
-}
-
-
-int communication_via_pipes (void) {
-    
+BodyPipeCommunicator::BodyPipeCommunicator(void) {
     // generate pipe for Body --> Pump
     mknod("body_to_pump",S_IFIFO | 0666,0);
     
@@ -262,7 +233,33 @@ int communication_via_pipes (void) {
         puts("Fehler 'open pipe'");
         exit(EXIT__FAILURE);
     }
-    
+
+};
+BodyPipeCommunicator::~BodyPipeCommunicator(void) {
+};
+// getter - setter methods
+void BodyPipeCommunicator::setSendBSL(int BSL) {
+    this->SendBSLVar = BSL;
+}
+int BodyPipeCommunicator::getSendBSL(void) {
+    return this->SendBSLVar;
+}
+
+void BodyPipeCommunicator::setRecvGlucagon(int gluc) {
+    this->RecvGlucagonVar = gluc;
+}
+int BodyPipeCommunicator::getRecvGlucagon(void) {
+    return this->RecvGlucagonVar;
+}
+
+void BodyPipeCommunicator::setRecvInsulin(int insl) {
+    this->RecvInsulinVar = insl;
+}
+int BodyPipeCommunicator::getRecvInsulin(void) {
+    return this->RecvInsulinVar;
+}
+
+void BodyPipeCommunicator::sendBSL() {
     // write Body --> Pump
     if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
         printf("Fehler 'write-call'");
@@ -270,6 +267,9 @@ int communication_via_pipes (void) {
     }
     close(fdes_body_to_pump);
     
+}
+
+void BodyPipeCommunicator::recvAgents() {
     // read Pump --> Body
     read(fdes_pump_to_body, &Injecting, BUFLEN);
     cout << Injecting.injected_insulin;
@@ -277,8 +277,6 @@ int communication_via_pipes (void) {
     cout << Injecting.injected_glucagon;
     cout << "\n";
     close(fdes_pump_to_body);
-    
-    exit(0);
 }
 /******************************************************
  *          END Class for pipe communication          *
