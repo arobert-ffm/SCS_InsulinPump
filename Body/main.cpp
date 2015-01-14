@@ -238,15 +238,14 @@ int main(void) {
         exit(EXIT__FAILURE);
     }
     
+    cout << "Start\n";
+    
     // Init values
     communication.setThreadBodyFactor(1.03);
     communication.setThreadRising(false);
     communication.setThreadInsulinUnits(0);
     communication.setThreadGlucagonUnits(0);
     communication.setThreadEndThread(false);
-    
-    
-    cout << "Start\n";
     
     thread first_thread(Sim_Controll_Thread);
     thread second_thread(BSL_Sim_thread);
@@ -334,14 +333,17 @@ int BSL_Sim_thread(void) {
         }
         close(fdes_body_to_pump);
         
-        //read Pump --> Body
+        
         // read Pump --> Body
         read(fdes_pump_to_body, &Injecting, BUFLEN);
         communication.setThreadInsulinUnits(Injecting.injected_insulin);
-        cout << "\n";
         communication.setThreadGlucagonUnits(Injecting.injected_glucagon);
-        cout << "\n";
+
         close(fdes_pump_to_body);
+
+        /******************************************************
+         *       End Communication between body and pump      *
+         ******************************************************/
         
         
         // generate BSL graph by reacting or not reacting to insulin
