@@ -24,12 +24,12 @@
 
 using namespace std;
 
-#define BUFLEN          100 //<--- sizeof(struct) inststead of hard coded valuew
+#define BUFLEN          100 //<--- sizeof(struct) inststead of hard coded value
 #define EXIT__FAILURE   -1
 
 int     main                        (void);
 int     BSL_Sim_thread              (void); // is working
-int     Sim_Controll_Thread         (void); // becoming implemented right now
+int     Sim_Controll_Thread         (void); // seems to be working --> testing needed
 
 int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
