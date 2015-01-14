@@ -19,9 +19,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
 #include <thread>
-
 #include <fstream>
 
 using namespace std;
@@ -30,7 +28,7 @@ using namespace std;
 #define EXIT__FAILURE   -1
 
 int     main                        (void);
-int     communication_via_pipes     (void); // is working!
+//int     communication_via_pipes     (void); // is working!   <--- Can be removed when class BodyPipeCommunicator is working properly
 int     BSL_Sim_thread              (void); // is working
 int     Sim_Controll_Thread         (void); // implemented right now
 
@@ -215,6 +213,53 @@ float Body::getBloodSugarLevel() {
  ****************************************************************/
 
 
+
+/******************************************************
+ *            Class for pipe communication            *
+ ******************************************************/
+class BodyPipeCommunicator {
+
+int communication_via_pipes (void) {
+    
+    // generate pipe for Body --> Pump
+    mknod("body_to_pump",S_IFIFO | 0666,0);
+    
+    if((fdes_body_to_pump=open("body_to_pump",O_WRONLY))==(-1)) {
+        puts("Fehler 'open pipe'");
+        exit(EXIT__FAILURE);
+    }
+    
+    // generate pipe for Pump --> Body
+    mknod("pump_to_body",S_IFIFO | 0666,0);
+    
+    if((fdes_pump_to_body=open("pump_to_body",O_RDONLY))==(-1)) {
+        puts("Fehler 'open pipe'");
+        exit(EXIT__FAILURE);
+    }
+    
+    // write Body --> Pump
+    if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
+        printf("Fehler 'write-call'");
+        exit(EXIT__FAILURE);
+    }
+    close(fdes_body_to_pump);
+    
+    // read Pump --> Body
+    read(fdes_pump_to_body, &Injecting, BUFLEN);
+    cout << Injecting.injected_insulin;
+    cout << "\n";
+    cout << Injecting.injected_glucagon;
+    cout << "\n";
+    close(fdes_pump_to_body);
+    
+    exit(0);
+}
+/******************************************************
+ *          END Class for pipe communication          *
+ ******************************************************/
+
+
+
 /******************************************************
  *                       Main                         *
  ******************************************************/
@@ -290,9 +335,6 @@ int Sim_Controll_Thread(void) {
     
     return 0;
 }
-
-
-
 /******************************************************
  *            END Simulation-Controller               *
  ******************************************************/
@@ -345,42 +387,5 @@ int BSL_Sim_thread(void) {
  *                 END BSL-Simulator                  *
  ******************************************************/
 
-// communication via pipes
-int communication_via_pipes (void) {
-    
-    BodyStatus.bloodSugarLevel = 29.00;
-    
-    // generate pipe for Body --> Pump
-    mknod("body_to_pump",S_IFIFO | 0666,0);
-    
-    if((fdes_body_to_pump=open("body_to_pump",O_WRONLY))==(-1)) {
-        puts("Fehler 'open pipe'");
-        exit(EXIT__FAILURE);
-    }
-    
-    // generate pipe for Pump --> Body
-    mknod("pump_to_body",S_IFIFO | 0666,0);
-    
-    if((fdes_pump_to_body=open("pump_to_body",O_RDONLY))==(-1)) {
-        puts("Fehler 'open pipe'");
-        exit(EXIT__FAILURE);
-    }
-    
-    // write Body --> Pump
-    if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
-        printf("Fehler 'write-call'");
-        exit(EXIT__FAILURE);
-    }
-    close(fdes_body_to_pump);
-    
-    // read Pump --> Body
-    read(fdes_pump_to_body, &Injecting, BUFLEN);
-    cout << Injecting.injected_insulin;
-    cout << "\n";
-    cout << Injecting.injected_glucagon;
-    cout << "\n";
-    close(fdes_pump_to_body);
-    
-    exit(0);
-    
-} /* END_MAIN() */
+
+
