@@ -100,7 +100,16 @@ public:
          */
         void drainBatteryPower(int powerdrain);
 
-private:
+        /*
+         * CTOR
+         */
+        Pump();
+
+        /* DTOR
+         *
+         */
+        ~Pump();
+
         /* Injects either insulin or glucagon into the body.
         *
         * Parameters:

@@ -227,26 +227,29 @@ int Pump::checkPumpBatteryStatus(void)
 {
     int powerlevel= getBatteryPowerLevel();
 
+    cout << "battery charge: " << powerlevel << endl;
+
     QString warn = "WARNING! Battery low! Charge at: " + batteryPowerLevel;
     QString okm = "INFO! Battery ok! Charge at: " + batteryPowerLevel;
     QString err = "CRITICAL! Battery critical! Charge at: " + batteryPowerLevel;
 
-    if(powerlevel<=15)
+    if(powerlevel<=15 && powerlevel >0)
     {
-        tracer.writeStatusLog(warn);
+        tracer.writeCriticalLog(warn);
+        return getBatteryPowerLevel();
     }
     else if (powerlevel>15 && powerlevel <= 100)
     {
-        tracer.writeStatusLog(okm);
+        tracer.writeCriticalLog(okm);
         return getBatteryPowerLevel();
     }
     else if (powerlevel==0)
     {
         tracer.writeCriticalLog(err);
-        return EXIT_FAILURE;
+        return getBatteryPowerLevel();
     }
-    setBatteryPowerLevel(powerlevel);
-    return getBatteryPowerLevel()+ 42; //<<--- random bogus value. battery power level minus 42
+
+    return EXIT_SUCCESS; //<<--- random bogus value. status code 42
 }
 
 
@@ -479,6 +482,31 @@ void Pump::drainBatteryPower(int powerdrain)
         batteryPowerLevel-=powerdrain;
     }
     tracer.writeCriticalLog(err);
+}
+
+/* C/DTOR
+ *
+ */
+/**
+ * @brief Pump::Pump
+ *        init object with default values.
+ */
+Pump::Pump()
+{
+    this->setBatteryPowerLevel(100);
+    this->setHormoneSensitivityFactor(5);
+    this->setActive(true);
+    this->setDelay(false);
+    this->setTargetBloodSugarLevel(110);
+    this->setInsulin(false);
+}
+
+/**
+ * @brief Pump::~Pump
+ *        destroys object.
+ */
+Pump::~Pump()
+{
 }
 
 /*
