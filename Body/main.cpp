@@ -11,8 +11,6 @@
 
 #include "Body.h"
 #include "BodyThreadController.h"
-#include "BodyPipeCommunicator.h"
-
 #include <iostream>
 
 #include <stdio.h>
@@ -31,7 +29,7 @@ using namespace std;
 
 int     main                        (void);
 int     BSL_Sim_thread              (void); // is working
-int     Sim_Controll_Thread         (void); // implemented right now
+int     Sim_Controll_Thread         (void); // becoming implemented right now
 
 int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
@@ -215,9 +213,15 @@ float Body::getBloodSugarLevel() {
 
 
 /******************************************************
- *            Class for pipe communication            *
+ *                       Main                         *
  ******************************************************/
-BodyPipeCommunicator::BodyPipeCommunicator(void) {
+
+Body body(110.00, 5, 5); // generate Body object - natural BSL, insulin constant, glucagon constant
+BodyThreadController communication; // generate object for communication
+
+
+int main(void) {
+    
     // generate pipe for Body --> Pump
     mknod("body_to_pump",S_IFIFO | 0666,0);
     
@@ -233,68 +237,8 @@ BodyPipeCommunicator::BodyPipeCommunicator(void) {
         puts("Fehler 'open pipe'");
         exit(EXIT__FAILURE);
     }
-
-};
-BodyPipeCommunicator::~BodyPipeCommunicator(void) {
-};
-// getter - setter methods
-void BodyPipeCommunicator::setSendBSL(int BSL) {
-    this->SendBSLVar = BSL;
-}
-int BodyPipeCommunicator::getSendBSL(void) {
-    return this->SendBSLVar;
-}
-
-void BodyPipeCommunicator::setRecvGlucagon(int gluc) {
-    this->RecvGlucagonVar = gluc;
-}
-int BodyPipeCommunicator::getRecvGlucagon(void) {
-    return this->RecvGlucagonVar;
-}
-
-void BodyPipeCommunicator::setRecvInsulin(int insl) {
-    this->RecvInsulinVar = insl;
-}
-int BodyPipeCommunicator::getRecvInsulin(void) {
-    return this->RecvInsulinVar;
-}
-
-void BodyPipeCommunicator::sendBSL() {
-    // write Body --> Pump
-    if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
-        printf("Fehler 'write-call'");
-        exit(EXIT__FAILURE);
-    }
-    close(fdes_body_to_pump);
     
-}
-
-void BodyPipeCommunicator::recvAgents() {
-    // read Pump --> Body
-    read(fdes_pump_to_body, &Injecting, BUFLEN);
-    cout << Injecting.injected_insulin;
-    cout << "\n";
-    cout << Injecting.injected_glucagon;
-    cout << "\n";
-    close(fdes_pump_to_body);
-}
-/******************************************************
- *          END Class for pipe communication          *
- ******************************************************/
-
-
-
-/******************************************************
- *                       Main                         *
- ******************************************************/
-
-Body body(110.00, 5, 5); // generate Body object - natural BSL, insulin constant, glucagon constant
-BodyThreadController communication; // generate object for communication
-
-
-int main(void) {
-    
-    // Initialize values
+    // Init values
     communication.setThreadBodyFactor(1.03);
     communication.setThreadRising(false);
     communication.setThreadInsulinUnits(0);
@@ -376,6 +320,29 @@ int BSL_Sim_thread(void) {
 
     
     while (true) {
+        
+        /******************************************************
+         *      Communication between body and pump           *
+         ******************************************************/
+        // assigning vales to variable
+        BodyStatus.bloodSugarLevel = body.getBloodSugarLevel();
+        
+        // write Body --> Pump
+        if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
+            printf("Fehler 'write-call'");
+            exit(EXIT__FAILURE);
+        }
+        close(fdes_body_to_pump);
+        
+        //read Pump --> Body
+        // read Pump --> Body
+        read(fdes_pump_to_body, &Injecting, BUFLEN);
+        communication.setThreadInsulinUnits(Injecting.injected_insulin);
+        cout << "\n";
+        communication.setThreadGlucagonUnits(Injecting.injected_glucagon);
+        cout << "\n";
+        close(fdes_pump_to_body);
+        
         
         // generate BSL graph by reacting or not reacting to insulin
         if ((communication.getThreadInsulinUnits()) > 0 && communication.getThreadGlucagonUnits() == 0) {
