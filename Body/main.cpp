@@ -221,7 +221,7 @@ BodyThreadController communication; // generate object for communication
 
 
 int main(void) {
-    
+
     // generate pipe for Body --> Pump
     mknod("body_to_pump",S_IFIFO | 0666,0);
     
@@ -237,7 +237,6 @@ int main(void) {
         puts("Fehler 'open pipe'");
         exit(EXIT__FAILURE);
     }
-    
     cout << "Start\n";
     
     // Init values
@@ -325,7 +324,7 @@ int BSL_Sim_thread(void) {
          ******************************************************/
         // assigning vales to variable
         BodyStatus.bloodSugarLevel = body.getBloodSugarLevel();
-        
+
         // write Body --> Pump
         if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
             printf("Fehler 'write-call'");
