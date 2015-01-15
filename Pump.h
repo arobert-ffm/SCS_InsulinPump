@@ -119,9 +119,11 @@ public:
          * @brief checkPumpBatteryStatus
          *        Checks the battery status and returns the value in percent.
          *        Throws ok, warning and error, according to power level.
-         *        ok: level between 15 and 100 percent
-         *        warning: level below 15 percent.
-         *        critical: level at zero percent
+         *
+         *        ok:       level between 15 and 100 percent.
+         *        warning:  level below 15 percent.
+         *        critical: level at zero percent.
+         *
          * @return 0 on success.
          *
          */
