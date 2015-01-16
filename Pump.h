@@ -150,17 +150,17 @@ public:
          * @param amount
          *        the amount of FU that should be injected.
          *
-         * @return false on failed injection
+         * @return false on failed injection.
          */
         bool injectHormone(int targetBloodSugarLevel, bool insulin, int amount);
 
         /**
          * @brief decreaseHormoneLevel
          *        Decreases either the insulin or the glucagon level in the reservoir when a hormone is
-         *        injected to the body
+         *        injected to the body.
          *
          * @param amount
-         *        the amount of FU by that the reservoir should be decreased
+         *        the amount of FU by that the reservoir should be decreased.
          *
          * @param insulin
          *        true if the hormone to inject is insulin, false if it is glucagon.
@@ -171,23 +171,23 @@ public:
 
         /**
          * @brief   Pump::readBloodSugarSensor
-         *          Reads the current blood sugar level via pipe from body
+         *          Reads the current blood sugar level via pipe from body.
          *
-         * @return  the current blood sugar level
+         * @return  the current blood sugar level.
          */
         int readBloodSugarSensor();
 
         /**
          * @brief   Pump::injectHormoneToBody
-         *          Injects the calculated amount of hormones to the body via pipe
+         *          Injects the calculated amount of hormones to the body via pipe.
          *
          * @param   amount
-         *          the amount of hormones to inject
+         *          the amount of hormones to inject.
          *
          * @param   insulin
-         *          true if insulin, false if glucagon
+         *          true if insulin, false if glucagon.
          *
-         * @return  true if anything is ok
+         * @return  true if anything is ok.
          */
         bool injectHormoneToBody(int amount, bool insulin);
 
@@ -199,7 +199,7 @@ public:
          *        predefined value to raise or reduce blood sugar level to,
          *        e.g. 90mg/dl -> targetBloodSugarLevel = 90;
          *
-         * @return Returns fictional Units of specified hormone
+         * @return Returns fictional Units of specified hormone.
          */
         int calculateNeededHormone(int targetBloodSugarLevel);
 
@@ -349,7 +349,7 @@ public:
       * @brief setMinBloodSugarLevel
       *        set minimum BSL.
       * @param value
-      *        value of minimum BSL
+      *        value of minimum BSL.
       */
      void setMinBloodSugarLevel(int value);
 
@@ -366,13 +366,9 @@ public:
 
 // SLOTS
 public slots:
-    /**
-     * Refills the Insulin in the Reservoir of the Pump
-     */
+    /** Refills the Insulin in the Reservoir of the Pump.*/
     void refillInsulinReservoir();
-    /**
-     * Refills the Glucagon in the Reservoir of the Pump
-     */
+    /** Refills the Glucagon in the Reservoir of the Pump.*/
     void refillGlucagonReservoir();
 
 // END SLOTS
@@ -386,7 +382,7 @@ signals:
      *        Callback for updating Insulin Reservoir in the UI.
      *
      * @param amount
-     *        The current amount of insulin in the reservoir
+     *        The current amount of insulin in the reservoir.
      */
     void updateInsulinReservoir(float amount);
 
@@ -395,13 +391,13 @@ signals:
      *        Callback for updating Glucagon Reservoir in the UI.
      *
      * @param amount
-     *        The current amount of glucagon in the reservoir
+     *        The current amount of glucagon in the reservoir.
      */
     void updateGlucagonReservoir(float amount);
 
     /**
      * @brief updateBloodSugarLevel
-     *        The current amount of insulin in the reservoir
+     *        The current amount of insulin in the reservoir.
      *
      * @param tbsl
      *        target blood sugar level.
@@ -410,7 +406,7 @@ signals:
      *        amount of hormone used.
      *
      * @param injectHormUnits
-     *        units of injected hormone
+     *        units of injected hormone.
      */
     void updateBloodSugarLevel(int tbsl, int amountHormone, int injectHormUnits);
 
