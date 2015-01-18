@@ -78,6 +78,27 @@ private slots:
      */
     void updateClock();
 
+    /**
+     * Testing onBatteryButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setBatteryLevel().
+     */
+    void on_mTestingBatteryButton_clicked();
+
+    /**
+     * Testing onGlucagonButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setGlucagonReservoirLevel().
+     */
+    void on_mTestingGlucagonButton_clicked();
+
+    /**
+     * Testing onInsulinButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setInsulinReservoirLevel().
+     */
+    void on_mTestingInsulinButton_clicked();
+
 signals:
     /**
      * Notifys the Pump to refill the Insulin Reservoir
@@ -87,6 +108,27 @@ signals:
      * Notifys the Pump to refill the Glucagon Reservoir
      */
     void refillGlucagonInPump();
+
+    /**
+     * Notifys the SLOT method of the Pump class, which changes the battery level.
+     *
+     * @param level - new battery level
+     */
+    void setBatteryLevel(int level);
+
+    /**
+     * Notifys the SLOT method of the Pump class, which changes the glucagonreservoir fill level.
+     *
+     * @param level - new glucagonreservoir fill level
+     */
+    void setGlucagonReservoirLevel(int level);
+
+    /**
+     * Notifys the SLOT method of the Pump class, which changes the Insulinreservoir fill level.
+     *
+     * @param level - new insulinreservoir fill level
+     */
+    void setInsulinReservoirLevel(int level);
 
 private:
     Ui::UserInterface *ui;

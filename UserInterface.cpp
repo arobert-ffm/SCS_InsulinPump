@@ -15,6 +15,11 @@ UserInterface::UserInterface(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Init Testing section
+    ui->mTestingBatterySlider->setMaximum(ui->mBatteryProgressBar->maximum());
+    ui->mTestingGlucagonSlider->setMaximum(ui->mGlucagonProgressBar->maximum());
+    ui->mTestingInsulinSlider->setMaximum(ui->mInsulinProgressBar->maximum());
+
     // Init Time
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateClock()));
@@ -191,4 +196,34 @@ void UserInterface::updateBloodsugarLevel(int bloodsugarLevel, int hormone, int 
         //delete item;
     }
     ui->mBloodSugarValue->setValue(bloodsugarLevel);
+}
+
+/**
+ * Testing onBatteryButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setBatteryLevel().
+ */
+void UserInterface::on_mTestingBatteryButton_clicked()
+{
+    emit setBatteryLevel(ui->mTestingBatterySlider->value());
+}
+
+/**
+ * Testing onGlucagonButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setGlucagonReservoirLevel().
+ */
+void UserInterface::on_mTestingGlucagonButton_clicked()
+{
+    emit setGlucagonReservoirLevel(ui->mTestingGlucagonSlider->value());
+}
+
+/**
+ * Testing onInsulinButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setInsulinReservoirLevel().
+ */
+void UserInterface::on_mTestingInsulinButton_clicked()
+{
+    emit setInsulinReservoirLevel(ui->mTestingInsulinSlider->value());
 }
