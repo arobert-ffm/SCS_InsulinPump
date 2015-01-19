@@ -33,6 +33,26 @@ UserInterface::~UserInterface()
 }
 
 /**
+ * Updates the Batteries power level in the Progressbar
+ *
+ * @param level - new battery power level
+ */
+void UserInterface::batteryPowerLevelChanged(int level)
+{
+    ui->mBatteryProgressBar->setValue(level);
+}
+
+/**
+ * Updates the Batteries minimum power level in the spin box
+ *
+ * @param level - new battery power level
+ */
+void UserInterface::minBatteryLevelChanged(int level)
+{
+    ui->mMinBatLoadSpinner->setValue(level);
+}
+
+/**
  * Updates the Insulin amount in the Progressbar
  *
  * @param amount - new insulin amount
@@ -91,17 +111,35 @@ void UserInterface::glucagonAmountInReservoirChanged(float amount)
 }
 
 /**
+ * Updates the operation time in the Progressbar
+ *
+ * @param hours - new operation time in hours
+ */
+void UserInterface::operationTimeChanged(int hours)
+{
+    QString text = QString::number(hours) + " hours";
+    ui->mOpTimeValue->setText(text);
+}
+
+/**
+ * Updates the maximum operation time in the spin box
+ *
+ * @param hours - new maximum operation time in hours
+ */
+void UserInterface::maxOperationTimeChanged(int hours)
+{
+    ui->mMaxOpTimeSpinner->setValue(hours);
+}
+
+/**
  * Inserts the status message in to the QListWidgetItem
  *
  * @param message - string message to insert
  */
 void UserInterface::insertStatusLog(QString message)
 {
-    // Create Timestamp
-    QTime time = QTime::currentTime();
-    QString text = time.toString("hh:mm:ss");
     // Add Message and scroll to bottom
-    ui->mMessageList->addItem(new QListWidgetItem(text + "\tStatus:\t" + message));
+    ui->mMessageList->addItem(new QListWidgetItem(message));
     ui->mMessageList->scrollToBottom();
 }
 
@@ -112,11 +150,8 @@ void UserInterface::insertStatusLog(QString message)
  */
 void UserInterface::insertWarningLog(QString message)
 {
-    // Create Timestamp
-    QTime time = QTime::currentTime();
-    QString text = time.toString("hh:mm:ss");
     // Add Message and scroll to bottom
-    QListWidgetItem* item = new QListWidgetItem(text + "\tWarning:\t" + message);
+    QListWidgetItem* item = new QListWidgetItem(message);
     item->setBackgroundColor(Qt::yellow);
     ui->mMessageList->addItem(item);
     ui->mMessageList->scrollToBottom();
@@ -129,11 +164,8 @@ void UserInterface::insertWarningLog(QString message)
  */
 void UserInterface::insertCriticalLog(QString message)
 {
-    // Create Timestamp
-    QTime time = QTime::currentTime();
-    QString text = time.toString("hh:mm:ss");
     // Add Message and scroll to bottom
-    QListWidgetItem* item = new QListWidgetItem(text + "\tCritical:\t" + message);
+    QListWidgetItem* item = new QListWidgetItem(message);
     item->setBackgroundColor(Qt::red);
     ui->mMessageList->addItem(item);
     ui->mMessageList->scrollToBottom();
@@ -205,7 +237,17 @@ void UserInterface::updateBloodsugarLevel(int bloodsugarLevel, int hormone, int 
  */
 void UserInterface::on_mTestingBatteryButton_clicked()
 {
-    emit setBatteryLevel(ui->mTestingBatterySlider->value());
+    emit setBatteryPowerLevel(ui->mTestingBatterySlider->value());
+}
+
+/**
+ * Testing onMinBatLoadButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setMinBatteryLevel().
+ */
+void UserInterface::on_mMinBatLoadButton_clicked()
+{
+    emit setMinBatteryLevel(ui->mMinBatLoadSpinner->value());
 }
 
 /**
@@ -227,3 +269,25 @@ void UserInterface::on_mTestingInsulinButton_clicked()
 {
     emit setInsulinReservoirLevel(ui->mTestingInsulinSlider->value());
 }
+
+/**
+ * Testing onOpTimeButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setInsulinReservoirLevel().
+ */
+void UserInterface::on_mTestingOpTimeButton_clicked()
+{
+    emit setOperationTime(ui->mTestingOpTimeSlider->value());
+}
+
+/**
+ * Testing onmMaxOpTimeButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setMaxOperationTime();.
+ */
+void UserInterface::on_mMaxOpTimeButton_clicked()
+{
+    emit setMaxOperationTime(ui->mMaxOpTimeSpinner->value());
+}
+
+

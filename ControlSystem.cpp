@@ -34,15 +34,25 @@ ControlSystem::ControlSystem(UserInterface* ui)
     TheTracer = new Tracer();
 
     // Init UI Callbacks
+    QObject::connect(ThePump, SIGNAL(updateBatteryPowerLevel(int)), ui, SLOT(batteryPowerLevelChanged(int)));
+    QObject::connect(ui, SIGNAL(setBatteryPowerLevel(int)), ThePump, SLOT(changeBatteryPowerLevel(int)));
     QObject::connect(ThePump, SIGNAL(updateInsulinReservoir(float)), ui, SLOT(insulinAmountInReservoirChanged(float)));
+    QObject::connect(ui, SIGNAL(refillInsulinInPump()), ThePump, SLOT(refillInsulinReservoir()));
     QObject::connect(ThePump, SIGNAL(updateGlucagonReservoir(float)), ui, SLOT(glucagonAmountInReservoirChanged(float)));
+    QObject::connect(ui, SIGNAL(refillGlucagonInPump()), ThePump, SLOT(refillGlucagonReservoir()));
+    QObject::connect(ThePump, SIGNAL(updateBloodSugarLevel(int,int,int)), ui, SLOT(updateBloodsugarLevel(int,int,int)));
+
+    QObject::connect(TheScheduler, SIGNAL(updateOperationTime(int)), ui, SLOT(operationTimeChanged(int)));
+    QObject::connect(ui, SIGNAL(setOperationTime(int)), TheScheduler, SLOT(setOperationTimeInHours(int)));
+
     QObject::connect(TheTracer, SIGNAL(writeStatusLogInUi(QString)), ui, SLOT(insertStatusLog(QString)));
     QObject::connect(TheTracer, SIGNAL(writeWarningLogInUi(QString)), ui, SLOT(insertWarningLog(QString)));
     QObject::connect(TheTracer, SIGNAL(writeCriticalLogInUi(QString)), ui, SLOT(insertCriticalLog(QString)));
-    QObject::connect(ui, SIGNAL(refillInsulinInPump()), ThePump, SLOT(refillInsulinReservoir()));
-    QObject::connect(ui, SIGNAL(refillGlucagonInPump()), ThePump, SLOT(refillGlucagonReservoir()));
-    QObject::connect(ThePump, SIGNAL(updateBloodSugarLevel(int,int,int)), ui, SLOT(updateBloodsugarLevel(int,int,int)));
-    //QObject::connect(this, SIGNAL(saveOperationTimeInUi(int)), ui, SLOT(insertOprationTime(int)));
+
+    QObject::connect(this, SIGNAL(updateMinBatteryLevel(int)), ui, SLOT(minBatteryLevelChanged(int)));
+    QObject::connect(ui, SIGNAL(setMinBatteryLevel(int)), this, SLOT(setBatteryMinLoad(int)));
+    QObject::connect(this, SIGNAL(updateMaxOperationTime(int)), ui, SLOT(maxOperationTimeChanged(int)));
+    QObject::connect(ui, SIGNAL(setMaxOperationTime(int)), this, SLOT(setMaxOperationHours(int)));
 }
 
 
@@ -50,20 +60,22 @@ ControlSystem::ControlSystem(UserInterface* ui)
  */
 int ControlSystem::checkOperationHours()
 {
-    qint64 OperationTime = TheScheduler->getOperationTime();
+    quint64 OperationTime = TheScheduler->getOperationTime();
 
-    if(OperationTime > (MaxOperationHours*60*60*1000))
+    if((OperationTime/60/60/1000) > MaxOperationHours)
     {
-        QString msg = "The maximum operation time (" + QString::number(MAX_OPERATION_HOURS)
-                    + "h) is reached (" + QString::number(OperationTime/1000) + "sec).";
+        QString msg = "The maximum operation time (" + QString::number(MaxOperationHours)
+                    + "h) is reached (" + QString::number(OperationTime/60/60/1000) + "h).";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
-        return EXIT_FAILURE;
     }
-
-    // Update UI with actual operation time
-    //emit saveOperationTimeInUi(getOperationTime()/60/60/1000);
+    else if((OperationTime/60/60/1000) > (MaxOperationHours*0.9))
+    {
+        QString msg = "The actual operation time (" + QString::number(MaxOperationHours) +
+                      "h) is near MAX (" + QString::number(OperationTime/60/60/1000) + "h).";
+        TheTracer->writeWarningLog(msg);
+    }
 
     return (OperationTime/60/60/1000);
 }
@@ -121,11 +133,17 @@ int ControlSystem::checkBatteryStatus()
 
     if(BatteryStatus < BatteryMinLoad)
     {
-        QString msg = "The batteries charging state is to low (" + QString::number(BatteryStatus)+ "%).";
+        QString msg = "The batteries charging state (" + QString::number(BatteryStatus)
+                    + "%) is beyond minimum (" + QString::number(BatteryMinLoad) + "%).";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
-        return EXIT_FAILURE;
+    }
+    else if(BatteryStatus < BatteryMinLoad*2)
+    {
+        QString msg = "The batteries charging (" + QString::number(BatteryStatus)
+                    + "%) is getting low (MIN:" + QString::number(BatteryMinLoad)+ "%).";
+        TheTracer->writeWarningLog(msg);
     }
 
     return BatteryStatus;
@@ -146,9 +164,11 @@ int ControlSystem::getBatteryMinLoad() const
     return BatteryMinLoad;
 }
 
-void ControlSystem::setBatteryMinLoad(int value)
+void ControlSystem::setBatteryMinLoad(int load)
 {
-    BatteryMinLoad = value;
+    BatteryMinLoad = load;
+
+    emit updateMinBatteryLevel(load);
 }
 
 /* Getter & Setter for maximum operation time in hours
@@ -158,9 +178,11 @@ int ControlSystem::getMaxOperationHours() const
     return MaxOperationHours;
 }
 
-void ControlSystem::setMaxOperationHours(int value)
+void ControlSystem::setMaxOperationHours(int hours)
 {
-    MaxOperationHours = value;
+    MaxOperationHours = hours;
+
+    emit updateMaxOperationTime(hours);
 }
 
 /* Getter & Setter for Flag that thread should run periodically
@@ -174,5 +196,3 @@ void ControlSystem::setSchouldRun(bool value)
 {
     SchouldRun = value;
 }
-
-

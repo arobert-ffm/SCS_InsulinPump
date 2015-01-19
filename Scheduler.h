@@ -17,8 +17,8 @@
 #ifndef scheduler_
 #define scheduler_
 
-#include <QSettings>
 #include <QElapsedTimer>
+#include <QSettings>
 #include "Pump.h"
 
 
@@ -26,8 +26,10 @@
 
 
 
-class Scheduler
+class Scheduler : public QObject
 {
+    Q_OBJECT
+
     public:
         /**
          * @name:   Scheduler
@@ -61,26 +63,16 @@ class Scheduler
         virtual bool getStatus();
 
         /**
-         * @name:   Get Operation Time
-         * @brief:  Get total operation time of the system in hours
+         * @name:   Get/Set Operation Time
+         * @brief:  Get/Set total operation time of the system in ms
          *
-         *  Gets the systems total operation time in hours and
+         *  Gets the systems total operation time in milliseconds and
          *  answers ControlSystem’s call for checkOperationTime(),
          *
-         * @return: The systems total operation time in hours
+         * @return: The systems total operation time in milliseconds
          */
         virtual qint64 getOperationTime();
-
-        /**
-         * @name:   Reset Timer
-         * @brief:  Reset the timer for measuring the operation time
-         *
-         *  Sets the new timer start value and restarts the timer
-         *
-         * @param:  The new timer start value in minutes
-         * @return: 'true' is returned
-         */
-        virtual bool resetTimer(int time_min);
+        void setOperationTime(qint64 milliseconds);
 
         /**
          * @name:   Trigger Pump
@@ -95,11 +87,10 @@ class Scheduler
 
         /**
          * @name:   Save Operation Time
-         * @brief:  Save the systems total operation time in hours
+         * @brief:  Save the systems total operation time in milliseconds
          *
          *  The scheduler is keeping track of the total operation time
-         *  by adding the actual operation time to the last total and
-         *  saving the total time in a file
+         *  by adding the actual operation time to the last total
          *
          * @return: When saving the time is finished, 'true' is returned
          */
@@ -125,7 +116,7 @@ class Scheduler
         virtual bool getSchouldRun() const;
         virtual void setSchouldRun(bool value);
 
-private:
+    private:
         /**
          * @name:   Timer
          * @brief:  QElapsedTimer object for measuring the system time
@@ -171,8 +162,7 @@ private:
          * @name:   Start Operation Time Counter
          * @brief:  Starts the operation time counter
          *
-         *  Reads the old value from the configuration file from the section
-         *  “TotalOperationHours” and starts the counter for measuring the
+         *  Starts the elapsed timer as counter for measuring the
          *  actual system total operation time in milliseconds
          *
          * @return: 'true' is returned
@@ -183,13 +173,29 @@ private:
          * @name:   Stop Operation Time Counter
          * @brief:  Stops the operation time counter
          *
-         * Stops the timer for operation time measurement,
-         * adds the actual operation time to the total operation time and
-         * writes the actual total operation time to the configuration file
+         * Stops the timer for the operation time measurement,
+         * the timer gets invalidated
          *
          * @return: 'true' is returned
          */
         virtual bool stopOperationTimeCounter();
+
+        /**
+         * @name:   Start Operation Time Counter
+         * @brief:  Starts the operation time counter
+         *
+         *  Reads the old value from the configuration file from the section
+         *  “TotalOperationTime” and sets 'TotalOperationTime' in ms
+         */
+        virtual void readOperationTime();
+
+        /**
+         * @name:   Stop Operation Time Counter
+         * @brief:  Stops the operation time counter
+         *
+         * Writes the actual total operation time to the configuration file
+         */
+        virtual void writeOperationTime();
 
         /**
          * @name:   Schould Run
@@ -200,6 +206,30 @@ private:
          *  If 'ShouldRun' is flase, the thread stops the periodic checking
          */
         bool SchouldRun;
+
+    public slots:
+        /**
+         * @name:   Set Operation Time in Hours
+         * @brief:  Sets the actual operation time
+         *
+         *  Public slot to set the actual operation time
+         *  and emit a signal to the user interface
+         *
+         * @param:  The new operation time in hours
+         */
+        void setOperationTimeInHours(int hours);
+
+    signals:
+        /**
+         * @name:   Update Operation Time
+         * @brief:  Sets the actual operation time in the UI
+         *
+         *  Signal that gets emitted when the actual operation
+         *  time gets changed
+         *
+         * @param:  The new operation time in hours
+         */
+        void updateOperationTime(int hours);
 };
 
 #endif

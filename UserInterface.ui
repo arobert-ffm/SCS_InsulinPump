@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1121</width>
-    <height>655</height>
+    <width>1150</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,8 +28,8 @@
      <rect>
       <x>20</x>
       <y>430</y>
-      <width>821</width>
-      <height>191</height>
+      <width>870</width>
+      <height>220</height>
      </rect>
     </property>
     <property name="font">
@@ -218,8 +218,8 @@
     <widget class="QWidget" name="horizontalLayoutWidget_30">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>40</y>
+       <x>60</x>
+       <y>30</y>
        <width>271</width>
        <height>31</height>
       </rect>
@@ -268,8 +268,8 @@
     <widget class="QProgressBar" name="mBatteryProgressBar">
      <property name="geometry">
       <rect>
-       <x>130</x>
-       <y>100</y>
+       <x>160</x>
+       <y>110</y>
        <width>171</width>
        <height>31</height>
       </rect>
@@ -338,8 +338,8 @@ QProgressBar::chunk {
     <widget class="QLabel" name="mBatteryTitle">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>100</y>
+       <x>60</x>
+       <y>110</y>
        <width>71</width>
        <height>31</height>
       </rect>
@@ -348,14 +348,64 @@ QProgressBar::chunk {
       <string>Battery:</string>
      </property>
     </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_31">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>70</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayoutOpTime">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLabel" name="mOpTimeTitle">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>OpTime:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="mOpTimeValue">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxBloodsugar">
     <property name="geometry">
      <rect>
       <x>19</x>
       <y>200</y>
-      <width>821</width>
-      <height>171</height>
+      <width>870</width>
+      <height>210</height>
      </rect>
     </property>
     <property name="font">
@@ -454,8 +504,8 @@ QProgressBar::chunk {
       <rect>
        <x>580</x>
        <y>30</y>
-       <width>215</width>
-       <height>121</height>
+       <width>290</width>
+       <height>170</height>
       </rect>
      </property>
     </widget>
@@ -481,23 +531,23 @@ QProgressBar::chunk {
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>860</x>
+      <x>900</x>
       <y>30</y>
       <width>20</width>
-      <height>591</height>
+      <height>620</height>
      </rect>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="groupBox_TestBattery">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>20</y>
-      <width>191</width>
-      <height>171</height>
+      <x>925</x>
+      <y>150</y>
+      <width>210</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
@@ -506,13 +556,13 @@ QProgressBar::chunk {
      </font>
     </property>
     <property name="title">
-     <string>Testing Battery</string>
+     <string>Testing Battery Load</string>
     </property>
     <widget class="QSlider" name="mTestingBatterySlider">
      <property name="geometry">
       <rect>
        <x>19</x>
-       <y>70</y>
+       <y>40</y>
        <width>151</width>
        <height>20</height>
       </rect>
@@ -528,7 +578,7 @@ QProgressBar::chunk {
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>110</y>
+       <y>70</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -539,14 +589,14 @@ QProgressBar::chunk {
       </font>
      </property>
      <property name="text">
-      <string>Change Chrging State</string>
+      <string>Change Battery Load</string>
      </property>
     </widget>
     <widget class="QLabel" name="mTestingBatteryValue">
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>30</y>
+       <y>20</y>
        <width>51</width>
        <height>21</height>
       </rect>
@@ -559,13 +609,13 @@ QProgressBar::chunk {
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_2">
+   <widget class="QGroupBox" name="groupBox_TestGlucagon">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>230</y>
-      <width>191</width>
-      <height>171</height>
+      <x>925</x>
+      <y>280</y>
+      <width>210</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
@@ -574,13 +624,13 @@ QProgressBar::chunk {
      </font>
     </property>
     <property name="title">
-     <string>Testing Glucagon</string>
+     <string>Testing Glucagon Level</string>
     </property>
     <widget class="QSlider" name="mTestingGlucagonSlider">
      <property name="geometry">
       <rect>
        <x>19</x>
-       <y>70</y>
+       <y>40</y>
        <width>151</width>
        <height>20</height>
       </rect>
@@ -596,7 +646,7 @@ QProgressBar::chunk {
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>110</y>
+       <y>70</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -614,7 +664,7 @@ QProgressBar::chunk {
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>30</y>
+       <y>20</y>
        <width>51</width>
        <height>21</height>
       </rect>
@@ -627,13 +677,13 @@ QProgressBar::chunk {
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
+   <widget class="QGroupBox" name="groupBox_TestInsulin">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>440</y>
-      <width>191</width>
-      <height>181</height>
+      <x>925</x>
+      <y>410</y>
+      <width>210</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
@@ -642,13 +692,13 @@ QProgressBar::chunk {
      </font>
     </property>
     <property name="title">
-     <string>Testing Insulin</string>
+     <string>Testing Insulin Level</string>
     </property>
     <widget class="QSlider" name="mTestingInsulinSlider">
      <property name="geometry">
       <rect>
        <x>19</x>
-       <y>80</y>
+       <y>40</y>
        <width>151</width>
        <height>20</height>
       </rect>
@@ -664,7 +714,7 @@ QProgressBar::chunk {
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>120</y>
+       <y>70</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -682,7 +732,7 @@ QProgressBar::chunk {
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>40</y>
+       <y>20</y>
        <width>51</width>
        <height>21</height>
       </rect>
@@ -692,6 +742,162 @@ QProgressBar::chunk {
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_TestOpTime">
+    <property name="geometry">
+     <rect>
+      <x>925</x>
+      <y>540</y>
+      <width>210</width>
+      <height>120</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Testing Operation Time</string>
+    </property>
+    <widget class="QSlider" name="mTestingOpTimeSlider">
+     <property name="geometry">
+      <rect>
+       <x>19</x>
+       <y>40</y>
+       <width>151</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>500</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="mTestingOpTimeButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Change Op.Time</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="mTestingOpTimeValue">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>20</y>
+       <width>51</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_MinBatLoad">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>30</y>
+      <width>90</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>MinLoad</string>
+    </property>
+    <widget class="QSpinBox" name="mMinBatLoadSpinner">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="mMinBatLoadButton">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>60</y>
+       <width>80</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_MaxOpTime">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>30</y>
+      <width>110</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>MaxOpTime</string>
+    </property>
+    <widget class="QSpinBox" name="mMaxOpTimeSpinner">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="mMaxOpTimeButton">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>60</y>
+       <width>80</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change</string>
      </property>
     </widget>
    </widget>
@@ -811,6 +1017,22 @@ QProgressBar::chunk {
     <hint type="destinationlabel">
      <x>979</x>
      <y>492</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mTestingOpTimeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>mTestingOpTimeValue</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>989</x>
+     <y>569</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>990</x>
+     <y>540</y>
     </hint>
    </hints>
   </connection>

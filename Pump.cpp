@@ -205,6 +205,8 @@ int Pump::checkPumpBatteryStatus(void)
 {
     int powerlevel = getBatteryPowerLevel();
 
+    emit updateBatteryPowerLevel(powerlevel);
+
     if(powerlevel<=15 && powerlevel >0)
     {
         return powerlevel;
@@ -302,6 +304,15 @@ void Pump::drainBatteryPower(int powerdrain)
         batteryPowerLevel-=powerdrain;
     }
     tracer.writeCriticalLog(err);
+}
+
+// changes the batteries power level
+void Pump::changeBatteryPowerLevel(int level)
+{
+    batteryPowerLevel = level;
+
+    // Update UI
+    emit updateBatteryPowerLevel(level);
 }
 
 // refills insulin reservoir

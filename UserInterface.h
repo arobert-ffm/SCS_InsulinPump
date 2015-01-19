@@ -26,6 +26,18 @@ public:
 
 public slots:
     /**
+     * Updates the Batteries power level in the Progressbar
+     *
+     * @param level - new battery power level
+     */
+    void batteryPowerLevelChanged(int level);
+    /**
+     * Updates the Batteries minimum power level in the spin box
+     *
+     * @param level - new battery power level
+     */
+    void minBatteryLevelChanged(int level);
+    /**
      * Updates the Insulin amount in the Progressbar
      *
      * @param amount - new insulin amount
@@ -37,6 +49,18 @@ public slots:
      * @param amount - new glucagon amount
      */
     void glucagonAmountInReservoirChanged(float amount);
+    /**
+     * Updates the operation time in the Progressbar
+     *
+     * @param hours - new operation time in hours
+     */
+    void operationTimeChanged(int hours);
+    /**
+     * Updates the maximum operation time in the spin box
+     *
+     * @param hours - new maximum operation time in hours
+     */
+    void maxOperationTimeChanged(int hours);
     /**
      * Inserts the status message in to the QListWidgetItem
      *
@@ -86,6 +110,13 @@ private slots:
     void on_mTestingBatteryButton_clicked();
 
     /**
+     * Testing onMinBatLoadButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setMinBatteryLevel().
+     */
+    void on_mMinBatLoadButton_clicked();
+
+    /**
      * Testing onGlucagonButtonClicked
      *
      * Reads the value from the slider and calls the SIGNAL method setGlucagonReservoirLevel().
@@ -99,11 +130,26 @@ private slots:
      */
     void on_mTestingInsulinButton_clicked();
 
+    /**
+     * Testing onOpTimeButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setOperationTime();.
+     */
+    void on_mTestingOpTimeButton_clicked();
+
+    /**
+     * Testing onmMaxOpTimeButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setMaxOperationTime();.
+     */
+    void on_mMaxOpTimeButton_clicked();
+
 signals:
     /**
      * Notifys the Pump to refill the Insulin Reservoir
      */
     void refillInsulinInPump();
+
     /**
      * Notifys the Pump to refill the Glucagon Reservoir
      */
@@ -114,7 +160,14 @@ signals:
      *
      * @param level - new battery level
      */
-    void setBatteryLevel(int level);
+    void setBatteryPowerLevel(int level);
+
+    /**
+     * Notifys the SLOT method of the ControlSystem class, which changes the min battery level.
+     *
+     * @param level - new minimum battery level
+     */
+    void setMinBatteryLevel(int level);
 
     /**
      * Notifys the SLOT method of the Pump class, which changes the glucagonreservoir fill level.
@@ -129,6 +182,20 @@ signals:
      * @param level - new insulinreservoir fill level
      */
     void setInsulinReservoirLevel(int level);
+
+    /**
+     * Notifys the SLOT method of the Scheduler class, which changes the operation time.
+     *
+     * @param hours - new operation time in hours
+     */
+    void setOperationTime(int hours);
+
+    /**
+     * Notifys the SLOT method of the Scheduler class, which changes the max operation time.
+     *
+     * @param hours - new maximum operation time in hours
+     */
+    void setMaxOperationTime(int hours);
 
 private:
     Ui::UserInterface *ui;

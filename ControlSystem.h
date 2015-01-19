@@ -24,12 +24,14 @@
 
 
 #define BATTERY_MIN_LOAD 10
-#define MAX_OPERATION_HOURS 500
+#define MAX_OPERATION_HOURS 300
 
 
 
-class ControlSystem
+class ControlSystem : public QObject
 {
+    Q_OBJECT
+
     public:
         /**
          * @name:   Control System
@@ -108,24 +110,22 @@ class ControlSystem
         virtual Scheduler *getScheduler();
 
         /**
-         * @name:   Get/Set Bettery Minimum Load
-         * @brief:  Get/Set the minimum battery load level in percent
+         * @name:   Get Bettery Minimum Load
+         * @brief:  Get the minimum battery load level in percent
          *
          * @param:  The batteries minimum load level in percent
          * @return: The batteries minimum load level in percent
          */
         virtual int getBatteryMinLoad() const;
-        virtual void setBatteryMinLoad(int value);
 
         /**
-         * @name:   Get/Set Maximum Operation Hours
-         * @brief:  Get/Set the maximum operation time in hours
+         * @name:   Get Maximum Operation Hours
+         * @brief:  Get the maximum operation time in hours
          *
          * @param:  The maximum operation time in hours
          * @return: The maximum operation time in hours
          */
         virtual int getMaxOperationHours() const;
-        virtual void setMaxOperationHours(int value);
 
         /**
          * @name:   Get/Set Should Run
@@ -137,7 +137,7 @@ class ControlSystem
         virtual bool getSchouldRun() const;
         virtual void setSchouldRun(bool value);
 
-private:
+    private:
         /**
          * @name:   The Pump
          * @brief:  A local representation of the Insulin Pump
@@ -166,7 +166,7 @@ private:
          * @name:   Maximum Operation Hours
          * @brief:  Maximum operation time in hours
          */
-        int MaxOperationHours;
+        unsigned int MaxOperationHours;
 
         /**
          * @name:   Schould Run
@@ -178,6 +178,51 @@ private:
          */
         bool SchouldRun;
 
+    public slots:
+        /**
+         * @name:   Set Bettery Minimum Load
+         * @brief:  Sets the minimum battery load level in percent
+         *
+         *  Public slot to set the minimum load level of the battery
+         *  and emit a signal to the user interface
+         *
+         * @param:  The batteries minimum load level in percent
+         */
+        virtual void setBatteryMinLoad(int load);
+
+        /**
+         * @name:   Set Maximum Operation Hours
+         * @brief:  Sets the maximum operation time in hours
+         *
+         *  Public slot to set the maximum operation time in hours
+         *  and emit a signal to the user interface
+         *
+         * @param:  The maximum operation time in hours
+         */
+        virtual void setMaxOperationHours(int hours);
+
+    signals:
+        /**
+         * @name:   Update Minimum Battery Level
+         * @brief:  Sets the minimum battery level in the UI
+         *
+         *  Signal that gets emitted when the minimum battery
+         *  load level gets changed
+         *
+         * @param:  The new operation time in hours
+         */
+        void updateMinBatteryLevel(int level);
+
+        /**
+         * @name:   Update Maximum Operation Time
+         * @brief:  Sets the maximum operation time in the UI
+         *
+         *  Signal that gets emitted when the maximum operation
+         *  time gets changed
+         *
+         * @param:  The new maximum operation time in hours
+         */
+        void updateMaxOperationTime(int hours);
 };
 
 #endif

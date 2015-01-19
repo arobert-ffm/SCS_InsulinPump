@@ -54,7 +54,7 @@ bool Tracer::writeStatusLog(QString message)
     TextStream << prefix << message  << endl;
 
     // Update UI with actually sent status message
-    emit writeStatusLogInUi(message);
+    emit writeStatusLogInUi(prefix + message);
 
     return true;
 }
@@ -73,7 +73,7 @@ bool Tracer::writeWarningLog(QString message)
     TextStream << prefix << message  << endl;
 
     // Update UI with actually sent warning message
-    emit writeWarningLogInUi(message);
+    emit writeWarningLogInUi(prefix + message);
 
     return true;
 }
@@ -92,7 +92,7 @@ bool Tracer::writeCriticalLog(QString message)
     TextStream << prefix << message  << endl;
 
     // Update UI with actually sent critical message
-    emit writeCriticalLogInUi(message);
+    emit writeCriticalLogInUi(prefix + message);
 
     return true;
 }

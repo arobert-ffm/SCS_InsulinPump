@@ -85,7 +85,7 @@ private:
         bool delay;
 
         // current battery power level
-        int batteryPowerLevel=100;
+        int batteryPowerLevel;
 
         // hormone sensitivity factor
         int hormoneSensitivityFactor;
@@ -366,8 +366,12 @@ public:
 
 // SLOTS
 public slots:
+    /** Changes the Power Level of the Battery.*/
+    void changeBatteryPowerLevel(int level);
+
     /** Refills the Insulin in the Reservoir of the Pump.*/
     void refillInsulinReservoir();
+
     /** Refills the Glucagon in the Reservoir of the Pump.*/
     void refillGlucagonReservoir();
 
@@ -377,7 +381,16 @@ public slots:
 // SIGNALS
 signals:
 
-    /**
+     /**
+      * @brief updateBatteryPowerLevel
+      *        Callback for updating Battery Power Level in the UI.
+      *
+      * @param level
+      *        The current level of bettery power.
+      */
+     void updateBatteryPowerLevel(int level);
+
+     /**
      * @brief updateInsulinReservoir
      *        Callback for updating Insulin Reservoir in the UI.
      *
