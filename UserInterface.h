@@ -1,3 +1,24 @@
+/**
+ * @file:   UserInterface.h
+ * @class:  UserInterface
+ *
+ * @author: Andreij Robert,
+ *          Sven Sperner, sillyconn@gmail.com
+ *          - added stuff for displaying operation time
+ *          - added stuff to change minimum battery load
+ *          - added testing stuff for actual battery load
+ *          - added stuff to change maximum operation time
+ *          - added testing stuff for actual operation time
+ *
+ * @date:   19.01.2015
+ * Created: 24.12.14 17:11 with Idatto, version 1.3
+ *
+ * @brief:  Check the systems health status
+ *          Write via Tracer to logfile & to UI
+ *
+ * Copyright (c) 2015 All Rights Reserved
+ */
+
 #ifndef USERINTERFACE_H
 #define USERINTERFACE_H
 
