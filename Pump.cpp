@@ -74,6 +74,23 @@ struct transmit_bloodsugar {
 } BodyStatus;
 
 
+// CTOR
+Pump::Pump()
+{
+    this->setBatteryPowerLevel(100);
+    this->setHormoneSensitivityFactor(5);
+    this->setActive(true);
+    this->setDelay(false);
+    this->setTargetBloodSugarLevel(110);
+    this->setInsulin(false);
+}
+
+//DTOR
+Pump::~Pump()
+{
+}
+
+
 // read BSL value from sensor
 int Pump::readBloodSugarSensor()
 {
@@ -123,25 +140,9 @@ bool Pump::injectHormoneToBody(int amount, bool insulin)
 }
 
 
-// CTOR
-Pump::Pump()
-{
-    this->setBatteryPowerLevel(100);
-    this->setHormoneSensitivityFactor(5);
-    this->setActive(true);
-    this->setDelay(false);
-    this->setTargetBloodSugarLevel(110);
-    this->setInsulin(false);
-}
-
-//DTOR
-Pump::~Pump()
-{
-}
-
 // inject hormone
 bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
-{   
+{
     // inject to body
     if (injectHormoneToBody(amount, insulin))
     {
@@ -204,24 +205,17 @@ int Pump::checkPumpBatteryStatus(void)
 {
     int powerlevel = getBatteryPowerLevel();
 
-    QString warn = "WARNING! Battery low! Charge at: " + powerlevel;
-    QString okm = "INFO! Battery ok! Charge at: " + powerlevel;
-    QString err = "CRITICAL! Battery critical! Charge at: " + powerlevel;
-
     if(powerlevel<=15 && powerlevel >0)
     {
-        tracer.writeWarningLog(warn);
-        return getBatteryPowerLevel();
+        return powerlevel;
     }
     else if (powerlevel>15 && powerlevel <= 100)
     {
-        tracer.writeStatusLog(okm);
-        return getBatteryPowerLevel();
+        return powerlevel;
     }
     else if (powerlevel==0)
     {
-        tracer.writeCriticalLog(err);
-        return getBatteryPowerLevel();
+        return powerlevel;
     }
 
     return EXIT_SUCCESS;
