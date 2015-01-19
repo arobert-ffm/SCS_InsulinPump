@@ -137,6 +137,20 @@ public:
          */
         void drainBatteryPower(int powerdrain);
 
+       /** @brief decreaseHormoneLevel
+        *        Decreases either the insulin or the glucagon level in the reservoir when a hormone is
+        *        injected to the body.
+        *
+        * @param amount
+        *        the amount of FU by that the reservoir should be decreased.
+        *
+        * @param insulin
+        *        true if the hormone to inject is insulin, false if it is glucagon.
+        *
+        * @return true on successful decrease.
+        */
+       bool decreaseHormoneReservoir(int amount, bool insulin);
+
         /**
          * @brief injectHormone
          *        Injects either insulin or glucagon into the body.
@@ -153,21 +167,6 @@ public:
          * @return false on failed injection.
          */
         bool injectHormone(int targetBloodSugarLevel, bool insulin, int amount);
-
-        /**
-         * @brief decreaseHormoneLevel
-         *        Decreases either the insulin or the glucagon level in the reservoir when a hormone is
-         *        injected to the body.
-         *
-         * @param amount
-         *        the amount of FU by that the reservoir should be decreased.
-         *
-         * @param insulin
-         *        true if the hormone to inject is insulin, false if it is glucagon.
-         *
-         * @return true on successful decrease.
-         */
-        bool decreaseHormoneReservoir(int amount, bool insulin);
 
         /**
          * @brief   Pump::readBloodSugarSensor
