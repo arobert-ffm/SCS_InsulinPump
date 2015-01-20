@@ -3,7 +3,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   13.01.2015
+ * @date:   20.01.2015
  * Created: 07.01.15 16:54 with Idatto, version 1.3
  *
  * @brief:  Main() routine for InsulinPump Simulation
@@ -85,20 +85,21 @@ int main(int argc, char *argv[])
 {
     //Init battery
 
-
-
     // Create User Interface
     QApplication application(argc, argv);
     UserInterface window;
 
-    // Start Controll System Thread
-    ControlSystem TheControlSystem(&window);
-    thread Controller(watch,&TheControlSystem);
-    Controller.detach();
+    // Create System Objects
+    ControlSystem* TheControlSystem = new ControlSystem(&window);
+    Scheduler* TheScheduler = TheControlSystem->getScheduler();
 
     // Start Scheduler Thread
-    thread Scheduler(schedule,TheControlSystem.getScheduler());
-    Scheduler.detach();
+    thread* Scheduler = new thread(schedule,TheScheduler);
+    TheScheduler->setThread(Scheduler);
+
+    // Start Controll System Thread
+    thread* Controller = new thread(watch,TheControlSystem);
+    Controller->detach();
 
     // Show UI
     window.show();

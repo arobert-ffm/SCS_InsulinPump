@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   13.01.2015
+ * @date:   20.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Check the systems health status
@@ -60,40 +60,62 @@ ControlSystem::ControlSystem(UserInterface* ui)
  */
 int ControlSystem::checkOperationHours()
 {
-    quint64 OperationTime = TheScheduler->getOperationTime();
+    if( OperationTime == TheScheduler->getOperationTime())
+    {
+        QString msg = "The operation time has not changed since the last cycle";
+        TheTracer->writeWarningLog(msg);
+    }
+    else
+    {
+        OperationTime = TheScheduler->getOperationTime();
+    }
 
-    if((OperationTime/60/60/1000) > MaxOperationHours)
+    uint OperationHours = OperationTime/60/60/1000;
+    if(OperationHours > MaxOperationHours)
     {
         QString msg = "The maximum operation time (" + QString::number(MaxOperationHours)
-                    + "h) is reached (" + QString::number(OperationTime/60/60/1000) + "h).";
+                    + "h) is reached (" + QString::number(OperationHours) + "h).";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
     }
-    else if((OperationTime/60/60/1000) > (MaxOperationHours*0.9))
+    else if(OperationHours > (MaxOperationHours*0.9))
     {
         QString msg = "The actual operation time (" + QString::number(MaxOperationHours) +
-                      "h) is near MAX (" + QString::number(OperationTime/60/60/1000) + "h).";
+                      "h) is near maximum (" + QString::number(OperationHours) + "h).";
         TheTracer->writeWarningLog(msg);
     }
 
-    return (OperationTime/60/60/1000);
+    return (int)OperationHours;
 }
 
 /* Checks the scheduler for correct operation
  */
 bool ControlSystem::checkScheduler()
 {
-    if(!TheScheduler->getStatus())
+    QString msg = "";
+
+    switch(TheScheduler->getStatus())
     {
-        QString msg = "The scheduler is in a critical state.";
-        TheTracer->writeCriticalLog(msg);
-        TheTracer->playAcousticWarning();
-        TheTracer->vibrationWarning();
-        return false;
+        case 0: return true;
+        case 1: msg = "The scheduler is in a critical state: " \
+                      "the timer is not valid!";
+                break;
+        case 2: msg = "The scheduler is in a critical state: " \
+                      "the thread is not valid!";
+                break;
+        case 3: msg = "The scheduler is in a critical state: " \
+                      "the thread is not joinable!";
+                break;
+        default:msg = "The scheduler is in a critical state: " \
+                      "unexpected behavior!";
     }
 
-    return true;
+    TheTracer->writeCriticalLog(msg);
+    TheTracer->playAcousticWarning();
+    TheTracer->vibrationWarning();
+
+    return false;
 }
 
 /* Checks the hormone reservoir
@@ -116,13 +138,20 @@ bool ControlSystem::checkPump()
  */
 bool ControlSystem::checkTracer()
 {
-    if(!TheTracer->getStatus())
+    switch(TheTracer->getStatus())
     {
-        cout << "The tracer is in a critical state.";
-        return false;
+        case 0: return true;
+        case 1: cout << "The Tracer is in a critical state: "
+                     << "the logfile is not opened!" << endl;
+                break;
+        case 2: cout << "The Tracer is in a critical state: "
+                     << "the logfile is not writeable!" << endl;
+                break;
+        default:cout << "The Tracer is in a critical state: "
+                     << "unexpected behavior!" << endl;
     }
 
-    return true;
+    return false;
 }
 
 /* Checks the batteries charging state
@@ -139,10 +168,10 @@ int ControlSystem::checkBatteryStatus()
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
     }
-    else if(BatteryStatus < BatteryMinLoad*2)
+    else if(BatteryStatus < (BatteryMinLoad*1.1))
     {
-        QString msg = "The batteries charging (" + QString::number(BatteryStatus)
-                    + "%) is getting low (MIN:" + QString::number(BatteryMinLoad)+ "%).";
+        QString msg = "The batteries charging state (" + QString::number(BatteryStatus)
+                    + "%) is getting low (min:" + QString::number(BatteryMinLoad)+ "%).";
         TheTracer->writeWarningLog(msg);
     }
 

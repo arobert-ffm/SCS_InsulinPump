@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   13.01.2015
+ * @date:   20.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Triggering the hormone pump
@@ -46,27 +46,41 @@ Scheduler::~Scheduler()
 
 /* Answers ControlSystem’s call for checkScheduler()
  */
-bool Scheduler::getStatus()
+int Scheduler::getStatus()
 {
     if(!Timer.isValid())
     {
-        return false;
+        return 1;
+    }
+    else if(Thread)
+    {
+        if(!Thread->joinable())
+        {
+            return 3;
+        }
+    }
+    else
+    {
+        return 2;
     }
 
-    return true;
+    return 0;
 }
 
 /* Answers ControlSystem’s call for checkOperationTime()
  */
-qint64 Scheduler::getOperationTime()
+quint64 Scheduler::getOperationTime()
 {
     TotalOperationTime += Timer.elapsed();
+
+    emit updateOperationTime(TotalOperationTime/60/60/1000);
+
     return TotalOperationTime;
 }
 
 /* Set the total operation time in milliseconds
  */
-void Scheduler::setOperationTime(qint64 milliseconds)
+void Scheduler::setOperationTime(quint64 milliseconds)
 {
     TotalOperationTime = milliseconds;
 }
@@ -75,9 +89,12 @@ void Scheduler::setOperationTime(qint64 milliseconds)
  */
 bool Scheduler::triggerPump()
 {
-    if(!ThePump->runPump())
+    if(ThePump->getPumpStatus())
     {
-        return false;
+        if(!ThePump->runPump())
+        {
+            return false;
+        }
     }
 
     return true;
@@ -90,8 +107,6 @@ bool Scheduler::saveOperationTime()
     getOperationTime();
     writeOperationTime();
 
-    emit updateOperationTime(TotalOperationTime/60/60/1000);
-
     return true;
 }
 
@@ -99,7 +114,6 @@ bool Scheduler::saveOperationTime()
  */
 bool Scheduler::startOperationTimeCounter()
 {
-    //Starting timer for measuring operation time
     Timer.start();
 
     return true;
@@ -109,7 +123,6 @@ bool Scheduler::startOperationTimeCounter()
  */
 bool Scheduler::stopOperationTimeCounter()
 {
-    //Stopping the time measurement
     Timer.invalidate();
 
     return true;
@@ -158,6 +171,18 @@ bool Scheduler::getSchouldRun() const
 void Scheduler::setSchouldRun(bool value)
 {
     SchouldRun = value;
+}
+
+/* Getter & Setter for the thread object of the schedulling thread
+ */
+std::thread* Scheduler::getThread() const
+{
+    return Thread;
+}
+
+void Scheduler::setThread(std::thread* value)
+{
+    Thread = value;
 }
 
 

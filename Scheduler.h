@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   13.01.2015
+ * @date:   20.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Triggering the hormone pump
@@ -19,6 +19,8 @@
 
 #include <QElapsedTimer>
 #include <QSettings>
+#include <thread>
+#include <unistd.h>
 #include "Pump.h"
 
 
@@ -58,9 +60,12 @@ class Scheduler : public QObject
          *  Checks if the timer is started & working and
          *  answers ControlSystem’s call for checkScheduler(),
          *
-         * @return: When everything is working fine, 'true' is returned
+         * @return: When everything is working fine, 0 is returned
+         *          When the timer is not valid, 1 is returned
+         *          When the thread is not valid, 2 is returned
+         *          When the thread is not joinable, 3 is returned
          */
-        virtual bool getStatus();
+        virtual int getStatus();
 
         /**
          * @name:   Get/Set Operation Time
@@ -71,8 +76,8 @@ class Scheduler : public QObject
          *
          * @return: The systems total operation time in milliseconds
          */
-        virtual qint64 getOperationTime();
-        void setOperationTime(qint64 milliseconds);
+        virtual quint64 getOperationTime();
+        virtual void setOperationTime(quint64 milliseconds);
 
         /**
          * @name:   Trigger Pump
@@ -116,7 +121,17 @@ class Scheduler : public QObject
         virtual bool getSchouldRun() const;
         virtual void setSchouldRun(bool value);
 
-    private:
+        /**
+         * @name:   Get/Set Thread
+         * @brief:  Get/Set the thread object of the schedulling thread
+         *
+         * @param:  The thread object reference of the schedulling thread
+         * @return: The thread object reference of the schedulling thread
+         */
+        virtual std::thread* getThread() const;
+        virtual void setThread(std::thread* value);
+
+private:
         /**
          * @name:   Timer
          * @brief:  QElapsedTimer object for measuring the system time
@@ -150,13 +165,30 @@ class Scheduler : public QObject
          * is needed or when system lifetime (because of mechanical outwear) is
          * reached.
          */
-        qint64 TotalOperationTime;
+        quint64 TotalOperationTime;
 
         /**
          * @name:   The Pump
          * @brief:  A local representation of the Insulin Pump
          */
         Pump *ThePump;
+
+        /**
+         * @name:   Schould Run
+         * @brief:  Flag for the thread method
+         *
+         *  A flag for the thread method to check if it should run
+         *  If 'SchoulRun' is true, the scheduler thread loop will run
+         *  If 'ShouldRun' is flase, the thread stops the periodic checking
+         */
+        bool SchouldRun;
+
+        /**
+         * @name:   Thread
+         * @brief:  The thread object reference of the schedulling thread
+         *
+         */
+        std::thread *Thread;
 
         /**
          * @name:   Start Operation Time Counter
@@ -197,17 +229,7 @@ class Scheduler : public QObject
          */
         virtual void writeOperationTime();
 
-        /**
-         * @name:   Schould Run
-         * @brief:  Flag for the thread method
-         *
-         *  A flag for the thread method to check the bodies health periodically
-         *  If 'SchoulRun' is true, the scheduler thread loop will run
-         *  If 'ShouldRun' is flase, the thread stops the periodic checking
-         */
-        bool SchouldRun;
-
-    public slots:
+public slots:
         /**
          * @name:   Set Operation Time in Hours
          * @brief:  Sets the actual operation time

@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   13.01.2015
+ * @date:   20.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Writing to a logfile at different urgency
@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QString>
 #include <QTextStream>
+
 
 #define LOGFILE_NAME "InsulinPump.log"
 
@@ -112,9 +113,11 @@ class Tracer : public QObject
          *  Checks the logfile is available for writing and
          *  answers ControlSystem’s call for checkTracer()
          *
-         * @return: When the logfile is available, 'true' is returned
+         * @return: When the logfile is fully available, 0 is returned
+         *          When the logfile is not open, 1 is returned
+         *          When the logfile is not writeable, 2 is returned
          */
-        virtual bool getStatus();
+        virtual int getStatus();
 
         /**
          * @name:   Get/Set Log File Name

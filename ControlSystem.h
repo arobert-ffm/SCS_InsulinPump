@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   13.01.2015
+ * @date:   20.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Check the systems health status
@@ -155,6 +155,12 @@ class ControlSystem : public QObject
          * @brief:  A local representation of the Tracer
          */
         Tracer *TheTracer;
+
+        /**
+         * @name:   Operation Time
+         * @brief:  Systems actual opration time in ms
+         */
+        quint64 OperationTime;
 
         /**
          * @name:   Minumum Battery Load
