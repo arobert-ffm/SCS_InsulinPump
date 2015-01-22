@@ -106,7 +106,15 @@ public slots:
      *
      * @param amount - current bloodsugar
      */
-    void updateBloodsugarLevel(int bloodsugarLevel, int hormone, int amountInjected);
+    void updateBloodsugarLevel(int bloodsugarLevel);
+
+    /**
+     * Inserts a message into the QList witch containts the injected hormone and dose.
+     *
+     * @param hormone - injected hormone
+     * @param amountInjected - the amount injected
+     */
+    void updateHormoneInjectionLog(int hormone, int amountInjected);
 
 private slots:
     /**

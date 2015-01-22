@@ -149,11 +149,13 @@ bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
         // call gui
         if (insulin)
         {
-            emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::INSULIN, amount);
+            emit updateBloodSugarLevel(targetBloodSugarLevel);
+            emit updateHormoneInjectionLog(UserInterface::INSULIN, amount);
             return true;
         } else
         {
-            emit updateBloodSugarLevel(targetBloodSugarLevel, UserInterface::GLUCAGON, amount);
+            emit updateBloodSugarLevel(targetBloodSugarLevel);
+            emit updateHormoneInjectionLog(UserInterface::GLUCAGON, amount);
             return true;
         }
 

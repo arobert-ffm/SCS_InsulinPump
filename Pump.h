@@ -414,13 +414,19 @@ signals:
      * @param tbsl
      *        target blood sugar level.
      *
-     * @param amountHormone
-     *        amount of hormone used.
+     */
+    void updateBloodSugarLevel(int tbsl);
+
+    /**
+     * @brief Inserts the new injection in to the QList in the UI
+     *
+     * @param hormone
+     *        Hormone used.
      *
      * @param injectHormUnits
      *        units of injected hormone.
      */
-    void updateBloodSugarLevel(int tbsl, int amountHormone, int injectHormUnits);
+    void updateHormoneInjectionLog(int hormone, int injectHormUnits);
 
 // END SIGNALS
 }; //END HEADER

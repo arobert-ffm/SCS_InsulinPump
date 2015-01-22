@@ -40,7 +40,8 @@ ControlSystem::ControlSystem(UserInterface* ui)
     QObject::connect(ui, SIGNAL(refillInsulinInPump()), ThePump, SLOT(refillInsulinReservoir()));
     QObject::connect(ThePump, SIGNAL(updateGlucagonReservoir(int)), ui, SLOT(glucagonAmountInReservoirChanged(int)));
     QObject::connect(ui, SIGNAL(refillGlucagonInPump()), ThePump, SLOT(refillGlucagonReservoir()));
-    QObject::connect(ThePump, SIGNAL(updateBloodSugarLevel(int,int,int)), ui, SLOT(updateBloodsugarLevel(int,int,int)));
+    QObject::connect(ThePump, SIGNAL(updateBloodSugarLevel(int)), ui, SLOT(updateBloodsugarLevel(int)));
+    QObject::connect(ThePump, SIGNAL(updateHormoneInjectionLog(int,int)), ui, SLOT(updateHormoneInjectionLog(int,int)));
 
     QObject::connect(TheScheduler, SIGNAL(updateOperationTime(int)), ui, SLOT(operationTimeChanged(int)));
     QObject::connect(ui, SIGNAL(setOperationTime(int)), TheScheduler, SLOT(setOperationTimeInHours(int)));

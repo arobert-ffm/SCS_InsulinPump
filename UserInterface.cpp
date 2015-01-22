@@ -227,7 +227,19 @@ void UserInterface::updateClock()
  *
  * @param amount - current bloodsugar
  */
-void UserInterface::updateBloodsugarLevel(int bloodsugarLevel, int hormone, int amountInjected)
+void UserInterface::updateBloodsugarLevel(int bloodsugarLevel)
+{
+    // Update Sliders
+    ui->mBloodSugarValue->setValue(bloodsugarLevel);
+}
+
+/**
+ * Inserts a message into the QList witch containts the injected hormone and dose.
+ *
+ * @param hormone - injected hormone
+ * @param amountInjected - the amount injected
+ */
+void UserInterface::updateHormoneInjectionLog(int hormone, int amountInjected)
 {
     // Timestamp
     QTime time = QTime::currentTime();
@@ -248,7 +260,6 @@ void UserInterface::updateBloodsugarLevel(int bloodsugarLevel, int hormone, int 
         ui->mBloodsugarLog->takeItem(0);
         //delete item;
     }
-    ui->mBloodSugarValue->setValue(bloodsugarLevel);
 }
 
 /**
