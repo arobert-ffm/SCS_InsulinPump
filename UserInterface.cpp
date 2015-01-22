@@ -78,7 +78,7 @@ void UserInterface::minBatteryLevelChanged(int level)
  *
  * @param amount - new insulin amount
  */
-void UserInterface::insulinAmountInReservoirChanged(float amount)
+void UserInterface::insulinAmountInReservoirChanged(int amount)
 {
     // Update Color
     if (amount < 51 && amount >= 26)
@@ -107,7 +107,7 @@ void UserInterface::insulinAmountInReservoirChanged(float amount)
  *
  * @param amount - new glucagon amount
  */
-void UserInterface::glucagonAmountInReservoirChanged(float amount)
+void UserInterface::glucagonAmountInReservoirChanged(int amount)
 {
     // Update Color
     if (amount < 51 && amount >= 26)

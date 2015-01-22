@@ -63,13 +63,13 @@ public slots:
      *
      * @param amount - new insulin amount
      */
-    void insulinAmountInReservoirChanged(float amount);
+    void insulinAmountInReservoirChanged(int amount);
     /**
      * Updates the Glucagon amount in the Progressbar
      *
      * @param amount - new glucagon amount
      */
-    void glucagonAmountInReservoirChanged(float amount);
+    void glucagonAmountInReservoirChanged(int amount);
     /**
      * Updates the operation time in the Progressbar
      *

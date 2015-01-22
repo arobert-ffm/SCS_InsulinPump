@@ -396,7 +396,7 @@ signals:
      * @param amount
      *        The current amount of insulin in the reservoir.
      */
-    void updateInsulinReservoir(float amount);
+    void updateInsulinReservoir(int amount);
 
     /**
      * @brief updateGlucagonReservoir
@@ -405,7 +405,7 @@ signals:
      * @param amount
      *        The current amount of glucagon in the reservoir.
      */
-    void updateGlucagonReservoir(float amount);
+    void updateGlucagonReservoir(int amount);
 
     /**
      * @brief updateBloodSugarLevel

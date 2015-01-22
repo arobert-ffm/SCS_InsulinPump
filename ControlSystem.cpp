@@ -36,9 +36,9 @@ ControlSystem::ControlSystem(UserInterface* ui)
     // Init UI Callbacks
     QObject::connect(ThePump, SIGNAL(updateBatteryPowerLevel(int)), ui, SLOT(batteryPowerLevelChanged(int)));
     QObject::connect(ui, SIGNAL(setBatteryPowerLevel(int)), ThePump, SLOT(changeBatteryPowerLevel(int)));
-    QObject::connect(ThePump, SIGNAL(updateInsulinReservoir(float)), ui, SLOT(insulinAmountInReservoirChanged(float)));
+    QObject::connect(ThePump, SIGNAL(updateInsulinReservoir(int)), ui, SLOT(insulinAmountInReservoirChanged(int)));
     QObject::connect(ui, SIGNAL(refillInsulinInPump()), ThePump, SLOT(refillInsulinReservoir()));
-    QObject::connect(ThePump, SIGNAL(updateGlucagonReservoir(float)), ui, SLOT(glucagonAmountInReservoirChanged(float)));
+    QObject::connect(ThePump, SIGNAL(updateGlucagonReservoir(int)), ui, SLOT(glucagonAmountInReservoirChanged(int)));
     QObject::connect(ui, SIGNAL(refillGlucagonInPump()), ThePump, SLOT(refillGlucagonReservoir()));
     QObject::connect(ThePump, SIGNAL(updateBloodSugarLevel(int,int,int)), ui, SLOT(updateBloodsugarLevel(int,int,int)));
 
