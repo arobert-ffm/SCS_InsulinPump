@@ -89,6 +89,9 @@ int Pump::readBloodSugarSensor()
         file.seekg(0L, ios::beg);
         file.getline(line, 4);
         file.close();
+
+        remove("pipe_to_pump");
+
         return atoi(line);
     }
     else
