@@ -166,7 +166,7 @@ public:
          *
          * @return false on failed injection.
          */
-        bool injectHormone(int targetBloodSugarLevel, bool insulin, int amount);
+        void injectHormone(bool insulin, int amount);
 
         /**
          * @brief   Pump::readBloodSugarSensor
@@ -188,7 +188,7 @@ public:
          *
          * @return  true if anything is ok.
          */
-        bool injectHormoneToBody(int amount, bool insulin);
+        void injectHormoneToBody(int amount, bool insulin);
 
         /**
          * @brief calculateNeededHormone

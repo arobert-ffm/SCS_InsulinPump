@@ -36,9 +36,7 @@
 
 #include "Pump.h"
 #include "UserInterface.h"
-
 #include <iostream>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -47,31 +45,18 @@
 #include <string.h>
 #include <unistd.h>
 #include <QObject>
+#include <fstream>
 
 using namespace std;
 
+
+// TODO was sind die folgenden fünf variablen?
 #define BUFLEN  100 //<---- get buffer length for struct by sizeof(struct)
 
 int     i;
 int     main (void);
 int     fdes_body_to_pump; // fildescriptor for Body --> Pump
 int     fdes_pump_to_body; // fildescriptor for Pump --> Body
-
-
-/**********************************
- * transmit_hormone_injection     *
- **********************************/
-struct transmit_injection_hormones {
-    int injected_insulin;
-    int injected_glucagon;
-} Injecting;
-
-/**********************************
- * transmit_bloodsugar            *
- **********************************/
-struct transmit_bloodsugar {
-    int bloodSugarLevel;
-} BodyStatus;
 
 
 // CTOR
@@ -94,80 +79,73 @@ Pump::~Pump()
 // read BSL value from sensor
 int Pump::readBloodSugarSensor()
 {
-    int result;
+    ifstream file;
+    char line[4];
 
-    // open pipe Body --> Pump
-    if((fdes_body_to_pump=open("body_to_pump",O_RDONLY))==(-1)) {
-        printf("Failure 'open pipe'");
-        exit(-1);
-    }
+    file.open("pipe_to_pump", ios_base::in);
 
-    // read Body --> Pump
-    read(fdes_body_to_pump, &BodyStatus, BUFLEN);
-    result = BodyStatus.bloodSugarLevel;
-    close(fdes_body_to_pump);
-
-    return result;
-}
-
-// inject hormone to body
-bool Pump::injectHormoneToBody(int amount, bool insulin)
-{
-    // open pipe Pump --> Body
-    if((fdes_pump_to_body=open("pump_to_body",O_WRONLY))==(-1)) {
-        printf("Failure 'open pipe'");
-        return false;
-    }
-
-    if (insulin)
+    if (file.good())
     {
-        Injecting.injected_insulin = amount;
-        Injecting.injected_glucagon = 0;
+        file.seekg(0L, ios::beg);
+        file.getline(line, 4);
+        file.close();
+        return atoi(line);
     }
     else
     {
-        Injecting.injected_insulin = 0;
-        Injecting.injected_glucagon = amount;
+        return -1;
     }
+}
 
-    // write Pump --> Body
-    if((i=write(fdes_pump_to_body, &Injecting, BUFLEN)) != BUFLEN) {
-        printf("Fehler 'write-call'");
-        return false;
+
+// inject hormone to body
+void Pump::injectHormoneToBody(int amount, bool insulin)
+{
+    ofstream file("pipe_to_body", ios_base::out);
+
+    if (insulin)
+    {
+        if (amount < 10)
+        {
+            file << "0";
+        }
+        file << amount;
+        file << "00";
     }
-    close(fdes_pump_to_body);
-    return true;
+    else
+    {
+        file << "00";
+        if (amount < 10)
+        {
+            file << "0";
+        }
+        file << amount;
+    }
+    file.close();
 }
 
 
 // inject hormone
-bool Pump::injectHormone(int targetBloodSugarLevel, bool insulin, int amount)
+void Pump::injectHormone(bool insulin, int amount)
 {
     // inject to body
-    if (injectHormoneToBody(amount, insulin))
+    injectHormoneToBody(amount, insulin);
+
+    if (amount > 0)
     {
         // call gui
         if (insulin)
         {
-            emit updateBloodSugarLevel(targetBloodSugarLevel);
+            insulinReservoirLevel -= amount;
+            emit updateInsulinReservoir(insulinReservoirLevel);
             emit updateHormoneInjectionLog(UserInterface::INSULIN, amount);
-            return true;
-        } else
-        {
-            emit updateBloodSugarLevel(targetBloodSugarLevel);
-            emit updateHormoneInjectionLog(UserInterface::GLUCAGON, amount);
-            return true;
         }
-
-        QString err = "Injection aborted! No GUI detected";
-        tracer.writeCriticalLog(err);
-        return false;
-    }
-    else
-    {
-        QString err = "Injection aborted! No body detected!";
-        tracer.writeCriticalLog(err);
-        return false;
+        else
+        {
+            glucagonReservoirLevel -= amount;
+            emit updateGlucagonReservoir(glucagonReservoirLevel);
+            emit updateHormoneInjectionLog(UserInterface::GLUCAGON, amount);
+        }
     }
 }
 
@@ -237,10 +215,33 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 // main for pump
 bool Pump::runPump()
 {
-    // TODO first iteration? predefined value?
-    latestBloodSugarLevel = currentBloodSugarLevel;
-    currentBloodSugarLevel = readBloodSugarSensor();
-    int hormonesToInject=111; //<<---init with bogus value.
+    // First iteration: no latest blood sugar value, set latest to current
+    if (currentBloodSugarLevel <= 0)
+    {
+        currentBloodSugarLevel = readBloodSugarSensor();
+        if (currentBloodSugarLevel == -1)
+        {
+            QString err = "No body found!";
+            tracer.writeCriticalLog(err);
+
+            cout << "No body found!" << endl;
+
+            return false;
+        }
+        else
+        {
+            latestBloodSugarLevel = currentBloodSugarLevel;
+        }
+    }
+    // Following iterations: former blood sugar value to latest, read new one from sensor
+    else
+    {
+        latestBloodSugarLevel = currentBloodSugarLevel;
+        currentBloodSugarLevel = readBloodSugarSensor();
+    }
+
+    int hormonesToInject = 0; //<<---init with bogus value.
+    emit updateBloodSugarLevel(currentBloodSugarLevel);
 
     // inject insulin
     if (currentBloodSugarLevel > maxBloodSugarLevel)
@@ -280,7 +281,8 @@ bool Pump::runPump()
         hormonesToInject = 0;
     }
 
-    return injectHormone(targetBloodSugarLevel, insulin, hormonesToInject);
+    injectHormone(insulin, hormonesToInject);
+    return true;
 }
 
 // battery recharge
@@ -320,6 +322,7 @@ void Pump::changeBatteryPowerLevel(int level)
 // refills insulin reservoir
 void Pump::refillInsulinReservoir()
 {
+    insulinReservoirLevel = 100;
     // Update UI
     emit updateInsulinReservoir(100);
 }
@@ -327,6 +330,7 @@ void Pump::refillInsulinReservoir()
 // refills glucagon reservoir
 void Pump::refillGlucagonReservoir()
 {
+    glucagonReservoirLevel = 100;
     // Update UI
     emit updateGlucagonReservoir(100);
 }
