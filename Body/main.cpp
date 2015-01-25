@@ -31,32 +31,9 @@ int     main                        (void);
 int     BSL_Sim_thread              (void); // is working
 int     Sim_Controll_Thread         (void); // seems to be working --> testing needed
 
-int     fdes_body_to_pump; // fildescriptor for Body --> Pump
-int     fdes_pump_to_body; // fildescriptor for Pump --> Body
-int     i; // needed for communication over pipes
-
-
-/*****************************************************************
- *               used to store data for transmission             *
- *****************************************************************/
-
-/**********************************
- * transmit_hormone_injection     *
- **********************************/
-struct transmit_injection_hormones {
-    int injected_insulin;
-    int injected_glucagon;
-} Injecting; // will be send over pipe: pump_to_body
-
-/**********************************
- *       transmit_bloodsugar      *
- **********************************/
-struct transmit_bloodsugar {
-    int bloodSugarLevel;
-} BodyStatus; // will be send over pipe: body_to_pump
-/****************************************************************
- *                      END transmission                        *
- ****************************************************************/
+// generate filehandler for platform independent "pipe communication" between body and pump
+ofstream out_pipe("pipe_to_pump", ios_base::out);
+ifstream in_pipe; // pipe_to_body
 
 /*****************************************************************
  *                   Class: ThreadController                     *
@@ -222,21 +199,6 @@ BodyThreadController communication; // generate object for communication
 
 int main(void) {
 
-    // generate pipe for Body --> Pump
-    mknod("body_to_pump",S_IFIFO | 0666,0);
-    
-    if((fdes_body_to_pump=open("body_to_pump",O_WRONLY))==(-1)) {
-        puts("Fehler 'open pipe'");
-        exit(EXIT__FAILURE);
-    }
-    
-    // generate pipe for Pump --> Body
-    mknod("pump_to_body",S_IFIFO | 0666,0);
-    
-    if((fdes_pump_to_body=open("pump_to_body",O_RDONLY))==(-1)) {
-        puts("Fehler 'open pipe'");
-        exit(EXIT__FAILURE);
-    }
     cout << "Start\n";
     
     // Init values
@@ -258,7 +220,6 @@ int main(void) {
 /******************************************************
  *                      END main                      *
  ******************************************************/
-
 
 
 /******************************************************
@@ -322,6 +283,18 @@ int BSL_Sim_thread(void) {
         /******************************************************
          *      Communication between body and pump           *
          ******************************************************/
+        
+        // write Body --> Pump
+        out_pipe << body.getBloodSugarLevel();
+        out_pipe.close();
+        
+        // read Pump --> Body
+        in_pipe.open("pipe_to_body", ios_base::in);
+        if (in_pipe.good()) {
+            
+        }
+        
+        /*to be removed when self-pipes working
         // assigning values to variable
         BodyStatus.bloodSugarLevel = body.getBloodSugarLevel();
 
@@ -340,6 +313,7 @@ int BSL_Sim_thread(void) {
 
         close(fdes_pump_to_body);
 
+         /*to be removed when self-pipes working
         /******************************************************
          *       End Communication between body and pump      *
          ******************************************************/
