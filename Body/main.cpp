@@ -34,6 +34,9 @@ int     Sim_Controll_Thread         (void); // seems to be working --> testing n
 // generate filehandler for platform independent "pipe communication" between body and pump
 ofstream out_pipe("pipe_to_pump", ios_base::out);
 ifstream in_pipe; // pipe_to_body
+char symbols_insulin[3];
+char symbols_glucagon[3];
+
 
 /*****************************************************************
  *                   Class: ThreadController                     *
@@ -233,6 +236,7 @@ int Sim_Controll_Thread(void) {
     
     while (true) {
         cout << "Please set:\n 1: Eating a lot of sweets (BSL rising fast)\n 2: BSL Eating a snack (BSL rising moderate) \n 3: Drinking water (BSL falling slowly)\n 4: Doing sports (BSL falling)\n 5: End Simulation\n";
+        cout << "Option: ";
         cin >> user_bsl_ris_fal;
         cout << "Your choice: " << user_bsl_ris_fal << "\n";
     
@@ -258,6 +262,9 @@ int Sim_Controll_Thread(void) {
             communication.setThreadEndThread(true);
             break;
         }
+        else {
+            cout << "Not a valid option. Please try again!\n";
+        }
     }
     
     return 0;
@@ -275,7 +282,7 @@ int BSL_Sim_thread(void) {
     
     ofstream logfile;
     
-    cout << "Init value for BloodSugarLevel: ";
+    cout << "Init value for BloodSugarLevel: " << body.getBloodSugarLevel() << endl;
 
     
     while (true) {
@@ -287,33 +294,7 @@ int BSL_Sim_thread(void) {
         // write Body --> Pump
         out_pipe << body.getBloodSugarLevel();
         out_pipe.close();
-        
-        // read Pump --> Body
-        in_pipe.open("pipe_to_body", ios_base::in);
-        if (in_pipe.good()) {
-            
-        }
-        
-        /*to be removed when self-pipes working
-        // assigning values to variable
-        BodyStatus.bloodSugarLevel = body.getBloodSugarLevel();
 
-        // write Body --> Pump
-        if((i=write(fdes_body_to_pump, &BodyStatus, BUFLEN)) != BUFLEN) {
-            printf("Fehler 'write-call'");
-            exit(EXIT__FAILURE);
-        }
-        close(fdes_body_to_pump);
-        
-        
-        // read Pump --> Body
-        read(fdes_pump_to_body, &Injecting, BUFLEN);
-        communication.setThreadInsulinUnits(Injecting.injected_insulin);
-        communication.setThreadGlucagonUnits(Injecting.injected_glucagon);
-
-        close(fdes_pump_to_body);
-
-         /*to be removed when self-pipes working
         /******************************************************
          *       End Communication between body and pump      *
          ******************************************************/
@@ -335,6 +316,41 @@ int BSL_Sim_thread(void) {
             communication.minusThreadGlucagonUnits(1);
         }
         
+        
+        /******************************************************
+         *      Communication between body and pump           *
+         ******************************************************/
+        // read Pump --> Body
+        in_pipe.open("pipe_to_body", ios_base::in);
+        
+        while (!(in_pipe.good())) {
+            cout << "Pipe not available!\nWaiting..." << endl;
+        }
+        
+        if (in_pipe.good()) {
+            in_pipe.seekg(0, ios::beg);
+            in_pipe.read(symbols_insulin, 2);
+            in_pipe.seekg(2, ios::beg);
+            in_pipe.read(symbols_glucagon, 2);
+            
+            in_pipe.close();
+            
+            remove("pipe_to_body");
+            cout << atoi(symbols_insulin) << endl;
+            cout << atoi(symbols_glucagon) << endl;
+            
+            communication.setThreadInsulinUnits(atoi(symbols_insulin));
+            communication.setThreadGlucagonUnits(atoi(symbols_glucagon));
+            
+        }
+        else {
+            cout << "Communication is not possible, broken pipe!\n";
+        }
+        /******************************************************
+         *       End Communication between body and pump      *
+         ******************************************************/
+
+
         logfile.open("log.txt", ios::out | ios::app);
         logfile << body.getBloodSugarLevel();
         logfile << "\n";
