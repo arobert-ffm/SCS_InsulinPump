@@ -136,6 +136,7 @@ void Pump::injectHormone(bool insulin, int amount)
 
     if (amount > 0)
     {
+        delay = true;
         // call gui
         if (insulin)
         {
@@ -284,6 +285,7 @@ bool Pump::runPump()
         hormonesToInject = 0;
     }
 
+    delay = false;
     injectHormone(insulin, hormonesToInject);
     return true;
 }
