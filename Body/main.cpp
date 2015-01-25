@@ -31,12 +31,9 @@ int     main                        (void);
 int     BSL_Sim_thread              (void); // is working
 int     Sim_Controll_Thread         (void); // seems to be working --> testing needed
 
-// generate filehandler for platform independent "pipe communication" between body and pump
-ofstream out_pipe("pipe_to_pump", ios_base::out);
-ifstream in_pipe; // pipe_to_body
+// generate chars for pipe buffers
 char symbols_insulin[3];
 char symbols_glucagon[3];
-
 
 /*****************************************************************
  *                   Class: ThreadController                     *
@@ -292,6 +289,7 @@ int BSL_Sim_thread(void) {
          ******************************************************/
         
         // write Body --> Pump
+        ofstream out_pipe("pipe_to_pump", ios_base::out);
         out_pipe << body.getBloodSugarLevel();
         out_pipe.close();
 
@@ -321,10 +319,13 @@ int BSL_Sim_thread(void) {
          *      Communication between body and pump           *
          ******************************************************/
         // read Pump --> Body
+        ifstream in_pipe; // pipe_to_body
         in_pipe.open("pipe_to_body", ios_base::in);
         
         while (!(in_pipe.good())) {
             cout << "Pipe not available!\nWaiting..." << endl;
+            in_pipe.close();
+            in_pipe.open("pipe_to_body", ios_base::in);
         }
         
         if (in_pipe.good()) {
