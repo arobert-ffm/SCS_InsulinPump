@@ -322,7 +322,7 @@ int BSL_Sim_thread(void) {
         /******************************************************
          *      Communication between body and pump           *
          ******************************************************/
-        // assigning vales to variable
+        // assigning values to variable
         BodyStatus.bloodSugarLevel = body.getBloodSugarLevel();
 
         // write Body --> Pump
