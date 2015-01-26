@@ -324,8 +324,10 @@ int BSL_Sim_thread(void) {
         in_pipe.open("pipe_to_body", ios_base::in);
         
         while (!(in_pipe.good())) {
+            /*
             cout << "Pipe not available!\nWaiting..." << endl;
             in_pipe.close();
+             */
             in_pipe.open("pipe_to_body", ios_base::in);
         }
         
