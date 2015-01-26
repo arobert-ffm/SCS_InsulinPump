@@ -284,6 +284,10 @@ int BSL_Sim_thread(void) {
     
     while (true) {
         
+        if (communication.getThreadEndThread() == true) {
+            break;
+        }
+        
         /******************************************************
          *      Communication between body and pump           *
          ******************************************************/
@@ -292,6 +296,10 @@ int BSL_Sim_thread(void) {
         ofstream out_pipe("pipe_to_pump", ios_base::out);
         out_pipe << body.getBloodSugarLevel();
         out_pipe.close();
+        
+        if (communication.getThreadEndThread() == true) {
+            break;
+        }
 
         /******************************************************
          *       End Communication between body and pump      *
@@ -326,8 +334,8 @@ int BSL_Sim_thread(void) {
         while (!(in_pipe.good())) {
             /*
             cout << "Pipe not available!\nWaiting..." << endl;
+            */
             in_pipe.close();
-             */
             in_pipe.open("pipe_to_body", ios_base::in);
         }
         
@@ -361,10 +369,6 @@ int BSL_Sim_thread(void) {
         logfile << "\n";
         logfile.close();
         usleep(1000000);
-        
-        if (communication.getThreadEndThread() == true) {
-            break;
-        }
 
     }
     cout << "\nThread ended\n";
