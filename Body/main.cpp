@@ -318,6 +318,7 @@ int BSL_Sim_thread(void) {
         /******************************************************
          *      Communication between body and pump           *
          ******************************************************/
+
         // read Pump --> Body
         ifstream in_pipe; // pipe_to_body
         in_pipe.open("pipe_to_body", ios_base::in);
@@ -347,6 +348,7 @@ int BSL_Sim_thread(void) {
         else {
             cout << "Communication is not possible, broken pipe!\n";
         }
+         
         /******************************************************
          *       End Communication between body and pump      *
          ******************************************************/
