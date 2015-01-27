@@ -43,7 +43,7 @@ class Pump : public QObject
 // ATTRIBUTES
 private:
         //for logging purposes
-        Tracer tracer;
+        Tracer *tracer;
 
         /* When pump is active injecting insulin the value will be 1, when
         *  injecting glucagon the value will be 2 and when inactive the value
@@ -58,25 +58,25 @@ private:
         int glucagonReservoirLevel;
 
         // current blood sugar level
-        int currentBloodSugarLevel;
+        int currentBSLevel;
 
         // the blood sugar level in the latest cycle
-        int latestBloodSugarLevel;
+        int latestBSLevel;
 
         // maximal healthy blood sugar level
-        int maxBloodSugarLevel;
+        int upperBSLimit;
 
         // minimum healthy blood sugar level
-        int minBloodSugarLevel;
+        int lowBSLimit;
 
         // target blood sugar level
         int targetBloodSugarLevel;
 
         // target to decrease blood sugar level with insulin injection
-        int upperTargetBloodSugarLevel;
+        int upperBSLevel;
 
         // target to increase blood sugar level with glucagon injection
-        int lowerTargetBloodSugarLevel;
+        int lowerBSLevel;
 
         // inject insulin or glucagon, true when insulin
         bool insulin;
@@ -102,6 +102,8 @@ public:
          *        init object with default values.
          */
         Pump();
+
+        Pump(Tracer *tracer, int hsf, int upLevel, int lowLevel, int upLimit, int lowLimit);
 
         /* DTOR
          *
@@ -287,6 +289,7 @@ public:
      void setInsulin(bool value);
 
 // END SETTER
+
 
 // SLOTS
 public slots:
