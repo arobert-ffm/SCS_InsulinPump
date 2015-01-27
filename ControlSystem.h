@@ -18,6 +18,7 @@
 #define controlsystem_
 
 #include <QFileInfo>
+#include <QMessageBox>
 #include "UserInterface.h"
 #include "Scheduler.h"
 #include "Tracer.h"
