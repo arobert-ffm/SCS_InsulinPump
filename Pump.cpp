@@ -49,16 +49,6 @@
 
 using namespace std;
 
-
-// TODO was sind die folgenden fünf variablen?
-#define BUFLEN  100 //<---- get buffer length for struct by sizeof(struct)
-
-int     i;
-int     main (void);
-int     fdes_body_to_pump; // fildescriptor for Body --> Pump
-int     fdes_pump_to_body; // fildescriptor for Pump --> Body
-
-
 // CTOR
 Pump::Pump()
 {
@@ -100,7 +90,6 @@ int Pump::readBloodSugarSensor()
     }
 }
 
-
 // inject hormone to body
 void Pump::injectHormoneToBody(int amount, bool insulin)
 {
@@ -126,7 +115,6 @@ void Pump::injectHormoneToBody(int amount, bool insulin)
     }
     file.close();
 }
-
 
 // inject hormone
 void Pump::injectHormone(bool insulin, int amount)
@@ -353,16 +341,6 @@ bool Pump::getPumpStatus() const
     return true;
 }
 
-int Pump::getTargetBloodSugarLevel() const
-{
-    return this->targetBloodSugarLevel;
-}
-
-int Pump::getCurrentBloodSugarLevel() const
-{
-   return this->currentBloodSugarLevel;
-}
-
 int Pump::getInsulinReservoirLevel() const
 {
     return this->insulinReservoirLevel;
@@ -372,52 +350,7 @@ int Pump::getGlucagonReservoirLevel() const
 {
     return this->glucagonReservoirLevel;
 }
-
 //>>>> auto generated getter
-int Pump::getLowerTargetBloodSugarLevel() const
-{
-    return lowerTargetBloodSugarLevel;
-}
-
-int Pump::getUpperTargetBloodSugarLevel() const
-{
-    return upperTargetBloodSugarLevel;
-}
-
-int Pump::getMinBloodSugarLevel() const
-{
-    return minBloodSugarLevel;
-}
-
-int Pump::getMaxBloodSugarLevel() const
-{
-    return maxBloodSugarLevel;
-}
-
-int Pump::getLatestBloodSugarLevel() const
-{
-    return latestBloodSugarLevel;
-}
-
-int Pump::getActive() const
-{
-    return active;
-}
-
-int Pump::getHormoneSensitivityFactor() const
-{
-    return hormoneSensitivityFactor;
-}
-
-bool Pump::getDelay() const
-{
-    return delay;
-}
-
-bool Pump::getInsulin() const
-{
-    return insulin;
-}
 // END GETTER
 
 
@@ -431,9 +364,9 @@ void Pump::setTargetBloodSugarLevel(int tbsl)
 {
     QString err = "Target Blood Sugar Level not within limits!";
 
-    if(tbsl>70 && tbsl<120)
+    if(tbsl>lowerTargetBloodSugarLevel && tbsl<upperTargetBloodSugarLevel)
     {
-        this->targetBloodSugarLevel=tbsl;
+        targetBloodSugarLevel=tbsl;
     }
     tracer.writeCriticalLog(err);
 }
@@ -441,7 +374,12 @@ void Pump::setTargetBloodSugarLevel(int tbsl)
 //>>>> auto generated setter
 void Pump::setHormoneSensitivityFactor(int value)
 {
-    hormoneSensitivityFactor = value;
+    QString err = "HSF invalid! Please enter valid HSF!";
+    if(value!=0)
+    {
+        hormoneSensitivityFactor = value;
+    }
+    tracer.writeCriticalLog(err);
 }
 
 void Pump::setDelay(bool value)
@@ -458,29 +396,5 @@ void Pump::setActive(int value)
 {
     active = value;
 }
-
-void Pump::setLowerTargetBloodSugarLevel(int value)
-{
-    lowerTargetBloodSugarLevel = value;
-}
-
-void Pump::setUpperTargetBloodSugarLevel(int value)
-{
-    upperTargetBloodSugarLevel = value;
-}
-
-void Pump::setLatestBloodSugarLevel(int value)
-{
-    latestBloodSugarLevel = value;
-}
-
-void Pump::setMaxBloodSugarLevel(int value)
-{
-    maxBloodSugarLevel = value;
-}
-
-void Pump::setMinBloodSugarLevel(int value)
-{
-    minBloodSugarLevel = value;
-}
 // END SETTER
+
