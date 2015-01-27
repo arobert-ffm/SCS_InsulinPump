@@ -32,15 +32,6 @@ using namespace std;
 
 Pump::Pump(Tracer *trcr, config cfg)
 {
-
-    /**
-    absMaxBSL = cfg.absMaxBSL;
-    battCrit = cfg.battCrit;
-    battWarn = cfg.battWarn;
-    resCrit = cfg.resCrit;
-    resWarn = cfg.resWarn;
-    */
-
     batteryPowerLevel=100;
     hormoneSensitivityFactor = cfg.hsf;
     active = true;
@@ -181,29 +172,6 @@ bool Pump::decreaseHormoneReservoir(int amount, bool insulin)
     }
     tracer->writeCriticalLog(err);
     return false;
-}
-
-// checks battery status of pump
-int Pump::checkPumpBatteryStatus(void)
-{
-    int powerlevel = getBatteryPowerLevel();
-
-    emit updateBatteryPowerLevel(powerlevel);
-
-    if(powerlevel<=15 && powerlevel >0)
-    {
-        return powerlevel;
-    }
-    else if (powerlevel>15 && powerlevel <= 100)
-    {
-        return powerlevel;
-    }
-    else if (powerlevel==0)
-    {
-        return powerlevel;
-    }
-
-    return EXIT_SUCCESS;
 }
 
 // calculates units for needed hormone
@@ -347,8 +315,10 @@ void Pump::refillGlucagonReservoir()
 
 
 // GETTER
-int Pump::getBatteryPowerLevel() const
+int Pump::getBatteryPowerLevel()
 {
+    int powerlevel = this->batteryPowerLevel;
+    emit updateBatteryPowerLevel(powerlevel);
     return this->batteryPowerLevel;
 }
 
