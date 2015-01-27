@@ -64,8 +64,8 @@ Pump::Pump()
     lowerTargetBSL = 80;
     upperAlarmLimit=120;
     lowerAlarmLimit=70;
-    insulinReservoirLevel=100;
-    glucagonReservoirLevel=100;
+    refillInsulinReservoir();
+    refillGlucagonReservoir();
 }
 
 Pump::Pump(Tracer *trcr, int hsf, int upBSLevel, int lowBSLevel, int upAlarmLimit, int lowAlarmLimit)
@@ -82,8 +82,8 @@ Pump::Pump(Tracer *trcr, int hsf, int upBSLevel, int lowBSLevel, int upAlarmLimi
     lowerTargetBSL = lowBSLevel;
     upperAlarmLimit = upAlarmLimit;
     lowerAlarmLimit = lowAlarmLimit;
-    insulinReservoirLevel=100;
-    glucagonReservoirLevel=100;
+    refillInsulinReservoir();
+    refillGlucagonReservoir();
     this->tracer = trcr;
 }
 
