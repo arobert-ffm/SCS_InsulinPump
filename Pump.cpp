@@ -92,6 +92,15 @@ Pump::~Pump()
 {
 }
 
+//
+bool Pump::initPump()
+{
+    emit updateInsulinReservoir(insulinReservoirLevel);
+    emit updateGlucagonReservoir(glucagonReservoirLevel);
+
+    return true;
+}
+
 // read BSL value from sensor
 int Pump::readBloodSugarSensor()
 {
@@ -107,8 +116,8 @@ int Pump::readBloodSugarSensor()
         file.close();
 
         remove("pipe_to_pump");
-        cout << "char line: " << line << endl;
-        cout << "int line: " << atoi(line) << endl;
+        //cout << "char line: " << line << endl;
+        //cout << "int line: " << atoi(line) << endl;
 
         return atoi(line);
     }

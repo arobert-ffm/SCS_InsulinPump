@@ -110,6 +110,8 @@ public:
          */
         ~Pump();
 
+        bool initPump();
+
         /**
          * @brief runPump
          *        "main"-function for pump triggered by Scheduler.
