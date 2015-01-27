@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   20.01.2015
+ * @date:   26.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Triggering the hormone pump
@@ -96,6 +96,10 @@ bool Scheduler::triggerPump()
             return false;
         }
     }
+    else
+    {
+        return false;
+    }
 
     return true;
 }
@@ -132,7 +136,7 @@ bool Scheduler::stopOperationTimeCounter()
  */
 void Scheduler::readOperationTime()
 {
-    SaveFile->beginGroup( "InsulinPump" );
+    SaveFile->beginGroup( "InsulinPump-Dynamic" );
     TotalOperationTime = SaveFile->value("TotalOperationTime").toLongLong();
     SaveFile->endGroup();
     SaveFile->sync();
@@ -142,7 +146,7 @@ void Scheduler::readOperationTime()
  */
 void Scheduler::writeOperationTime()
 {
-    SaveFile->beginGroup( "InsulinPump" );
+    SaveFile->beginGroup( "InsulinPump-Dynamic" );
     SaveFile->setValue("TotalOperationTime", TotalOperationTime);
     SaveFile->endGroup();
     SaveFile->sync();
@@ -194,3 +198,7 @@ void Scheduler::setOperationTimeInHours(int hours)
 
     emit updateOperationTime(hours);
 }
+
+
+
+

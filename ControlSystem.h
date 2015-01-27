@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   20.01.2015
+ * @date:   27.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Check the systems health status
@@ -25,6 +25,7 @@
 
 #define BATTERY_MIN_LOAD 10
 #define MAX_OPERATION_HOURS 300
+#define CONFIGFILE_NAME "InsulinPump.conf"
 
 
 
@@ -157,6 +158,14 @@ class ControlSystem : public QObject
         Tracer *TheTracer;
 
         /**
+         * @name:   Save File
+         * @brief:  QSettings object for the configuration file
+         *
+         *  File for loading some specific configuration values
+         */
+        QSettings *SaveFile;
+
+        /**
          * @name:   Operation Time
          * @brief:  Systems actual opration time in ms
          */
@@ -183,6 +192,26 @@ class ControlSystem : public QObject
          *  If 'ShouldRun' is flase, the thread stops the periodic checking
          */
         bool SchouldRun;
+
+        /**
+         * @name:   Configuration values
+         * @brief:  Some values from config file for pump
+         *
+         *  Sensitivity
+         *  UpperLevel
+         *  LowerLevel
+         *  UpperLimit
+         *  LowerLimit
+         */
+        int Sensitivity, UpperLevel, LowerLevel, UpperLimit, LowerLimit;
+
+        /**
+         * @name:   Read Configuration
+         * @brief:  Reads the configuration file
+         *
+         *  Reads some specific values from the configuration file
+         */
+        bool readConfiguration(QString filename);
 
     public slots:
         /**
@@ -232,3 +261,7 @@ class ControlSystem : public QObject
 };
 
 #endif
+
+
+
+

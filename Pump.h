@@ -43,7 +43,7 @@ class Pump : public QObject
 // ATTRIBUTES
 private:
         //for logging purposes
-        Tracer tracer;
+        Tracer *tracer;
 
         /* When pump is active injecting insulin the value will be 1, when
         *  injecting glucagon the value will be 2 and when inactive the value
@@ -58,25 +58,25 @@ private:
         int glucagonReservoirLevel;
 
         // current blood sugar level
-        int currentBloodSugarLevel;
+        int currentBSLevel;
 
         // the blood sugar level in the latest cycle
-        int latestBloodSugarLevel;
+        int latestBSLevel;
 
         // maximal healthy blood sugar level
-        int maxBloodSugarLevel;
+        int upperBSLimit;
 
         // minimum healthy blood sugar level
-        int minBloodSugarLevel;
+        int lowBSLimit;
 
         // target blood sugar level
         int targetBloodSugarLevel;
 
         // target to decrease blood sugar level with insulin injection
-        int upperTargetBloodSugarLevel;
+        int upperBSLevel;
 
         // target to increase blood sugar level with glucagon injection
-        int lowerTargetBloodSugarLevel;
+        int lowerBSLevel;
 
         // inject insulin or glucagon, true when insulin
         bool insulin;
@@ -102,6 +102,8 @@ public:
          *        init object with default values.
          */
         Pump();
+
+        Pump(Tracer *tracer, int hsf, int upLevel, int lowLevel, int upLimit, int lowLimit);
 
         /* DTOR
          *
@@ -218,47 +220,14 @@ public:
         /** @return 'true' when everything is working fine.*/
         bool getPumpStatus() const;
 
-        /** @return target blood sugar value.*/
-        int getTargetBloodSugarLevel(void) const;
-
         /** @return the insulin level in the reservoir.*/
         int getInsulinReservoirLevel() const;
 
         /** @return the glucagon level in the reservoir.*/
         int getGlucagonReservoirLevel() const;
 
-        /** @return the current blood sugar level.*/
-        int getCurrentBloodSugarLevel() const;
-
         /** @return battery power level.*/
         int getBatteryPowerLevel() const;
-
-        /** @return pump status active. See also attribute comment. */
-        int getActive() const;
-
-        /** @return latest blood sugar level.*/
-        int getLatestBloodSugarLevel() const;
-
-        /** @return HSF.*/
-        int getHormoneSensitivityFactor() const;
-
-        /** @return true if delay flag is set.*/
-        bool getDelay() const;
-
-        /** @return true if hormone is insulin, false if glucagon.*/
-        bool getInsulin() const;
-
-        /** @return lower threshold of blood sugar level.*/
-        int getLowerTargetBloodSugarLevel() const;
-
-        /** @return upper threshold of BSL.*/
-        int getUpperTargetBloodSugarLevel() const;
-
-        /** @return minimum blood sugar level.*/
-        int getMinBloodSugarLevel() const;
-
-        /** @return maximum blood sugar level.*/
-        int getMaxBloodSugarLevel() const;
 
 // END GETTER
 
@@ -294,14 +263,6 @@ public:
      void setActive(int value);
 
      /**
-      * @brief setLatestBloodSugarLevel
-      *        sets latest blood sugar level.
-      * @param value
-      *        last blood sugar level measured by sensor.
-      */
-     void setLatestBloodSugarLevel(int value);
-
-     /**
       * @brief setHormoneSensitivityFactor
       *        sets HSF.
       *
@@ -327,41 +288,8 @@ public:
       */
      void setInsulin(bool value);
 
-     /**
-      * @brief setLowerTargetBloodSugarLevel
-      *        set lower BSL.
-      * @param value
-      *        value of lower BSL.
-      */
-     void setLowerTargetBloodSugarLevel(int value);
-
-     /**
-      * @brief setUpperTargetBloodSugarLevel
-      *        set upper BSL.
-      *
-      * @param value
-      *        value of upper BSL.
-      */
-     void setUpperTargetBloodSugarLevel(int value);
-
-     /**
-      * @brief setMinBloodSugarLevel
-      *        set minimum BSL.
-      * @param value
-      *        value of minimum BSL.
-      */
-     void setMinBloodSugarLevel(int value);
-
-     /**
-      * @brief setMaxBloodSugarLevel
-      *        set minimum BSL.
-      *
-      * @param value
-      *        value of maximum BSL.
-      */
-     void setMaxBloodSugarLevel(int value);
-
 // END SETTER
+
 
 // SLOTS
 public slots:

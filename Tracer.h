@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   20.01.2015
+ * @date:   25.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Writing to a logfile at different urgency
@@ -183,3 +183,7 @@ class Tracer : public QObject
 };
 
 #endif
+
+
+
+

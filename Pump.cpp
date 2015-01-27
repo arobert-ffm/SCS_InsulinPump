@@ -49,38 +49,42 @@
 
 using namespace std;
 
-
-// TODO was sind die folgenden fünf variablen?
-#define BUFLEN  100 //<---- get buffer length for struct by sizeof(struct)
-
-int     i;
-int     main (void);
-int     fdes_body_to_pump; // fildescriptor for Body --> Pump
-int     fdes_pump_to_body; // fildescriptor for Pump --> Body
-
-
 // CTOR
 Pump::Pump()
 {
-    this->setBatteryPowerLevel(100);
-    this->setHormoneSensitivityFactor(5);
-    this->setActive(true);
-    this->setDelay(false);
-    this->setTargetBloodSugarLevel(110);
-    this->setInsulin(false);
+    batteryPowerLevel=100;
+    hormoneSensitivityFactor = 5;
+    active = true;
+    delay = false;
+    targetBloodSugarLevel=110;
+    insulin = false;
+    currentBSLevel = 0;
+    latestBSLevel = 0;
+    upperBSLevel = 110;
+    lowerBSLevel = 80;
+}
 
-    currentBloodSugarLevel = 0;
-    latestBloodSugarLevel = 0;
-
-    upperTargetBloodSugarLevel = 110;
-    lowerTargetBloodSugarLevel = 80;
+Pump::Pump(Tracer *trcr, int hsf, int upLevel, int lowLevel, int upLimit, int lowLimit)
+{
+    batteryPowerLevel=100;
+    hormoneSensitivityFactor = hsf;
+    active = true;
+    delay = false;
+    targetBloodSugarLevel=110;
+    insulin = false;
+    currentBSLevel = 0;
+    latestBSLevel = 0;
+    upperBSLevel = upLevel;
+    lowerBSLevel = lowLevel;
+    upperBSLimit = upLimit;
+    lowBSLimit = lowLimit;
+    this->tracer = trcr;
 }
 
 //DTOR
 Pump::~Pump()
 {
 }
-
 
 // read BSL value from sensor
 int Pump::readBloodSugarSensor()
@@ -108,7 +112,6 @@ int Pump::readBloodSugarSensor()
     }
 }
 
-
 // inject hormone to body
 void Pump::injectHormoneToBody(int amount, bool insulin)
 {
@@ -134,7 +137,6 @@ void Pump::injectHormoneToBody(int amount, bool insulin)
     }
     file.close();
 }
-
 
 // inject hormone
 void Pump::injectHormone(bool insulin, int amount)
@@ -188,7 +190,7 @@ bool Pump::decreaseHormoneReservoir(int amount, bool insulin)
             return true;
         }
     }
-    tracer.writeCriticalLog(err);
+    tracer->writeCriticalLog(err);
     return false;
 }
 
@@ -219,7 +221,7 @@ int Pump::checkPumpBatteryStatus(void)
 int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 {
     int difference; int fictHormUnit;
-    difference = abs(currentBloodSugarLevel - targetBloodSugarLevel);
+    difference = abs(currentBSLevel - targetBloodSugarLevel);
     fictHormUnit = ceil(difference / hormoneSensitivityFactor);
 
     cout << "int targetBloodSugarLevel: " << targetBloodSugarLevel << endl;
@@ -233,13 +235,13 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 bool Pump::runPump()
 {
     // First iteration: no latest blood sugar value, set latest to current
-    if (currentBloodSugarLevel <= 0)
+    if (currentBSLevel <= 0)
     {
-        currentBloodSugarLevel = readBloodSugarSensor();
-        if (currentBloodSugarLevel == -1)
+        currentBSLevel = readBloodSugarSensor();
+        if (currentBSLevel == -1)
         {
             QString err = "No body found!";
-            tracer.writeCriticalLog(err);
+            tracer->writeCriticalLog(err);
 
             cout << "No body found!" << endl;
 
@@ -247,48 +249,48 @@ bool Pump::runPump()
         }
         else
         {
-            latestBloodSugarLevel = currentBloodSugarLevel;
+            latestBSLevel = currentBSLevel;
         }
     }
     // Following iterations: former blood sugar value to latest, read new one from sensor
     else
     {
-        latestBloodSugarLevel = currentBloodSugarLevel;
-        currentBloodSugarLevel = readBloodSugarSensor();
+        latestBSLevel = currentBSLevel;
+        currentBSLevel = readBloodSugarSensor();
     }
 
     int hormonesToInject = 0; //<<---init with bogus value.
-    emit updateBloodSugarLevel(currentBloodSugarLevel);
+    emit updateBloodSugarLevel(currentBSLevel);
 
     // inject insulin
-    if (currentBloodSugarLevel > maxBloodSugarLevel)
+    if (currentBSLevel > upperBSLimit)
     {
-        if (currentBloodSugarLevel > latestBloodSugarLevel)
+        if (currentBSLevel > latestBSLevel)
         {
             insulin = true;
             if (delay)
             {
-                hormonesToInject = calculateNeededHormone(latestBloodSugarLevel);
+                hormonesToInject = calculateNeededHormone(latestBSLevel);
             }
             else
             {
-                hormonesToInject = calculateNeededHormone(upperTargetBloodSugarLevel);
+                hormonesToInject = calculateNeededHormone(upperBSLevel);
             }
         }
     }
     // inject glucagon
-    else if (currentBloodSugarLevel < minBloodSugarLevel)
+    else if (currentBSLevel < lowBSLimit)
     {
-        if (currentBloodSugarLevel < latestBloodSugarLevel)
+        if (currentBSLevel < latestBSLevel)
         {
             insulin = false;
             if (delay)
             {
-                hormonesToInject = calculateNeededHormone(latestBloodSugarLevel);
+                hormonesToInject = calculateNeededHormone(latestBSLevel);
             }
             else
             {
-                hormonesToInject = calculateNeededHormone(lowerTargetBloodSugarLevel);
+                hormonesToInject = calculateNeededHormone(lowerBSLevel);
             }
         }
     }
@@ -312,7 +314,7 @@ void Pump::rechargeBatteryPower(int charge)
         //TODO! <- check for correctness.
         this->batteryPowerLevel = charge;
     }
-    tracer.writeCriticalLog(err);
+    tracer->writeCriticalLog(err);
 }
 
 // power drain
@@ -325,7 +327,7 @@ void Pump::drainBatteryPower(int powerdrain)
         //TODO! <- check for correctness.
         batteryPowerLevel-=powerdrain;
     }
-    tracer.writeCriticalLog(err);
+    tracer->writeCriticalLog(err);
 }
 
 // changes the batteries power level
@@ -366,16 +368,6 @@ bool Pump::getPumpStatus() const
     return true;
 }
 
-int Pump::getTargetBloodSugarLevel() const
-{
-    return this->targetBloodSugarLevel;
-}
-
-int Pump::getCurrentBloodSugarLevel() const
-{
-   return this->currentBloodSugarLevel;
-}
-
 int Pump::getInsulinReservoirLevel() const
 {
     return this->insulinReservoirLevel;
@@ -385,52 +377,7 @@ int Pump::getGlucagonReservoirLevel() const
 {
     return this->glucagonReservoirLevel;
 }
-
 //>>>> auto generated getter
-int Pump::getLowerTargetBloodSugarLevel() const
-{
-    return lowerTargetBloodSugarLevel;
-}
-
-int Pump::getUpperTargetBloodSugarLevel() const
-{
-    return upperTargetBloodSugarLevel;
-}
-
-int Pump::getMinBloodSugarLevel() const
-{
-    return minBloodSugarLevel;
-}
-
-int Pump::getMaxBloodSugarLevel() const
-{
-    return maxBloodSugarLevel;
-}
-
-int Pump::getLatestBloodSugarLevel() const
-{
-    return latestBloodSugarLevel;
-}
-
-int Pump::getActive() const
-{
-    return active;
-}
-
-int Pump::getHormoneSensitivityFactor() const
-{
-    return hormoneSensitivityFactor;
-}
-
-bool Pump::getDelay() const
-{
-    return delay;
-}
-
-bool Pump::getInsulin() const
-{
-    return insulin;
-}
 // END GETTER
 
 
@@ -444,17 +391,22 @@ void Pump::setTargetBloodSugarLevel(int tbsl)
 {
     QString err = "Target Blood Sugar Level not within limits!";
 
-    if(tbsl>70 && tbsl<120)
+    if(tbsl>lowerBSLevel && tbsl<upperBSLevel)
     {
-        this->targetBloodSugarLevel=tbsl;
+        targetBloodSugarLevel=tbsl;
     }
-    tracer.writeCriticalLog(err);
+    tracer->writeCriticalLog(err);
 }
 
 //>>>> auto generated setter
 void Pump::setHormoneSensitivityFactor(int value)
 {
-    hormoneSensitivityFactor = value;
+    QString err = "HSF invalid! Please enter valid HSF!";
+    if(value!=0)
+    {
+        hormoneSensitivityFactor = value;
+    }
+    tracer->writeCriticalLog(err);
 }
 
 void Pump::setDelay(bool value)
@@ -471,29 +423,5 @@ void Pump::setActive(int value)
 {
     active = value;
 }
-
-void Pump::setLowerTargetBloodSugarLevel(int value)
-{
-    lowerTargetBloodSugarLevel = value;
-}
-
-void Pump::setUpperTargetBloodSugarLevel(int value)
-{
-    upperTargetBloodSugarLevel = value;
-}
-
-void Pump::setLatestBloodSugarLevel(int value)
-{
-    latestBloodSugarLevel = value;
-}
-
-void Pump::setMaxBloodSugarLevel(int value)
-{
-    maxBloodSugarLevel = value;
-}
-
-void Pump::setMinBloodSugarLevel(int value)
-{
-    minBloodSugarLevel = value;
-}
 // END SETTER
+

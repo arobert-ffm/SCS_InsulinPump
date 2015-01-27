@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   20.01.2015
+ * @date:   26.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Triggering the hormone pump
@@ -213,8 +213,8 @@ private:
         virtual bool stopOperationTimeCounter();
 
         /**
-         * @name:   Start Operation Time Counter
-         * @brief:  Starts the operation time counter
+         * @name:   Read Operation Time
+         * @brief:  Reads the total operation time to the config file
          *
          *  Reads the old value from the configuration file from the section
          *  “TotalOperationTime” and sets 'TotalOperationTime' in ms
@@ -222,8 +222,8 @@ private:
         virtual void readOperationTime();
 
         /**
-         * @name:   Stop Operation Time Counter
-         * @brief:  Stops the operation time counter
+         * @name:   Write Operation Time
+         * @brief:  Writes the total operation time to the config file
          *
          * Writes the actual total operation time to the configuration file
          */
@@ -255,3 +255,7 @@ public slots:
 };
 
 #endif
+
+
+
+
