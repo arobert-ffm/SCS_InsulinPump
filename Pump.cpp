@@ -14,26 +14,6 @@
  * Copyright (c) 2015 All Rights Reserved
  */
 
-//TODO
-/*
- * 1. clean up code.
- * 2. check return values of functions
- * 3. check initial values!
- * 4.
- * 5.
- * 6. refactor code. especially code that is redundant.
- * 7. test pump.
- * 8. check for TODOs.
- * 9. check methods for correctness.
- * A.
- * B. see TODO tags!
- * C. setter and getter for all attributes! <--- auto generated!
- * D. fill getter and setter with life!
- * E.
- * F.
- * 0.
- */
-
 #include "Pump.h"
 #include "UserInterface.h"
 #include <iostream>
@@ -175,6 +155,8 @@ void Pump::injectHormone(bool insulin, int amount)
             emit updateGlucagonReservoir(glucagonReservoirLevel);
             emit updateHormoneInjectionLog(UserInterface::GLUCAGON, amount);
         }
+        //drain power of battery
+        drainBatteryPower(1);
     }
 }
 
@@ -249,6 +231,9 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
 // main for pump
 bool Pump::runPump()
 {
+    //drain power of battery
+    drainBatteryPower(1);
+
     // First iteration: no latest blood sugar value, set latest to current
     if (currentBSLevel <= 0)
     {
@@ -257,9 +242,6 @@ bool Pump::runPump()
         {
             QString err = "No body found!";
             tracer->writeCriticalLog(err);
-
-            cout << "No body found!" << endl;
-
             return false;
         }
         else
@@ -327,7 +309,7 @@ void Pump::rechargeBatteryPower(int charge)
     if(charge >=batteryPowerLevel && charge <= MAX_BATTERY_CHARGE)
     {
         //TODO! <- check for correctness.
-        this->batteryPowerLevel = charge;
+        batteryPowerLevel = charge;
     }
     tracer->writeCriticalLog(err);
 }
