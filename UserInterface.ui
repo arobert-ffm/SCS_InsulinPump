@@ -319,8 +319,8 @@ QProgressBar::chunk {
     <widget class="QLabel" name="mBatteryIage">
      <property name="geometry">
       <rect>
-       <x>300</x>
-       <y>100</y>
+       <x>330</x>
+       <y>110</y>
        <width>31</width>
        <height>31</height>
       </rect>
@@ -515,7 +515,7 @@ QProgressBar::chunk {
      <rect>
       <x>30</x>
       <y>400</y>
-      <width>71</width>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>

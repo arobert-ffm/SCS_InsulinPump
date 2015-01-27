@@ -4,7 +4,7 @@
  *
  * @author: Sven Sperner, sillyconn@gmail.com
  *
- * @date:   20.01.2015
+ * @date:   27.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
  *
  * @brief:  Check the systems health status
@@ -29,9 +29,18 @@ ControlSystem::ControlSystem(UserInterface* ui)
     BatteryMinLoad = BATTERY_MIN_LOAD;
     MaxOperationHours = MAX_OPERATION_HOURS;
 
-    ThePump = new Pump();
-    TheScheduler = new Scheduler(ThePump);
     TheTracer = new Tracer();
+
+    if(readConfiguration(CONFIGFILE_NAME))
+    {
+        ThePump = new Pump(TheTracer, Sensitivity, UpperLevel, LowerLevel, UpperLimit, LowerLimit);
+    }
+    else
+    {
+        ThePump = new Pump();
+    }
+
+    TheScheduler = new Scheduler(ThePump);
 
     // Init UI Callbacks
     QObject::connect(ThePump, SIGNAL(updateBatteryPowerLevel(int)), ui, SLOT(batteryPowerLevelChanged(int)));
@@ -194,6 +203,7 @@ int ControlSystem::getBatteryMinLoad() const
     return BatteryMinLoad;
 }
 
+/* (SLOT) */
 void ControlSystem::setBatteryMinLoad(int load)
 {
     BatteryMinLoad = load;
@@ -208,6 +218,7 @@ int ControlSystem::getMaxOperationHours() const
     return MaxOperationHours;
 }
 
+/* (SLOT) */
 void ControlSystem::setMaxOperationHours(int hours)
 {
     MaxOperationHours = hours;
@@ -226,3 +237,33 @@ void ControlSystem::setSchouldRun(bool value)
 {
     SchouldRun = value;
 }
+
+
+/* Reads the configuration file
+ */
+bool ControlSystem::readConfiguration(QString filename)
+{
+    SaveFile = new QSettings(filename, QSettings::NativeFormat);
+
+    if(!SaveFile->status() == QSettings::NoError)
+    {
+        return false;
+    }
+
+    SaveFile->beginGroup( "InsulinPump-Static" );
+    Sensitivity = SaveFile->value("Sensitivity").toInt();
+    UpperLevel = SaveFile->value("UpperLevel").toInt();
+    LowerLevel = SaveFile->value("LowerLevel").toInt();
+    UpperLimit = SaveFile->value("UpperLimit").toInt();
+    LowerLimit = SaveFile->value("LowerLimit").toInt();
+    SaveFile->endGroup();
+    SaveFile->sync();
+
+    delete SaveFile;
+
+    return true;
+}
+
+
+
+
