@@ -64,9 +64,7 @@ ControlSystem::ControlSystem(UserInterface* ui)
     QObject::connect(this, SIGNAL(updateMaxOperationTime(int)), ui, SLOT(maxOperationTimeChanged(int)));
     QObject::connect(ui, SIGNAL(setMaxOperationTime(int)), this, SLOT(setMaxOperationHours(int)));
 
-    // Refill hormone reservoirs
-    ThePump->refillGlucagonReservoir();
-    ThePump->refillInsulinReservoir();
+    ThePump->initPump();
 }
 
 

@@ -92,6 +92,15 @@ Pump::~Pump()
 {
 }
 
+//
+bool Pump::initPump()
+{
+    emit updateInsulinReservoir(insulinReservoirLevel);
+    emit updateGlucagonReservoir(glucagonReservoirLevel);
+
+    return true;
+}
+
 // read BSL value from sensor
 int Pump::readBloodSugarSensor()
 {
