@@ -73,7 +73,7 @@ quint64 Scheduler::getOperationTime()
 {
     TotalOperationTime += Timer.elapsed();
 
-    emit updateOperationTime(TotalOperationTime/60/60/1000);
+    emit updateOperationTime(TotalOperationTime/3600000);
 
     return TotalOperationTime;
 }
@@ -108,7 +108,7 @@ bool Scheduler::triggerPump()
  */
 bool Scheduler::saveOperationTime()
 {
-    getOperationTime();
+    //getOperationTime();
     writeOperationTime();
 
     return true;
@@ -194,7 +194,7 @@ void Scheduler::setThread(std::thread* value)
  */
 void Scheduler::setOperationTimeInHours(int hours)
 {
-    TotalOperationTime = hours*60*60*1000;
+    TotalOperationTime = hours*3600000;
 
     emit updateOperationTime(hours);
 }

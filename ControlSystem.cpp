@@ -80,7 +80,7 @@ int ControlSystem::checkOperationHours()
         OperationTime = TheScheduler->getOperationTime();
     }
 
-    uint OperationHours = OperationTime/60/60/1000;
+    uint OperationHours = OperationTime/3600000;
     if(OperationHours > MaxOperationHours)
     {
         QString msg = "The maximum operation time (" + QString::number(MaxOperationHours)
