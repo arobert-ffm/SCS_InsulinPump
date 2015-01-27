@@ -60,8 +60,10 @@ Pump::Pump()
     insulin = false;
     currentBSLevel = 0;
     latestBSLevel = 0;
-    upperBSLevel = 110;
-    lowerBSLevel = 80;
+    upperTargetBSL = 110;
+    lowerTargetBSL = 80;
+    upperAlarmLimit=120;
+    lowerAlarmLimit=70;
     insulinReservoirLevel=100;
     glucagonReservoirLevel=100;
 }
@@ -78,8 +80,8 @@ Pump::Pump(Tracer *trcr, int hsf, int upBSLevel, int lowBSLevel, int upAlarmLimi
     latestBSLevel = 0;
     upperTargetBSL = upBSLevel;
     lowerTargetBSL = lowBSLevel;
-    upperAlarmBSL = upAlarmLimit;
-    lowerAlarmBSL = lowAlarmLimit;
+    upperAlarmLimit = upAlarmLimit;
+    lowerAlarmLimit = lowAlarmLimit;
     insulinReservoirLevel=100;
     glucagonReservoirLevel=100;
     this->tracer = trcr;
@@ -267,7 +269,7 @@ bool Pump::runPump()
     emit updateBloodSugarLevel(currentBSLevel);
 
     // inject insulin
-    if (currentBSLevel > upperBSLimit)
+    if (currentBSLevel > upperAlarmLimit)
     {
         if (currentBSLevel > latestBSLevel)
         {
@@ -278,12 +280,12 @@ bool Pump::runPump()
             }
             else
             {
-                hormonesToInject = calculateNeededHormone(upperBSLevel);
+                hormonesToInject = calculateNeededHormone(upperTargetBSL);
             }
         }
     }
     // inject glucagon
-    else if (currentBSLevel < lowBSLimit)
+    else if (currentBSLevel < lowerAlarmLimit)
     {
         if (currentBSLevel < latestBSLevel)
         {
@@ -294,7 +296,7 @@ bool Pump::runPump()
             }
             else
             {
-                hormonesToInject = calculateNeededHormone(lowerBSLevel);
+                hormonesToInject = calculateNeededHormone(lowerTargetBSL);
             }
         }
     }
@@ -395,7 +397,7 @@ void Pump::setTargetBloodSugarLevel(int tbsl)
 {
     QString err = "Target Blood Sugar Level not within limits!";
 
-    if(tbsl>lowerBSLevel && tbsl<upperBSLevel)
+    if(tbsl>lowerTargetBSL && tbsl<upperTargetBSL)
     {
         targetBloodSugarLevel=tbsl;
     }
