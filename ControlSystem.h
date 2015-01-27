@@ -203,7 +203,7 @@ class ControlSystem : public QObject
          *  UpperLimit
          *  LowerLimit
          */
-        int Sensitivity, UpperLevel, LowerLevel, UpperLimit, LowerLimit;
+        int Sensitivity, UpperLevel, LowerLevel, UpperLimit, LowerLimit, AbsMax;
 
         /**
          * @name:   Read Configuration

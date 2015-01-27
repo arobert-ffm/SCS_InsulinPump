@@ -258,6 +258,7 @@ bool ControlSystem::readConfiguration(QString filename)
     LowerLevel = SaveFile->value("LowerLevel").toInt();
     UpperLimit = SaveFile->value("UpperLimit").toInt();
     LowerLimit = SaveFile->value("LowerLimit").toInt();
+    AbsMax = SaveFile->value("AbsoluteMax").toInt();
     SaveFile->endGroup();
     SaveFile->sync();
 
