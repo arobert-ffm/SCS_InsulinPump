@@ -33,11 +33,11 @@ ControlSystem::ControlSystem(UserInterface* ui)
 
     if(readConfiguration(CONFIGFILE_NAME))
     {
-        ThePump = new Pump(TheTracer, Sensitivity, UpperLevel, LowerLevel, UpperLimit, LowerLimit);
+        ThePump = new Pump(TheTracer, Configuration);
     }
     else
     {
-        ThePump = new Pump();
+        exit(EXIT_FAILURE);
     }
 
     TheScheduler = new Scheduler(ThePump);
@@ -253,12 +253,16 @@ bool ControlSystem::readConfiguration(QString filename)
     }
 
     SaveFile->beginGroup( "InsulinPump-Static" );
-    Sensitivity = SaveFile->value("Sensitivity").toInt();
-    UpperLevel = SaveFile->value("UpperLevel").toInt();
-    LowerLevel = SaveFile->value("LowerLevel").toInt();
-    UpperLimit = SaveFile->value("UpperLimit").toInt();
-    LowerLimit = SaveFile->value("LowerLimit").toInt();
-    AbsMax = SaveFile->value("AbsoluteMax").toInt();
+    Configuration.hsf = SaveFile->value("Sensitivity").toInt();
+    Configuration.upperLevel = SaveFile->value("UpperLevel").toInt();
+    Configuration.lowerLevel = SaveFile->value("LowerLevel").toInt();
+    Configuration.upperLimit = SaveFile->value("UpperLimit").toInt();
+    Configuration.lowerLimit = SaveFile->value("LowerLimit").toInt();
+    Configuration.absMaxBSL = SaveFile->value("AbsoluteMax").toInt();
+    Configuration.resWarn = SaveFile->value("ReservoirWarn").toInt();
+    Configuration.resCrit = SaveFile->value("ReservoirCrit").toInt();
+    Configuration.battWarn = SaveFile->value("BatterieWarn").toInt();
+    Configuration.battCrit = SaveFile->value("BatterieCrit").toInt();
     SaveFile->endGroup();
     SaveFile->sync();
 

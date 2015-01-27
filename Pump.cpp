@@ -29,24 +29,6 @@
 
 using namespace std;
 
-// CTOR
-Pump::Pump()
-{
-    batteryPowerLevel=100;
-    hormoneSensitivityFactor = 5;
-    active = true;
-    delay = false;
-    targetBloodSugarLevel=110;
-    insulin = false;
-    currentBSLevel = 0;
-    latestBSLevel = 0;
-    upperTargetBSL = 110;
-    lowerTargetBSL = 80;
-    upperAlarmLimit=120;
-    lowerAlarmLimit=70;
-    refillInsulinReservoir();
-    refillGlucagonReservoir();
-}
 
 Pump::Pump(Tracer *trcr, config cfg)
 {

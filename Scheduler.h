@@ -91,6 +91,14 @@ class Scheduler : public QObject
         virtual bool triggerPump();
 
         /**
+         * @name:   Get Batterie Status
+         * @brief:  Get the actual battery status
+         *
+         * @return: The batterie load level
+         */
+        virtual int getBatstatus();
+
+        /**
          * @name:   Save Operation Time
          * @brief:  Save the systems total operation time in milliseconds
          *

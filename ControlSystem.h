@@ -202,8 +202,13 @@ class ControlSystem : public QObject
          *  LowerLevel
          *  UpperLimit
          *  LowerLimit
+         *  AbsMax
+         *  ResWarn
+         *  ResCrit
+         *  BattWarn
+         *  BattCrit
          */
-        int Sensitivity, UpperLevel, LowerLevel, UpperLimit, LowerLimit, AbsMax;
+        config Configuration;
 
         /**
          * @name:   Read Configuration

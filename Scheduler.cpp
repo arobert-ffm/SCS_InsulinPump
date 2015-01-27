@@ -104,6 +104,13 @@ bool Scheduler::triggerPump()
     return true;
 }
 
+/* Returns the actual battery load level
+ */
+int Scheduler::getBatstatus()
+{
+    return ThePump->getBatteryPowerLevel();
+}
+
 /* Triggers the scheduler to save the systems operation time
  */
 bool Scheduler::saveOperationTime()
