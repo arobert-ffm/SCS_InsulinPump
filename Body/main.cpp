@@ -294,7 +294,7 @@ int BSL_Sim_thread(void) {
         
         // write Body --> Pump
         ofstream out_pipe("pipe_to_pump", ios_base::out);
-        out_pipe << body.getBloodSugarLevel();
+        out_pipe << (int)body.getBloodSugarLevel();
         out_pipe.close();
         
         if (communication.getThreadEndThread() == true) {
