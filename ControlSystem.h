@@ -171,18 +171,6 @@ class ControlSystem : public QObject
         quint64 OperationTime;
 
         /**
-         * @name:   Minumum Battery Load
-         * @brief:  Minumum battery load level in percent
-         */
-        int BatteryMinLoad;
-
-        /**
-         * @name:   Maximum Operation Hours
-         * @brief:  Maximum operation time in hours
-         */
-        unsigned int MaxOperationHours;
-
-        /**
          * @name:   Schould Run
          * @brief:  Flag for the thread method
          *
@@ -196,16 +184,17 @@ class ControlSystem : public QObject
          * @name:   Configuration values
          * @brief:  Some values from config file for pump
          *
-         *  Sensitivity
-         *  UpperLevel
-         *  LowerLevel
-         *  UpperLimit
-         *  LowerLimit
-         *  AbsMax
-         *  ResWarn
-         *  ResCrit
-         *  BattWarn
-         *  BattCrit
+         *  Hsf         Hormone Sensitivity Factor
+         *  UpperLevel  Upper Bloodsugar Target Level
+         *  LowerLevel  Lower BLoodsugar Target Level
+         *  UpperLimit  Upper Bloodsugar Target Limit
+         *  LowerLimit  Lower Bloodsugar Target Limit
+         *  AbsMax      Absolute Maximum Bloodsugar
+         *  ResWarn     Reservoir Warning Fill Level
+         *  ResCrit     Reservoir Critical Fill Level
+         *  BattWarn    Battery Warning Level
+         *  BattCrit    Battery Critical Level
+         *  MaxOpTime   Maximum Operation Time (h)
          */
         config Configuration;
 

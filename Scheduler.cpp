@@ -71,7 +71,7 @@ int Scheduler::getStatus()
  */
 quint64 Scheduler::getOperationTime()
 {
-    TotalOperationTime += Timer.elapsed();
+    TotalOperationTime += Timer.restart();
 
     emit updateOperationTime(TotalOperationTime/3600000);
 

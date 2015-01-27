@@ -35,3 +35,6 @@ FORMS    += \
 
 RESOURCES += \
     Ressources.qrc
+
+#QMAKE_POST_LINK = cp ../*.conf ./; cp ../*-Body-*/Body ./
+

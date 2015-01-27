@@ -25,6 +25,7 @@ using namespace std;
  */
 ControlSystem::ControlSystem(UserInterface* ui)
 {
+    // Initialise variables & objects
     SchouldRun = true;
 
     TheTracer = new Tracer();
@@ -38,12 +39,10 @@ ControlSystem::ControlSystem(UserInterface* ui)
         TheTracer->writeCriticalLog("No configuration file found! Exiting...");
         exit(EXIT_FAILURE);
     }
-    BatteryMinLoad = Configuration.battCrit;
-    MaxOperationHours = Configuration.maxOpTime;
 
     TheScheduler = new Scheduler(ThePump);
 
-    // Init UI Callbacks
+    // Initialise callbacks for user interface
     QObject::connect(ThePump, SIGNAL(updateBatteryPowerLevel(int)), ui, SLOT(batteryPowerLevelChanged(int)));
     QObject::connect(ui, SIGNAL(setBatteryPowerLevel(int)), ThePump, SLOT(changeBatteryPowerLevel(int)));
     QObject::connect(ThePump, SIGNAL(updateInsulinReservoir(int)), ui, SLOT(insulinAmountInReservoirChanged(int)));
@@ -65,6 +64,7 @@ ControlSystem::ControlSystem(UserInterface* ui)
     QObject::connect(this, SIGNAL(updateMaxOperationTime(int)), ui, SLOT(maxOperationTimeChanged(int)));
     QObject::connect(ui, SIGNAL(setMaxOperationTime(int)), this, SLOT(setMaxOperationHours(int)));
 
+    // Let objects do their initialisation
     ThePump->initPump();
 }
 
@@ -83,23 +83,23 @@ int ControlSystem::checkOperationHours()
         OperationTime = TheScheduler->getOperationTime();
     }
 
-    uint OperationHours = OperationTime/3600000;
-    if(OperationHours > MaxOperationHours)
+    int OperationHours = OperationTime/3600000;
+    if(OperationHours > Configuration.maxOpTime)
     {
-        QString msg = "The maximum operation time (" + QString::number(MaxOperationHours)
+        QString msg = "The maximum operation time (" + QString::number(Configuration.maxOpTime)
                     + "h) is reached (" + QString::number(OperationHours) + "h).";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
     }
-    else if(OperationHours > (MaxOperationHours*0.9))
+    else if(OperationHours > (Configuration.maxOpTime*0.9))
     {
-        QString msg = "The actual operation time (" + QString::number(MaxOperationHours) +
+        QString msg = "The actual operation time (" + QString::number(Configuration.maxOpTime) +
                       "h) is near maximum (" + QString::number(OperationHours) + "h).";
         TheTracer->writeWarningLog(msg);
     }
 
-    return (int)OperationHours;
+    return OperationHours;
 }
 
 /* Checks the scheduler for correct operation
@@ -173,18 +173,18 @@ int ControlSystem::checkBatteryStatus()
 {
     int BatteryStatus = ThePump->getBatteryPowerLevel();
 
-    if(BatteryStatus < BatteryMinLoad)
+    if(BatteryStatus < Configuration.battCrit)
     {
         QString msg = "The batteries charging state (" + QString::number(BatteryStatus)
-                    + "%) is beyond minimum (" + QString::number(BatteryMinLoad) + "%).";
+                    + "%) is beyond minimum (" + QString::number(Configuration.battCrit) + "%).";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
     }
-    else if(BatteryStatus < (BatteryMinLoad*1.1))
+    else if(BatteryStatus < Configuration.battWarn)
     {
         QString msg = "The batteries charging state (" + QString::number(BatteryStatus)
-                    + "%) is getting low (min:" + QString::number(BatteryMinLoad)+ "%).";
+                    + "%) is getting low (min:" + QString::number(Configuration.battCrit)+ "%).";
         TheTracer->writeWarningLog(msg);
     }
 
@@ -203,13 +203,13 @@ Scheduler* ControlSystem::getScheduler()
  */
 int ControlSystem::getBatteryMinLoad() const
 {
-    return BatteryMinLoad;
+    return Configuration.battCrit;
 }
 
 /* (SLOT) */
 void ControlSystem::setBatteryMinLoad(int load)
 {
-    BatteryMinLoad = load;
+    Configuration.battCrit = load;
 
     emit updateMinBatteryLevel(load);
 }
@@ -218,13 +218,13 @@ void ControlSystem::setBatteryMinLoad(int load)
  */
 int ControlSystem::getMaxOperationHours() const
 {
-    return MaxOperationHours;
+    return Configuration.maxOpTime;
 }
 
 /* (SLOT) */
 void ControlSystem::setMaxOperationHours(int hours)
 {
-    MaxOperationHours = hours;
+    Configuration.maxOpTime = hours;
 
     emit updateMaxOperationTime(hours);
 }
