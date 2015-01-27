@@ -37,6 +37,9 @@ ControlSystem::ControlSystem(UserInterface* ui)
     else
     {
         TheTracer->writeCriticalLog("No configuration file found! Exiting...");
+        QMessageBox msgBox;
+        msgBox.setText("No configuration file found! Exiting...");
+        msgBox.exec();
         exit(EXIT_FAILURE);
     }
 
