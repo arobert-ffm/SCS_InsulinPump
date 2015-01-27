@@ -64,19 +64,19 @@ private:
         int latestBSLevel;
 
         // maximal healthy blood sugar level
-        int upperBSLimit;
+        int upperAlarmLimit;
 
         // minimum healthy blood sugar level
-        int lowBSLimit;
+        int lowerAlarmLimit;
 
         // target blood sugar level
         int targetBloodSugarLevel;
 
         // target to decrease blood sugar level with insulin injection
-        int upperBSLevel;
+        int upperTargetBSL;
 
         // target to increase blood sugar level with glucagon injection
-        int lowerBSLevel;
+        int lowerTargetBSL;
 
         // inject insulin or glucagon, true when insulin
         bool insulin;
@@ -103,7 +103,7 @@ public:
          */
         Pump();
 
-        Pump(Tracer *tracer, int hsf, int upLevel, int lowLevel, int upLimit, int lowLimit);
+        Pump(Tracer *tracer, int hsf, int upTargetBSL, int lowTargetBSL, int upAlarmLimit, int lowAlarmLimit);
 
         /* DTOR
          *

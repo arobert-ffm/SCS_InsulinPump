@@ -62,9 +62,11 @@ Pump::Pump()
     latestBSLevel = 0;
     upperBSLevel = 110;
     lowerBSLevel = 80;
+    insulinReservoirLevel=100;
+    glucagonReservoirLevel=100;
 }
 
-Pump::Pump(Tracer *trcr, int hsf, int upLevel, int lowLevel, int upLimit, int lowLimit)
+Pump::Pump(Tracer *trcr, int hsf, int upBSLevel, int lowBSLevel, int upAlarmLimit, int lowAlarmLimit)
 {
     batteryPowerLevel=100;
     hormoneSensitivityFactor = hsf;
@@ -74,10 +76,12 @@ Pump::Pump(Tracer *trcr, int hsf, int upLevel, int lowLevel, int upLimit, int lo
     insulin = false;
     currentBSLevel = 0;
     latestBSLevel = 0;
-    upperBSLevel = upLevel;
-    lowerBSLevel = lowLevel;
-    upperBSLimit = upLimit;
-    lowBSLimit = lowLimit;
+    upperTargetBSL = upBSLevel;
+    lowerTargetBSL = lowBSLevel;
+    upperAlarmBSL = upAlarmLimit;
+    lowerAlarmBSL = lowAlarmLimit;
+    insulinReservoirLevel=100;
+    glucagonReservoirLevel=100;
     this->tracer = trcr;
 }
 

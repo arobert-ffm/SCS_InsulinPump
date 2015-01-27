@@ -338,7 +338,7 @@ int BSL_Sim_thread(void) {
             cout << "Pipe not available!\nWaiting..." << endl;
             */
             in_pipe.close();
-	    usleep(100000);
+            usleep(100000);
             in_pipe.open("pipe_to_body", ios_base::in);
         }
         
