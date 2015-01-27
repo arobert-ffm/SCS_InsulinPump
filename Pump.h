@@ -50,6 +50,7 @@ struct config{
     int resCrit;
     int battWarn;
     int battCrit;
+    int maxOpTime;
 };
 
 class Pump : public QObject

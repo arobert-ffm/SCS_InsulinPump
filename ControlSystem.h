@@ -17,14 +17,13 @@
 #ifndef controlsystem_
 #define controlsystem_
 
+#include <QFileInfo>
 #include "UserInterface.h"
 #include "Scheduler.h"
 #include "Tracer.h"
 #include "Pump.h"
 
 
-#define BATTERY_MIN_LOAD 10
-#define MAX_OPERATION_HOURS 300
 #define CONFIGFILE_NAME "InsulinPump.conf"
 
 

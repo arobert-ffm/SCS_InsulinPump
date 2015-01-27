@@ -63,7 +63,10 @@ int schedule(Scheduler *Scheduler)
 {
     while(Scheduler->getSchouldRun())
     {
-        Scheduler->triggerPump();
+        if(Scheduler->getBatstatus() > 1)
+        {
+            Scheduler->triggerPump();
+        }
         Scheduler->saveOperationTime();
 
         sleep(RUN_INTERVAL_SEC);
