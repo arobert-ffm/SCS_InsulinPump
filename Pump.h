@@ -248,7 +248,7 @@ public:
         int getGlucagonReservoirLevel() const;
 
         /** @return battery power level.*/
-        int getBatteryPowerLevel() const;
+        int getBatteryPowerLevel();
 
 // END GETTER
 
