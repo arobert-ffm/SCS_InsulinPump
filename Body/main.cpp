@@ -262,6 +262,8 @@ int Sim_Controll_Thread(void) {
         else {
             cout << "Not a valid option. Please try again!\n";
         }
+        
+        
     }
     
     return 0;
@@ -336,6 +338,7 @@ int BSL_Sim_thread(void) {
             cout << "Pipe not available!\nWaiting..." << endl;
             */
             in_pipe.close();
+	    usleep(100000);
             in_pipe.open("pipe_to_body", ios_base::in);
         }
         
@@ -348,8 +351,8 @@ int BSL_Sim_thread(void) {
             in_pipe.close();
             
             remove("pipe_to_body");
-            cout << atoi(symbols_insulin) << endl;
-            cout << atoi(symbols_glucagon) << endl;
+            cout << "Injected Insulin: " << atoi(symbols_insulin) << endl;
+            cout << "Injected Glucagon: " << atoi(symbols_glucagon) << endl;
             
             communication.setThreadInsulinUnits(atoi(symbols_insulin));
             communication.setThreadGlucagonUnits(atoi(symbols_glucagon));
@@ -368,7 +371,7 @@ int BSL_Sim_thread(void) {
         logfile << body.getBloodSugarLevel();
         logfile << "\n";
         logfile.close();
-        usleep(1000000);
+        //usleep(100000);
 
     }
     cout << "\nThread ended\n";
