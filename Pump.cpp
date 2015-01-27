@@ -50,24 +50,27 @@ Pump::Pump()
 
 Pump::Pump(Tracer *trcr, config cfg)
 {
-    cfg.hsf;
-    cfg.upperLevel;
-    cfg.lowerLever;
-    cfg.upperLimit;
-    cfg.lowerLimit;
-    cfg.absMaxBSL;
-    cfg.battCrit;
-    cfg.battWarn;
-    cfg.resCrit;
-    cfg.resWarn;
+
+    /**
+    absMaxBSL = cfg.absMaxBSL;
+    battCrit = cfg.battCrit;
+    battWarn = cfg.battWarn;
+    resCrit = cfg.resCrit;
+    resWarn = cfg.resWarn;
+    */
 
     batteryPowerLevel=100;
+    hormoneSensitivityFactor = cfg.hsf;
     active = true;
     delay = false;
     targetBloodSugarLevel=110;
     insulin = false;
     currentBSLevel = 0;
     latestBSLevel = 0;
+    upperTargetBSL = cfg.upperLevel;
+    lowerTargetBSL = cfg.lowerLevel;
+    upperAlarmLimit = cfg.upperLimit;
+    lowerAlarmLimit = cfg.lowerLimit;
 
     refillInsulinReservoir();
     refillGlucagonReservoir();

@@ -42,7 +42,7 @@ struct config{
 
     int hsf;
     int upperLevel;
-    int lowerLever;
+    int lowerLevel;
     int upperLimit;
     int lowerLimit;
     int absMaxBSL;
@@ -58,6 +58,7 @@ class Pump : public QObject
 
 // ATTRIBUTES
 private:
+
         //for logging purposes
         Tracer *tracer;
 
@@ -114,12 +115,14 @@ public:
          *
          */
         /**
-         * @brief Pump
-         *        init object with default values.
-         */
-        Pump();
-
-        Pump(Tracer *tracer, config cfg);
+          * @brief Pump
+          *        init pump object with values from .conf
+          * @param tracer
+          *        error handling obj
+          * @param cfg
+          *        struct for .conf
+          */
+         Pump(Tracer *tracer, config cfg);
 
         /* DTOR
          *
