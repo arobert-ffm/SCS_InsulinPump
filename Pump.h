@@ -34,7 +34,23 @@
 
 using namespace std;
 
+/**
+ * @brief The config struct
+ *        used to config pump from .conf-file
+ */
+struct config{
 
+    int hsf;
+    int upperLevel;
+    int lowerLever;
+    int upperLimit;
+    int lowerLimit;
+    int absMaxBSL;
+    int resWarn;
+    int resCrit;
+    int battWarn;
+    int battCrit;
+};
 
 class Pump : public QObject
 {
@@ -103,7 +119,7 @@ public:
          */
         Pump();
 
-        Pump(Tracer *tracer, int hsf, int upTargetBSL, int lowTargetBSL, int upAlarmLimit, int lowAlarmLimit);
+        Pump(Tracer *tracer, config cfg);
 
         /* DTOR
          *
