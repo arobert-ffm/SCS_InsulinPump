@@ -30,163 +30,44 @@
 using namespace std;
 
 
+/****************************************************************************************************
+ *                                                                                                  *
+ *                              EXTERNAL CALLABLE FUNCTIONS                                         *
+ *                                                                                                  *
+ ***************************************************************************************************/
 Pump::Pump(Tracer *trcr, config cfg)
-{
-    batteryPowerLevel=100;
+{   
+    this->tracer = trcr;
+
     hormoneSensitivityFactor = cfg.hsf;
-    active = true;
-    delay = false;
-    targetBloodSugarLevel=110;
-    insulin = false;
-    currentBSLevel = 0;
-    latestBSLevel = 0;
     upperTargetBSL = cfg.upperLevel;
     lowerTargetBSL = cfg.lowerLevel;
     upperAlarmLimit = cfg.upperLimit;
     lowerAlarmLimit = cfg.lowerLimit;
-
-    refillInsulinReservoir();
-    refillGlucagonReservoir();
-    this->tracer = trcr;
+    reservoirWarning = cfg.resWarn;
+    reservoirCritical = cfg.resCrit;
 }
+
 
 //DTOR
 Pump::~Pump()
 {
 }
 
-//
-bool Pump::initPump()
-{
-    emit updateInsulinReservoir(insulinReservoirLevel);
-    emit updateGlucagonReservoir(glucagonReservoirLevel);
 
-    return true;
+// initializes working attributes
+void Pump::initPump()
+{
+    batteryPowerLevel = 100;
+    active = true;
+    delay = false;
+    refillInsulinReservoir();
+    refillGlucagonReservoir();
+    insulin = false;
+    currentBSLevel = 0;
+    latestBSLevel = 0;
 }
 
-// read BSL value from sensor
-int Pump::readBloodSugarSensor()
-{
-    ifstream file;
-    char line[4];
-
-    file.open("pipe_to_pump", ios_base::in);
-
-    if (file.good())
-    {
-        file.seekg(0L, ios::beg);
-        file.getline(line, 4);
-        file.close();
-
-        remove("pipe_to_pump");
-        //cout << "char line: " << line << endl;
-        //cout << "int line: " << atoi(line) << endl;
-
-        return atoi(line);
-    }
-    else
-    {
-        return -1;
-    }
-}
-
-// inject hormone to body
-void Pump::injectHormoneToBody(int amount, bool insulin)
-{
-    ofstream file("pipe_to_body", ios_base::out);
-
-    if (insulin)
-    {
-        if (amount < 10)
-        {
-            file << "0";
-        }
-        file << amount;
-        file << "00";
-    }
-    else
-    {
-        file << "00";
-        if (amount < 10)
-        {
-            file << "0";
-        }
-        file << amount;
-    }
-    file.close();
-}
-
-// inject hormone
-void Pump::injectHormone(bool insulin, int amount)
-{
-    // inject to body
-    injectHormoneToBody(amount, insulin);
-
-    if (amount > 0)
-    {
-        delay = true;
-        // call gui
-        if (insulin)
-        {
-            insulinReservoirLevel -= amount;
-            emit updateInsulinReservoir(insulinReservoirLevel);
-            emit updateHormoneInjectionLog(UserInterface::INSULIN, amount);
-        }
-        else
-        {
-            glucagonReservoirLevel -= amount;
-            emit updateGlucagonReservoir(glucagonReservoirLevel);
-            emit updateHormoneInjectionLog(UserInterface::GLUCAGON, amount);
-        }
-        //drain power of battery
-        drainBatteryPower(1);
-    }
-}
-
-// substrace value from reservoirs
-bool Pump::decreaseHormoneReservoir(int amount, bool insulin)
-{
-    QString str_hormone, str_insulin="Insulin", str_glucagon="Glucagon";
-    QString err = "Reservoir "+ str_hormone +" too low!";
-
-    //set str_hormone to "Insulin" or "Glucagon". ternary operator!
-    str_hormone = insulin? str_insulin : str_glucagon;
-
-    if (insulin)
-    {
-        if (amount <= this->getInsulinReservoirLevel() && amount!=0)
-        {
-            insulinReservoirLevel -= amount;
-            emit updateInsulinReservoir(insulinReservoirLevel);
-            return true;
-        }
-    }
-    else
-    {
-        if (amount <= this->getGlucagonReservoirLevel() && amount !=0)
-        {
-            glucagonReservoirLevel -= amount;
-            emit updateGlucagonReservoir(glucagonReservoirLevel);
-            return true;
-        }
-    }
-    tracer->writeCriticalLog(err);
-    return false;
-}
-
-// calculates units for needed hormone
-int Pump::calculateNeededHormone(int targetBloodSugarLevel)
-{
-    int difference; int fictHormUnit;
-    difference = abs(currentBSLevel - targetBloodSugarLevel);
-    fictHormUnit = ceil(difference / hormoneSensitivityFactor);
-
-    cout << "int targetBloodSugarLevel: " << targetBloodSugarLevel << endl;
-    cout << "difference: " << difference << endl;
-    cout << "fictHormUnit: " << fictHormUnit << endl;
-
-    return fictHormUnit;
-}
 
 // main for pump
 bool Pump::runPump()
@@ -258,9 +139,10 @@ bool Pump::runPump()
     }
 
     delay = false;
-    injectHormone(insulin, hormonesToInject);
+    prepareInjection(insulin, hormonesToInject);
     return true;
 }
+
 
 // battery recharge
 void Pump::rechargeBatteryPower(int charge)
@@ -274,6 +156,26 @@ void Pump::rechargeBatteryPower(int charge)
     tracer->writeCriticalLog(err);
 }
 
+
+int Pump::getBatteryPowerLevel()
+{
+    int powerlevel = this->batteryPowerLevel;
+    emit updateBatteryPowerLevel(powerlevel);
+    return this->batteryPowerLevel;
+}
+
+
+bool Pump::getPumpStatus() const
+{
+    return true;
+}
+
+
+/****************************************************************************************************
+ *                                                                                                  *
+ *                                  INTERNAL WORKING FUNCTIONS                                      *
+ *                                                                                                  *
+ ***************************************************************************************************/
 // power drain
 void Pump::drainBatteryPower(int powerdrain)
 {
@@ -287,11 +189,154 @@ void Pump::drainBatteryPower(int powerdrain)
     tracer->writeCriticalLog(err);
 }
 
+
+// read BSL value from sensor
+int Pump::readBloodSugarSensor()
+{
+    ifstream file;
+    char line[4];
+
+    file.open("pipe_to_pump", ios_base::in);
+
+    if (file.good())
+    {
+        file.seekg(0L, ios::beg);
+        file.getline(line, 4);
+        file.close();
+
+        remove("pipe_to_pump");
+
+        return atoi(line);
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+
+// inject hormone to body
+void Pump::injectHormoneToBody(int amount, bool insulin)
+{
+    ofstream file("pipe_to_body", ios_base::out);
+
+    if (insulin)
+    {
+        if (amount < 10)
+        {
+            file << "0";
+        }
+        file << amount;
+        file << "00";
+    }
+    else
+    {
+        file << "00";
+        if (amount < 10)
+        {
+            file << "0";
+        }
+        file << amount;
+    }
+    file.close();
+}
+
+
+// inject hormone
+void Pump::prepareInjection(bool insulin, int amount)
+{
+    QString msg = "";
+    if (amount > 0)
+    {
+        //drain power of battery
+        drainBatteryPower(1);
+        delay = true;
+
+        if (insulin)
+        {
+            if (insulinReservoirLevel >= amount)
+            {
+                insulinReservoirLevel -= amount;
+            }
+            else
+            {
+                amount = insulinReservoirLevel;
+                insulinReservoirLevel = 0;
+                msg = "Insulin reservoir too low to inject proper amount!";
+                tracer->writeCriticalLog(msg);
+            }
+            emit updateInsulinReservoir(insulinReservoirLevel);
+            emit updateHormoneInjectionLog(UserInterface::INSULIN, amount);
+
+            if (insulinReservoirLevel <= reservoirCritical)
+            {
+                msg = "CRITICAL! Insulin reservoir empty! Please refill!";
+                tracer->writeWarningLog(msg);
+            }
+            else if (insulinReservoirLevel <= reservoirWarning)
+            {
+                msg = "Warning! Insulin reservoir nearly empty! Please refill!";
+                tracer->writeWarningLog(msg);
+            }
+        }
+        else
+        {
+            if (glucagonReservoirLevel >= amount)
+            {
+                glucagonReservoirLevel -= amount;
+            }
+            else
+            {
+                amount = glucagonReservoirLevel;
+                glucagonReservoirLevel = 0;
+                QString err = "Glucagon reservoir too low to inject proper amount!";
+                tracer->writeCriticalLog(err);
+            }
+            emit updateGlucagonReservoir(glucagonReservoirLevel);
+            emit updateHormoneInjectionLog(UserInterface::GLUCAGON, amount);
+
+            if (glucagonReservoirLevel <= reservoirCritical)
+            {
+                msg = "CRITICAL! Glucagon reservoir empty! Please refill!";
+                tracer->writeWarningLog(msg);
+            }
+            else if (glucagonReservoirLevel <= reservoirWarning)
+            {
+                msg = "Warning! Glucagon reservoir nearly empty! Please refill!";
+                tracer->writeWarningLog(msg);
+            }
+        }
+    }
+
+    // inject to body
+    injectHormoneToBody(amount, insulin);
+}
+
+
+// calculates amount of needed hormone
+int Pump::calculateNeededHormone(int targetBloodSugarLevel)
+{
+    int difference; int fictHormUnit;
+    difference = abs(currentBSLevel - targetBloodSugarLevel);
+    fictHormUnit = ceil(difference / hormoneSensitivityFactor);
+
+    cout << "int targetBloodSugarLevel: " << targetBloodSugarLevel << endl;
+    cout << "difference: " << difference << endl;
+    cout << "fictHormUnit: " << fictHormUnit << endl;
+
+    return fictHormUnit;
+}
+
+
+/****************************************************************************************************
+ *                                                                                                  *
+ *                                             SLOTS                                                *
+ *                                                                                                  *
+ ***************************************************************************************************/
 // changes the batteries power level
 void Pump::changeBatteryPowerLevel(int level)
 {
     batteryPowerLevel = level;
-
     // Update UI
     emit updateBatteryPowerLevel(level);
 }
@@ -311,76 +356,3 @@ void Pump::refillGlucagonReservoir()
     // Update UI
     emit updateGlucagonReservoir(100);
 }
-//END FUNCTIONS
-
-
-// GETTER
-int Pump::getBatteryPowerLevel()
-{
-    int powerlevel = this->batteryPowerLevel;
-    emit updateBatteryPowerLevel(powerlevel);
-    return this->batteryPowerLevel;
-}
-
-bool Pump::getPumpStatus() const
-{
-    return true;
-}
-
-int Pump::getInsulinReservoirLevel() const
-{
-    return this->insulinReservoirLevel;
-}
-
-int Pump::getGlucagonReservoirLevel() const
-{
-    return this->glucagonReservoirLevel;
-}
-//>>>> auto generated getter
-// END GETTER
-
-
-// SETTER
-void Pump::setBatteryPowerLevel(int powerlevel=100)
-{
-    batteryPowerLevel=powerlevel;
-}
-
-void Pump::setTargetBloodSugarLevel(int tbsl)
-{
-    QString err = "Target Blood Sugar Level not within limits!";
-
-    if(tbsl>lowerTargetBSL && tbsl<upperTargetBSL)
-    {
-        targetBloodSugarLevel=tbsl;
-    }
-    tracer->writeCriticalLog(err);
-}
-
-//>>>> auto generated setter
-void Pump::setHormoneSensitivityFactor(int value)
-{
-    QString err = "HSF invalid! Please enter valid HSF!";
-    if(value!=0)
-    {
-        hormoneSensitivityFactor = value;
-    }
-    tracer->writeCriticalLog(err);
-}
-
-void Pump::setDelay(bool value)
-{
-    delay = value;
-}
-
-void Pump::setInsulin(bool value)
-{
-    insulin = value;
-}
-
-void Pump::setActive(int value)
-{
-    active = value;
-}
-// END SETTER
-
