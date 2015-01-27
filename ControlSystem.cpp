@@ -26,8 +26,6 @@ using namespace std;
 ControlSystem::ControlSystem(UserInterface* ui)
 {
     SchouldRun = true;
-    BatteryMinLoad = BATTERY_MIN_LOAD;
-    MaxOperationHours = MAX_OPERATION_HOURS;
 
     TheTracer = new Tracer();
 
@@ -37,8 +35,11 @@ ControlSystem::ControlSystem(UserInterface* ui)
     }
     else
     {
+        TheTracer->writeCriticalLog("No configuration file found! Exiting...");
         exit(EXIT_FAILURE);
     }
+    BatteryMinLoad = Configuration.battCrit;
+    MaxOperationHours = Configuration.maxOpTime;
 
     TheScheduler = new Scheduler(ThePump);
 
@@ -170,7 +171,7 @@ bool ControlSystem::checkTracer()
  */
 int ControlSystem::checkBatteryStatus()
 {
-    int BatteryStatus = ThePump->checkPumpBatteryStatus();
+    int BatteryStatus = ThePump->getBatteryPowerLevel();
 
     if(BatteryStatus < BatteryMinLoad)
     {
@@ -245,6 +246,12 @@ void ControlSystem::setSchouldRun(bool value)
  */
 bool ControlSystem::readConfiguration(QString filename)
 {
+    QFileInfo checkFile(filename);
+    if(!checkFile.exists())
+    {
+        return false;
+    }
+
     SaveFile = new QSettings(filename, QSettings::NativeFormat);
 
     if(!SaveFile->status() == QSettings::NoError)
@@ -263,6 +270,7 @@ bool ControlSystem::readConfiguration(QString filename)
     Configuration.resCrit = SaveFile->value("ReservoirCrit").toInt();
     Configuration.battWarn = SaveFile->value("BatterieWarn").toInt();
     Configuration.battCrit = SaveFile->value("BatterieCrit").toInt();
+    Configuration.maxOpTime = SaveFile->value("MaxOpTime").toInt();
     SaveFile->endGroup();
     SaveFile->sync();
 
