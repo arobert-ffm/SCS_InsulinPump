@@ -58,6 +58,12 @@ Pump::Pump()
     this->setDelay(false);
     this->setTargetBloodSugarLevel(110);
     this->setInsulin(false);
+
+    currentBloodSugarLevel = 0;
+    latestBloodSugarLevel = 0;
+
+    upperTargetBloodSugarLevel = 110;
+    lowerTargetBloodSugarLevel = 80;
 }
 
 //DTOR
@@ -81,6 +87,8 @@ int Pump::readBloodSugarSensor()
         file.close();
 
         remove("pipe_to_pump");
+        cout << "char line: " << line << endl;
+        cout << "int line: " << atoi(line) << endl;
 
         return atoi(line);
     }
@@ -201,6 +209,11 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
     int difference; int fictHormUnit;
     difference = abs(currentBloodSugarLevel - targetBloodSugarLevel);
     fictHormUnit = ceil(difference / hormoneSensitivityFactor);
+
+    cout << "int targetBloodSugarLevel: " << targetBloodSugarLevel << endl;
+    cout << "difference: " << difference << endl;
+    cout << "fictHormUnit: " << fictHormUnit << endl;
+
     return fictHormUnit;
 }
 
