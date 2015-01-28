@@ -26,6 +26,7 @@
 #include <QString>
 #include <QTime>
 #include <QTimer>
+#include <QPixmap>
 
 using namespace std;
 
@@ -231,6 +232,20 @@ void UserInterface::updateBloodsugarLevel(int bloodsugarLevel)
 {
     // Update Sliders
     ui->mBloodSugarValue->setValue(bloodsugarLevel);
+    // Update Smiley
+    if (bloodsugarLevel < 70)
+    {
+        QPixmap pixmap(":/Facesad.png");
+        ui->mSmileyView->setPixmap(pixmap);
+    } else if(bloodsugarLevel > 120)
+    {
+        QPixmap pixmap(":/Faceplain.png");
+        ui->mSmileyView->setPixmap(pixmap);
+    } else
+    {
+        QPixmap pixmap(":/Facesmile.png");
+        ui->mSmileyView->setPixmap(pixmap);
+    }
 }
 
 /**

@@ -422,7 +422,7 @@ QProgressBar::chunk {
     <widget class="QLCDNumber" name="lcdNumber">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>280</x>
        <y>50</y>
        <width>81</width>
        <height>51</height>
@@ -507,6 +507,19 @@ QProgressBar::chunk {
        <width>290</width>
        <height>170</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="mSmileyView">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>50</y>
+       <width>61</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>
