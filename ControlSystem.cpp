@@ -33,6 +33,7 @@ ControlSystem::ControlSystem(UserInterface* ui)
     if(readConfiguration(CONFIGFILE_NAME))
     {
         ThePump = new Pump(TheTracer, Configuration);
+        ui->init(Configuration);
     }
     else
     {
