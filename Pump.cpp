@@ -186,7 +186,10 @@ void Pump::drainBatteryPower(int powerdrain)
         //TODO! <- check for correctness.
         batteryPowerLevel-=powerdrain;
     }
-    tracer->writeCriticalLog(err);
+    else
+    {
+        tracer->writeCriticalLog(err);
+    }
 }
 
 
