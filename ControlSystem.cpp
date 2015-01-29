@@ -263,17 +263,17 @@ bool ControlSystem::readConfiguration(QString filename)
     }
 
     SaveFile->beginGroup( "InsulinPump-Static" );
-    Configuration.hsf = SaveFile->value("Sensitivity").toInt();
-    Configuration.upperLevel = SaveFile->value("UpperLevel").toInt();
-    Configuration.lowerLevel = SaveFile->value("LowerLevel").toInt();
-    Configuration.upperLimit = SaveFile->value("UpperLimit").toInt();
-    Configuration.lowerLimit = SaveFile->value("LowerLimit").toInt();
-    Configuration.absMaxBSL = SaveFile->value("AbsoluteMax").toInt();
-    Configuration.resWarn = SaveFile->value("ReservoirWarn").toInt();
-    Configuration.resCrit = SaveFile->value("ReservoirCrit").toInt();
-    Configuration.battWarn = SaveFile->value("BatterieWarn").toInt();
-    Configuration.battCrit = SaveFile->value("BatterieCrit").toInt();
-    Configuration.maxOpTime = SaveFile->value("MaxOpTime").toInt();
+    Configuration.hsf = SaveFile->value("Sensitivity", 5).toInt();
+    Configuration.upperLevel = SaveFile->value("UpperLevel", 110).toInt();
+    Configuration.lowerLevel = SaveFile->value("LowerLevel", 80).toInt();
+    Configuration.upperLimit = SaveFile->value("UpperLimit", 120).toInt();
+    Configuration.lowerLimit = SaveFile->value("LowerLimit", 70).toInt();
+    Configuration.absMaxBSL = SaveFile->value("AbsoluteMax", 350).toInt();
+    Configuration.resWarn = SaveFile->value("ReservoirWarn", 30).toInt();
+    Configuration.resCrit = SaveFile->value("ReservoirCrit", 15).toInt();
+    Configuration.battWarn = SaveFile->value("BatterieWarn", 30).toInt();
+    Configuration.battCrit = SaveFile->value("BatterieCrit", 15).toInt();
+    Configuration.maxOpTime = SaveFile->value("MaxOpTime", 1000).toInt();
     SaveFile->endGroup();
     SaveFile->sync();
 
