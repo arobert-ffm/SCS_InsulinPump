@@ -55,13 +55,58 @@ UserInterface::~UserInterface()
 }
 
 /**
+ * Initiates the UI with the values from the config struct
+ *
+ * @param cfg - config scruct
+ */
+void UserInterface::init(config cfg)
+{
+    // Init values
+    absMaxBSL = cfg.absMaxBSL;
+    lowerLimit = cfg.lowerLimit;
+    upperLimit = cfg.upperLimit;
+    resWarn = cfg.resWarn;
+    resCrit = cfg.resCrit;
+    battWarn = cfg.battWarn;
+    battCrit = cfg.battCrit;
+    // Init Slider
+    float oneBslLeveInPercent = 1.0 / absMaxBSL; // 1 = 100 percent, because StyleSheet required percentvalues below 1
+    float lLimit = oneBslLeveInPercent * cfg.lowerLimit;
+    float uLimit = oneBslLeveInPercent * cfg.upperLimit;
+    ui->mBloodSugarValue->setMaximum(absMaxBSL);
+    QString string("QSlider::groove:horizontal {border: 1px solid rgb(0, 0, 0); height: 7px;background: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:1,"
+                                            "stop:0 rgba(255, 0, 0, 255), stop:" + QString::number(lLimit-0.0001) + " rgba(255, 0, 0, 255),"
+                                            "stop:" + QString::number(lLimit) + " rgba(0, 255, 0, 255), stop:" + QString::number(uLimit-0.0001) + " rgba(0, 255, 0, 255),"
+                                            "stop:" + QString::number(uLimit) + " rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 0, 255));"
+                                            "margin: 2px 0; } QSlider::handle:horizontal {background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);"
+                                            "border: 1px solid #5c5c5c;width: 8px;margin: -7px 0;border-radius: 1px;}");
+    ui->mBloodSugarValue->setStyleSheet(string);
+}
+
+/**
  * Updates the Batteries power level in the Progressbar
  *
  * @param level - new battery power level
  */
 void UserInterface::batteryPowerLevelChanged(int level)
 {
+    // Set Value
     ui->mBatteryProgressBar->setValue(level);
+    // Update Color
+    if (level <= battWarn && level > battCrit)
+    {
+        ui->mBatteryProgressBar->setStyleSheet(QString("QProgressBar {border: 1px solid rgb(100, 100, 100); border-radius: 4px;}"
+                                                       "QProgressBar::chunk {background-color: rgb(250, 250, 0);width: 10px; margin: 0.5px;})"));
+    } else if (level <= battCrit)
+    {
+        ui->mBatteryProgressBar->setStyleSheet(QString("QProgressBar {border: 1px solid rgb(100, 100, 100); border-radius: 4px;}"
+                                                       "QProgressBar::chunk {background-color: rgb(255, 0, 0);width: 10px; margin: 0.5px;})"));
+    } else
+    {
+        ui->mBatteryProgressBar->setStyleSheet(QString("QProgressBar {border: 1px solid rgb(100, 100, 100); border-radius: 4px;}"
+                                                       "QProgressBar::chunk {background-color: rgb(11, 226, 0);width: 10px; margin: 0.5px;})"));
+    }
+
 }
 
 /**
@@ -82,12 +127,12 @@ void UserInterface::minBatteryLevelChanged(int level)
 void UserInterface::insulinAmountInReservoirChanged(int amount)
 {
     // Update Color
-    if (amount < 51 && amount >= 26)
+    if (amount <= resWarn && amount > resCrit)
     {
         ui->mInsulinProgressBar->setStyleSheet(ui->mInsulinProgressBar->property("defaultStyleSheet").toString() +
                                                    "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
                                                     "QProgressBar::chunk { background: rgb(240, 240, 0); }");
-    } else if(amount < 26)
+    } else if(amount <= resCrit)
     {
         ui->mInsulinProgressBar->setStyleSheet(ui->mInsulinProgressBar->property("defaultStyleSheet").toString() +
                                                    "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
@@ -111,12 +156,12 @@ void UserInterface::insulinAmountInReservoirChanged(int amount)
 void UserInterface::glucagonAmountInReservoirChanged(int amount)
 {
     // Update Color
-    if (amount < 51 && amount >= 26)
+    if (amount <= resWarn && amount > resCrit)
     {
         ui->mGlucagonProgressBar->setStyleSheet(ui->mGlucagonProgressBar->property("defaultStyleSheet").toString() +
                                                    "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
                                                     "QProgressBar::chunk { background: rgb(240, 240, 0); }");
-    } else if(amount < 26)
+    } else if(amount <= resCrit)
     {
         ui->mGlucagonProgressBar->setStyleSheet(ui->mGlucagonProgressBar->property("defaultStyleSheet").toString() +
                                                    "QProgressBar { border: 1px solid grey; border-radius: 4px; background-color: rgb(213, 213, 213); }" +
@@ -233,11 +278,11 @@ void UserInterface::updateBloodsugarLevel(int bloodsugarLevel)
     // Update Sliders
     ui->mBloodSugarValue->setValue(bloodsugarLevel);
     // Update Smiley
-    if (bloodsugarLevel < 70)
+    if (bloodsugarLevel < lowerLimit)
     {
         QPixmap pixmap(":/Facesad.png");
         ui->mSmileyView->setPixmap(pixmap);
-    } else if(bloodsugarLevel > 120)
+    } else if(bloodsugarLevel > upperLimit)
     {
         QPixmap pixmap(":/Faceplain.png");
         ui->mSmileyView->setPixmap(pixmap);

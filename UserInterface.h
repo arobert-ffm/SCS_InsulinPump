@@ -25,6 +25,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <string>
+#include <Pump.h>
 
 using namespace std;
 
@@ -44,6 +45,13 @@ public:
 
     static const int INSULIN    = 1;
     static const int GLUCAGON   = 2;
+
+    /**
+     * Initiates the UI with the values from the config struct
+     *
+     * @param cfg - config scruct
+     */
+    void init(config cfg);
 
 public slots:
     /**
@@ -228,6 +236,13 @@ signals:
 
 private:
     Ui::UserInterface *ui;
+    float upperLimit;
+    float lowerLimit;
+    int absMaxBSL;
+    int resWarn;
+    int resCrit;
+    int battWarn;
+    int battCrit;
 };
 
 #endif // USERINTERFACE_H
