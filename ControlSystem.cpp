@@ -32,19 +32,18 @@ ControlSystem::ControlSystem(UserInterface* ui)
 
     if(readConfiguration(CONFIGFILE_NAME))
     {
-        ThePump = new Pump(TheTracer, Configuration);
         ui->init(Configuration);
+        ThePump = new Pump(TheTracer, Configuration);
+        TheScheduler = new Scheduler(ThePump);
     }
     else
     {
-        TheTracer->writeCriticalLog("No configuration file found! Exiting...");
+        TheTracer->writeCriticalLog("Problem parsing the configuration file! Exiting...");
         QMessageBox msgBox;
-        msgBox.setText("No configuration file found! Exiting...");
+        msgBox.setText("Problem parsing the configuration file!\nIs it in path?\nExiting...");
         msgBox.exec();
         exit(EXIT_FAILURE);
     }
-
-    TheScheduler = new Scheduler(ThePump);
 
     // Initialise callbacks for user interface
     QObject::connect(ThePump, SIGNAL(updateBatteryPowerLevel(int)), ui, SLOT(batteryPowerLevelChanged(int)));
@@ -264,17 +263,50 @@ bool ControlSystem::readConfiguration(QString filename)
     }
 
     SaveFile->beginGroup( "InsulinPump-Static" );
-    Configuration.hsf = SaveFile->value("Sensitivity").toInt();
-    Configuration.upperLevel = SaveFile->value("UpperLevel").toInt();
-    Configuration.lowerLevel = SaveFile->value("LowerLevel").toInt();
-    Configuration.upperLimit = SaveFile->value("UpperLimit").toInt();
-    Configuration.lowerLimit = SaveFile->value("LowerLimit").toInt();
-    Configuration.absMaxBSL = SaveFile->value("AbsoluteMax").toInt();
-    Configuration.resWarn = SaveFile->value("ReservoirWarn").toInt();
-    Configuration.resCrit = SaveFile->value("ReservoirCrit").toInt();
-    Configuration.battWarn = SaveFile->value("BatterieWarn").toInt();
-    Configuration.battCrit = SaveFile->value("BatterieCrit").toInt();
-    Configuration.maxOpTime = SaveFile->value("MaxOpTime").toInt();
+    if((Configuration.hsf = SaveFile->value("Sensitivity").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.upperLevel = SaveFile->value("UpperLevel").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.lowerLevel = SaveFile->value("LowerLevel").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.upperLimit = SaveFile->value("UpperLimit").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.lowerLimit = SaveFile->value("LowerLimit").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.absMaxBSL = SaveFile->value("AbsoluteMax").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.resWarn = SaveFile->value("ReservoirWarn").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.resCrit = SaveFile->value("ReservoirCrit").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.battWarn = SaveFile->value("BatterieWarn").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.battCrit = SaveFile->value("BatterieCrit").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.maxOpTime = SaveFile->value("MaxOpTime").toInt()) == 0)
+    {
+        return false;
+    }
     SaveFile->endGroup();
     SaveFile->sync();
 
