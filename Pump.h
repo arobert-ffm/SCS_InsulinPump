@@ -4,6 +4,14 @@
  *
  * @author: Markus Ernst, markuser@stud.fra-uas.de
  *          Jenny Kreger, je.kreger@gmail.com
+ *          Sven Sperner, sillyconn@gmail.com
+ *          - fixed twistd bsl error messages
+ *          - fixed injection conditions
+ *          - fixed rechargeBatteryPower() missing else
+ *          - fixed drainBatteryPower() missing else
+ *          - added hormone test slider functionality
+ *          - small modifications of tracer messages
+ *          - rewrite of getPumpStatus()
  *
  * @date:   14.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
@@ -243,8 +251,14 @@ public:
      */
      void rechargeBatteryPower(int charge);
 
-     /** @return 'true' when everything is working fine.*/
-     bool getPumpStatus() const;
+     /** @return pump status.
+       *         0 - everything is fine
+       *         1 - insulin level critical
+       *         2 - insulin level warning
+       *         4 - glucagon level critical
+       *         8 - glucagon level warning
+       */
+     int getPumpStatus() const;
 
      /** @return battery power level.*/
      int getBatteryPowerLevel();

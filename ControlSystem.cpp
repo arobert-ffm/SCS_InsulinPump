@@ -140,16 +140,44 @@ bool ControlSystem::checkScheduler()
  */
 bool ControlSystem::checkPump()
 {
-    if(!ThePump->getPumpStatus())
+    int Status = ThePump->getPumpStatus();
+    QString msg = "";
+
+    if(Status == 0)
     {
-        QString msg = "The pump is in a critical state.";
+        return true;
+    }
+
+    if(Status & 1)
+    {
+        msg = "Pump status: " \
+              "the insulin fill level is very low!";
         TheTracer->writeCriticalLog(msg);
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
-        return false;
+    }
+    if(Status & 2)
+    {
+        msg = "Pump status: " \
+              "the insulin amount is getting low!";
+        TheTracer->writeWarningLog(msg);
+    }
+    if(Status & 4)
+    {
+        msg = "Pump status: " \
+              "the glucagon fill level is very low!";
+        TheTracer->writeCriticalLog(msg);
+        TheTracer->playAcousticWarning();
+        TheTracer->vibrationWarning();
+    }
+    if(Status & 8)
+    {
+        msg = "Pump status: " \
+              "the glucagon amount is getting low!";
+        TheTracer->writeWarningLog(msg);
     }
 
-    return true;
+    return false;
 }
 
 /* Checks the tracer

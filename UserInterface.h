@@ -9,6 +9,7 @@
  *          - added testing stuff for actual battery load
  *          - added stuff to change maximum operation time
  *          - added testing stuff for actual operation time
+ *          - fixed stylesheet for battery widget
  *
  * @date:   19.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3

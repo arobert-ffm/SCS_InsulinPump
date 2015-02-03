@@ -89,7 +89,7 @@ void Scheduler::setOperationTime(quint64 milliseconds)
  */
 bool Scheduler::triggerPump()
 {
-    if(ThePump->getPumpStatus())
+    if(ThePump->getPumpStatus() >= 0)
     {
         if(!ThePump->runPump())
         {

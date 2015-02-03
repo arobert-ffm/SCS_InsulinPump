@@ -4,6 +4,14 @@
  *
  * @author: Markus Ernst, markuser@stud.fra-uas.de
  *          Jenny Kreger, je.kreger@gmail.com
+ *          Sven Sperner, sillyconn@gmail.com
+ *          - fixed twistd bsl error messages
+ *          - fixed injection conditions
+ *          - fixed rechargeBatteryPower() missing else
+ *          - fixed drainBatteryPower() missing else
+ *          - added hormone test slider functionality
+ *          - small modifications of tracer messages
+ *          - rewrite of getPumpStatus()
  *
  * @date:   14.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
@@ -83,7 +91,7 @@ bool Pump::runPump()
         currentBSLevel = readBloodSugarSensor();
         if (currentBSLevel == -1)
         {
-            QString err = "No body found!";
+            QString err = "Pump: No body found!";
             tracer->writeCriticalLog(err);
             return false;
         }
@@ -102,12 +110,12 @@ bool Pump::runPump()
     // low/high blood sugar level checks
     if (currentBSLevel <= lowerAlarm)
     {
-        QString err = "Low blood sugar level! Please eat something!";
+        QString err = "Pump: Low blood sugar level!";
         tracer->writeCriticalLog(err);
     }
     if (currentBSLevel >= upperAlarm)
     {
-        QString err = "High blood sugar level! Please stop eating!";
+        QString err = "Pump: High blood sugar level!";
         tracer->writeCriticalLog(err);
     }
 
@@ -161,13 +169,16 @@ bool Pump::runPump()
 // battery recharge
 void Pump::rechargeBatteryPower(int charge)
 {
-    QString err = "Insufficient Power! Battery not charged!";
+    QString err = "Pump: Insufficient Power! Battery not charged!";
     if(charge >=batteryPowerLevel && charge <= MAX_BATTERY_CHARGE)
     {
         //TODO! <- check for correctness.
         batteryPowerLevel = charge;
     }
-    tracer->writeCriticalLog(err);
+    else
+    {
+        tracer->writeCriticalLog(err);
+    }
 }
 
 
@@ -179,9 +190,28 @@ int Pump::getBatteryPowerLevel()
 }
 
 
-bool Pump::getPumpStatus() const
+int Pump::getPumpStatus() const
 {
-    return true;
+    int RetVal = 0;
+
+    if(insulinReservoirLevel < reservoirCritical)
+    {
+        RetVal += 1;
+    }
+    else if(insulinReservoirLevel < reservoirWarning)
+    {
+        RetVal += 2;
+    }
+    if(glucagonReservoirLevel < reservoirCritical)
+    {
+        RetVal += 4;
+    }
+    else if(glucagonReservoirLevel < reservoirWarning)
+    {
+        RetVal += 8;
+    }
+
+    return RetVal;
 }
 
 
@@ -193,7 +223,7 @@ bool Pump::getPumpStatus() const
 // power drain
 void Pump::drainBatteryPower(int powerdrain)
 {
-    QString err = "Power drainage too high!";
+    QString err = "Pump: Power drainage too high!";
 
     if(powerdrain>0 && powerdrain<=batteryPowerLevel)
     {
@@ -279,22 +309,23 @@ void Pump::prepareInjection(bool insulin, int amount)
             {
                 amount = insulinReservoirLevel;
                 insulinReservoirLevel = 0;
-                msg = "Insulin reservoir too low to inject proper amount!";
+                msg = "Pump: Insulin reservoir too low to inject proper amount!";
                 tracer->writeCriticalLog(msg);
             }
             emit updateInsulinReservoir(insulinReservoirLevel);
             emit updateHormoneInjectionLog(UserInterface::INSULIN, amount);
-
+/*
             if (insulinReservoirLevel <= reservoirCritical)
             {
-                msg = "CRITICAL! Insulin reservoir empty! Please refill!";
+                msg = "Pump: Insulin reservoir empty! Please refill!";
                 tracer->writeCriticalLog(msg);
             }
             else if (insulinReservoirLevel <= reservoirWarning)
             {
-                msg = "Warning! Insulin reservoir nearly empty! Please refill!";
-                tracer->writeCriticalLog(msg);
+                msg = "Pump: Insulin reservoir nearly empty! Please refill!";
+                tracer->writeWarningLog(msg);
             }
+*/
         }
         else
         {
@@ -306,7 +337,7 @@ void Pump::prepareInjection(bool insulin, int amount)
             {
                 amount = glucagonReservoirLevel;
                 glucagonReservoirLevel = 0;
-                QString err = "Glucagon reservoir too low to inject proper amount!";
+                QString err = "Pump: Glucagon reservoir too low to inject proper amount!";
                 tracer->writeCriticalLog(err);
             }
             emit updateGlucagonReservoir(glucagonReservoirLevel);
@@ -314,13 +345,13 @@ void Pump::prepareInjection(bool insulin, int amount)
 
             if (glucagonReservoirLevel <= reservoirCritical)
             {
-                msg = "CRITICAL! Glucagon reservoir empty! Please refill!";
+                msg = "Pump: Glucagon reservoir empty! Please refill!";
                 tracer->writeCriticalLog(msg);
             }
             else if (glucagonReservoirLevel <= reservoirWarning)
             {
-                msg = "Warning! Glucagon reservoir nearly empty! Please refill!";
-                tracer->writeCriticalLog(msg);
+                msg = "Pump: Glucagon reservoir nearly empty! Please refill!";
+                tracer->writeWarningLog(msg);
             }
         }
     }

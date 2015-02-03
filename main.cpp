@@ -21,8 +21,8 @@
 #include "Scheduler.h"
 #include "Pump.h"
 
-#define CHECK_INTERVAL_SEC 5
-#define RUN_INTERVAL_SEC 5
+#define CHECK_INTERVAL_SEC 3
+#define RUN_INTERVAL_SEC 3
 
 using namespace std;
 

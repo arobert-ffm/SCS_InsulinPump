@@ -5,6 +5,9 @@
 //
 //  Created by Johannes Kinzig on 04.01.15.
 //  Copyright (c) 2015 Johannes Kinzig. All rights reserved.
+//                     Sven Sperner, sillyconn@gmail.com
+//                     - added 'doing nothing' to control thread
+//                     - modified output of bsl thread with leading CR (\r)
 //
 //  Description: Simulates a body suffering from diabetes and reacting to insulin and/or glucagon.
 //
