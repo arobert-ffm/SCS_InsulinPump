@@ -283,6 +283,14 @@ bool ControlSystem::readConfiguration(QString filename)
     {
         return false;
     }
+    if((Configuration.upperAlarm = SaveFile->value("UpperAlarm").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.lowerAlarm = SaveFile->value("LowerAlarm").toInt()) == 0)
+    {
+        return false;
+    }
     if((Configuration.absMaxBSL = SaveFile->value("AbsoluteMax").toInt()) == 0)
     {
         return false;
