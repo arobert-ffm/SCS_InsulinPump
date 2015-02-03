@@ -369,3 +369,19 @@ void Pump::refillGlucagonReservoir()
     // Update UI
     emit updateGlucagonReservoir(100);
 }
+
+// changes insulin amount
+void Pump::setInsulinAmount(int level)
+{
+    insulinReservoirLevel = level;
+    // Update UI
+    emit updateInsulinReservoir(level);
+}
+
+// changes glucagon amount
+void Pump::setGlucagonAmount(int level)
+{
+    glucagonReservoirLevel = level;
+    // Update UI
+    emit updateGlucagonReservoir(level);
+}

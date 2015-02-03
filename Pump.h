@@ -265,6 +265,11 @@ public slots:
     /** Refills the Glucagon in the Reservoir of the Pump.*/
     void refillGlucagonReservoir();
 
+    /** Changes the Amount of Insulin in the Reservoir.*/
+    void setInsulinAmount(int level);
+
+    /** Changes the Amount of Glucagon in the Reservoir.*/
+    void setGlucagonAmount(int level);
 
 
 signals:
