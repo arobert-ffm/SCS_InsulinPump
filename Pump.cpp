@@ -102,12 +102,12 @@ bool Pump::runPump()
     // low/high blood sugar level checks
     if (currentBSLevel <= lowerAlarm)
     {
-        QString err = "High blood sugar level! Please stop eating!";
+        QString err = "Low blood sugar level! Please eat something!";
         tracer->writeCriticalLog(err);
     }
     if (currentBSLevel >= upperAlarm)
     {
-        QString err = "Low blood sugar level! Please eat something!";
+        QString err = "High blood sugar level! Please stop eating!";
         tracer->writeCriticalLog(err);
     }
 
