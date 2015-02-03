@@ -323,10 +323,6 @@ int Pump::calculateNeededHormone(int targetBloodSugarLevel)
     difference = abs(currentBSLevel - targetBloodSugarLevel);
     fictHormUnit = ceil(difference / hormoneSensitivityFactor);
 
-    cout << "int targetBloodSugarLevel: " << targetBloodSugarLevel << endl;
-    cout << "difference: " << difference << endl;
-    cout << "fictHormUnit: " << fictHormUnit << endl;
-
     return fictHormUnit;
 }
 
