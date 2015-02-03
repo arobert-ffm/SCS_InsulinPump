@@ -42,8 +42,10 @@ Pump::Pump(Tracer *trcr, config cfg)
     hormoneSensitivityFactor = cfg.hsf;
     upperTargetBSL = cfg.upperLevel;
     lowerTargetBSL = cfg.lowerLevel;
-    upperAlarmLimit = cfg.upperLimit;
-    lowerAlarmLimit = cfg.lowerLimit;
+    upperLimit = cfg.upperLimit;
+    lowerLimit = cfg.lowerLimit;
+    upperAlarm = cfg.upperAlarm;
+    lowerAlarm = cfg.lowerAlarm;
     reservoirWarning = cfg.resWarn;
     reservoirCritical = cfg.resCrit;
 }
@@ -97,11 +99,23 @@ bool Pump::runPump()
         currentBSLevel = readBloodSugarSensor();
     }
 
+    // low/high blood sugar level checks
+    if (currentBSLevel <= lowerAlarm)
+    {
+        QString err = "High blood sugar level! Please stop eating!";
+        tracer->writeCriticalLog(err);
+    }
+    if (currentBSLevel >= upperAlarm)
+    {
+        QString err = "Low blood sugar level! Please eat something!";
+        tracer->writeCriticalLog(err);
+    }
+
     int hormonesToInject = 0; //<<---init with bogus value.
     emit updateBloodSugarLevel(currentBSLevel);
 
     // inject insulin
-    if (currentBSLevel > upperAlarmLimit)
+    if (currentBSLevel > upperLimit)
     {
         if (currentBSLevel > latestBSLevel)
         {
@@ -117,7 +131,7 @@ bool Pump::runPump()
         }
     }
     // inject glucagon
-    else if (currentBSLevel < lowerAlarmLimit)
+    else if (currentBSLevel < lowerLimit)
     {
         if (currentBSLevel < latestBSLevel)
         {
@@ -274,12 +288,12 @@ void Pump::prepareInjection(bool insulin, int amount)
             if (insulinReservoirLevel <= reservoirCritical)
             {
                 msg = "CRITICAL! Insulin reservoir empty! Please refill!";
-                tracer->writeWarningLog(msg);
+                tracer->writeCriticalLog(msg);
             }
             else if (insulinReservoirLevel <= reservoirWarning)
             {
                 msg = "Warning! Insulin reservoir nearly empty! Please refill!";
-                tracer->writeWarningLog(msg);
+                tracer->writeCriticalLog(msg);
             }
         }
         else
@@ -301,12 +315,12 @@ void Pump::prepareInjection(bool insulin, int amount)
             if (glucagonReservoirLevel <= reservoirCritical)
             {
                 msg = "CRITICAL! Glucagon reservoir empty! Please refill!";
-                tracer->writeWarningLog(msg);
+                tracer->writeCriticalLog(msg);
             }
             else if (glucagonReservoirLevel <= reservoirWarning)
             {
                 msg = "Warning! Glucagon reservoir nearly empty! Please refill!";
-                tracer->writeWarningLog(msg);
+                tracer->writeCriticalLog(msg);
             }
         }
     }

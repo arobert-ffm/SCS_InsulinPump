@@ -44,6 +44,8 @@ struct config{
     int lowerLevel;
     int upperLimit;
     int lowerLimit;
+    int upperAlarm;
+    int lowerAlarm;
     int absMaxBSL;
     int resWarn;
     int resCrit;
@@ -75,10 +77,16 @@ private:
     int lowerTargetBSL;
 
     // maximal healthy blood sugar level
-    int upperAlarmLimit;
+    int upperLimit;
 
     // minimum healthy blood sugar level
-    int lowerAlarmLimit;
+    int lowerLimit;
+
+    // blood sugar level when user is alarmed
+    int upperAlarm;
+
+    // blood sugar level when user is alarmed
+    int lowerAlarm;
 
     // reservoir level warning
     int reservoirWarning;
