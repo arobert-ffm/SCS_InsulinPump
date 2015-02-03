@@ -117,7 +117,7 @@ bool Pump::runPump()
     // inject insulin
     if (currentBSLevel > upperLimit)
     {
-        if (currentBSLevel > latestBSLevel)
+        if (currentBSLevel >= latestBSLevel)
         {
             insulin = true;
             if (delay)
@@ -133,7 +133,7 @@ bool Pump::runPump()
     // inject glucagon
     else if (currentBSLevel < lowerLimit)
     {
-        if (currentBSLevel < latestBSLevel)
+        if (currentBSLevel <= latestBSLevel)
         {
             insulin = false;
             if (delay)
