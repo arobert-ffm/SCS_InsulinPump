@@ -232,10 +232,16 @@ int Sim_Controll_Thread(void) {
     cout << "Body simulator for SCS-Project InsulinPump\nV1.0\n\n";
     
     while (true) {
-        cout << "Please set:\n 1: Eating a lot of sweets (BSL rising fast)\n 2: BSL Eating a snack (BSL rising moderate) \n 3: Drinking water (BSL falling slowly)\n 4: Doing sports (BSL falling)\n 5: End Simulation\n";
+        cout << "Please set:\n" \
+                " 1: Eating a lot of sweets (BSL rising fast)\n" \
+                " 2: BSL Eating a snack (BSL rising moderate)\n" \
+                " 3: Doing nothing (Consant BSL)\n" \
+                " 4: Drinking water (BSL falling slowly)\n" \
+                " 5: Doing sports (BSL falling)\n" \
+                " 6: End Simulation\n";
         cout << "Option: ";
         cin >> user_bsl_ris_fal;
-        cout << "Your choice: " << user_bsl_ris_fal << "\n";
+        cout << "Your choice: " << user_bsl_ris_fal << endl << flush;
     
         if (user_bsl_ris_fal == 1) {
             communication.setThreadRising(true);
@@ -247,15 +253,17 @@ int Sim_Controll_Thread(void) {
         }
         else if (user_bsl_ris_fal == 3) {
             communication.setThreadRising(false);
+            communication.setThreadBodyFactor(1.00);
+        }
+        else if (user_bsl_ris_fal == 4) {
+            communication.setThreadRising(false);
             communication.setThreadBodyFactor(1.01);
         }
-        
-        else if (user_bsl_ris_fal == 4) {
+        else if (user_bsl_ris_fal == 5) {
             communication.setThreadRising(false);
             communication.setThreadBodyFactor(1.05);
         }
-        
-        else if (user_bsl_ris_fal == 5) {
+        else if (user_bsl_ris_fal == 6) {
             communication.setThreadEndThread(true);
             break;
         }
