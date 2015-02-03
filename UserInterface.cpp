@@ -96,15 +96,15 @@ void UserInterface::batteryPowerLevelChanged(int level)
     if (level <= battWarn && level > battCrit)
     {
         ui->mBatteryProgressBar->setStyleSheet(QString("QProgressBar {border: 1px solid rgb(100, 100, 100); border-radius: 4px;}"
-                                                       "QProgressBar::chunk {background-color: rgb(250, 250, 0);width: 10px; margin: 0.5px;})"));
+                                                       " QProgressBar::chunk {background-color: rgb(250, 250, 0); width: 10px; margin: 0.5px; }"));
     } else if (level <= battCrit)
     {
         ui->mBatteryProgressBar->setStyleSheet(QString("QProgressBar {border: 1px solid rgb(100, 100, 100); border-radius: 4px;}"
-                                                       "QProgressBar::chunk {background-color: rgb(255, 0, 0);width: 10px; margin: 0.5px;})"));
+                                                       " QProgressBar::chunk {background-color: rgb(255, 0, 0); width: 10px; margin: 0.5px; }"));
     } else
     {
         ui->mBatteryProgressBar->setStyleSheet(QString("QProgressBar {border: 1px solid rgb(100, 100, 100); border-radius: 4px;}"
-                                                       "QProgressBar::chunk {background-color: rgb(11, 226, 0);width: 10px; margin: 0.5px;})"));
+                                                       " QProgressBar::chunk {background-color: rgb(11, 226, 0); width: 10px; margin: 0.5px; }"));
     }
 
 }
