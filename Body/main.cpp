@@ -277,6 +277,8 @@ int Sim_Controll_Thread(void) {
  *                  BSL-Simulator                     *
  ******************************************************/
 int BSL_Sim_thread(void) {
+    int insulin_amount, glucagon_amount;
+
     cout << "\nThread started\n";
     
     ofstream logfile;
@@ -351,9 +353,23 @@ int BSL_Sim_thread(void) {
             in_pipe.close();
             
             remove("pipe_to_body");
-            cout << "Injected Insulin: " << atoi(symbols_insulin) << endl;
-            cout << "Injected Glucagon: " << atoi(symbols_glucagon) << endl;
-            
+
+            insulin_amount = atoi(symbols_insulin);
+            glucagon_amount = atoi(symbols_glucagon);
+            if( insulin_amount == 0 && glucagon_amount == 0 )
+            {
+                cout << "\rInjected Insulin: " << atoi(symbols_insulin)
+                     << ", Injected Glucagon: " << atoi(symbols_glucagon)
+                     << flush;
+            }
+            else
+            {
+                cout << "\rInjected Insulin: " << atoi(symbols_insulin)
+                     << ", Injected Glucagon: " << atoi(symbols_glucagon)
+                     << endl << flush;
+            }
+            fflush(stdout);
+
             communication.setThreadInsulinUnits(atoi(symbols_insulin));
             communication.setThreadGlucagonUnits(atoi(symbols_glucagon));
             
