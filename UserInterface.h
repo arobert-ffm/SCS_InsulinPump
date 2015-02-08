@@ -10,6 +10,7 @@
  *          - added stuff to change maximum operation time
  *          - added testing stuff for actual operation time
  *          - fixed stylesheet for battery widget
+ *          - added stuff to change thread intervals
  *
  * @date:   19.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
@@ -24,6 +25,7 @@
 #define USERINTERFACE_H
 
 #include <QMainWindow>
+#include <QMouseEvent>
 #include <QString>
 #include <string>
 #include <Pump.h>
@@ -91,6 +93,18 @@ public slots:
      * @param hours - new maximum operation time in hours
      */
     void maxOperationTimeChanged(int hours);
+    /**
+     * Updates the control thread interval in the spin box
+     *
+     * @param seconds - new control thread interval in seconds
+     */
+    void controlThreadIntervalChanged(int seconds);
+    /**
+     * Updates the scheduler thread interval in the spin box
+     *
+     * @param seconds - new scheduler thread interval in seconds
+     */
+    void schedulerThreadIntervalChanged(int seconds);
     /**
      * Inserts the status message in to the QListWidgetItem
      *
@@ -171,16 +185,35 @@ private slots:
     /**
      * Testing onOpTimeButtonClicked
      *
-     * Reads the value from the slider and calls the SIGNAL method setOperationTime();.
+     * Reads the value from the slider and calls the SIGNAL method setOperationTime().
      */
     void on_mTestingOpTimeButton_clicked();
 
     /**
      * Testing onmMaxOpTimeButtonClicked
      *
-     * Reads the value from the slider and calls the SIGNAL method setMaxOperationTime();.
+     * Reads the value from the slider and calls the SIGNAL method setMaxOperationTime().
      */
     void on_mMaxOpTimeButton_clicked();
+
+    /**
+     * Testing onmContrIntButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setControlThreadInterval().
+     */
+    void on_mContrIntButton_clicked();
+
+    /**
+     * Testing onmSchedIntButtonClicked
+     *
+     * Reads the value from the slider and calls the SIGNAL method setSchedulerThreadInterval().
+     */
+    void on_mSchedIntButton_clicked();
+
+    /**
+     * Clear logs on right click
+     */
+    void mousePressEvent(QMouseEvent *event);
 
 signals:
     /**
@@ -234,6 +267,20 @@ signals:
      * @param hours - new maximum operation time in hours
      */
     void setMaxOperationTime(int hours);
+
+    /**
+     * Notifys the SLOT method of the Control System class, which changes the controller interval.
+     *
+     * @param hours - new control thread interval in seconds
+     */
+    void setControlThreadInterval(int seconds);
+
+    /**
+     * Notifys the SLOT method of the Scheduler class, which changes the scheduler interval.
+     *
+     * @param hours - new scheduler thread interval in seconds
+     */
+    void setSchedulerThreadInterval(int seconds);
 
 private:
     Ui::UserInterface *ui;

@@ -10,6 +10,7 @@
  *          - added stuff to change maximum operation time
  *          - added testing stuff for actual operation time
  *          - fixed stylesheet for battery widget
+ *          - added stuff to change thread intervals
  *
  * @date:   19.01.2015
  * Created: 24.12.14 17:11 with Idatto, version 1.3
@@ -200,6 +201,27 @@ void UserInterface::maxOperationTimeChanged(int hours)
 }
 
 /**
+ * Updates the control thread interval in the spin box
+ *
+ * @param seconds - new control thread interval in seconds
+ */
+void UserInterface::controlThreadIntervalChanged(int seconds)
+{
+    ui->mContrIntSpinner->setValue(seconds);
+}
+
+/**
+ * Updates the scheduler thread interval in the spin box
+ *
+ * @param seconds - new scheduler thread interval in seconds
+ */
+void UserInterface::schedulerThreadIntervalChanged(int seconds)
+{
+    ui->mSchedIntSpinner->setValue(seconds);
+}
+
+
+/**
  * Inserts the status message in to the QListWidgetItem
  *
  * @param message - string message to insert
@@ -381,6 +403,38 @@ void UserInterface::on_mTestingOpTimeButton_clicked()
 void UserInterface::on_mMaxOpTimeButton_clicked()
 {
     emit setMaxOperationTime(ui->mMaxOpTimeSpinner->value());
+}
+
+/**
+ * Testing onmContrIntButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setControlThreadInterval().
+ */
+void UserInterface::on_mContrIntButton_clicked()
+{
+    emit setControlThreadInterval(ui->mContrIntSpinner->value());
+}
+
+/**
+ * Testing onmSchedIntButtonClicked
+ *
+ * Reads the value from the slider and calls the SIGNAL method setSchedulerThreadInterval().
+ */
+void UserInterface::on_mSchedIntButton_clicked()
+{
+    emit setSchedulerThreadInterval(ui->mSchedIntSpinner->value());
+}
+
+/**
+ * Clear logs on right click
+ */
+void UserInterface::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::RightButton)
+    {
+        ui->mBloodsugarLog->clear();
+        ui->mMessageList->clear();
+    }
 }
 
 

@@ -21,9 +21,6 @@
 #include "Scheduler.h"
 #include "Pump.h"
 
-#define CHECK_INTERVAL_SEC 3
-#define RUN_INTERVAL_SEC 3
-
 using namespace std;
 
 
@@ -45,7 +42,7 @@ int watch(ControlSystem *ControlSystem)
         ControlSystem->checkScheduler();
         ControlSystem->checkTracer();
 
-        sleep(CHECK_INTERVAL_SEC);
+        sleep(ControlSystem->getIntervalSec());
     }
 
     return EXIT_SUCCESS;
@@ -69,7 +66,7 @@ int schedule(Scheduler *Scheduler)
         }
         Scheduler->saveOperationTime();
 
-        sleep(RUN_INTERVAL_SEC);
+        sleep(Scheduler->getIntervalSec());
     }
 
     return EXIT_SUCCESS;

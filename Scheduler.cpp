@@ -22,9 +22,10 @@ using namespace std;
 
 /* The constructor initializes the time measurement
  */
-Scheduler::Scheduler(Pump *ThePump)
+Scheduler::Scheduler(Pump *ThePump, config cfg)
 {
     SchouldRun = true;
+    IntervalSec = cfg.schedInt;
     TotalOperationTime = 0;
     ConfigFileName = CONFIGFILE_NAME;
 
@@ -194,6 +195,21 @@ std::thread* Scheduler::getThread() const
 void Scheduler::setThread(std::thread* value)
 {
     Thread = value;
+}
+
+/* Getter & Setter for the treads cycle interval time
+ */
+int Scheduler::getIntervalSec() const
+{
+    return IntervalSec;
+}
+
+/* (SLOT) */
+void Scheduler::setIntervalSec(int seconds)
+{
+    IntervalSec = seconds;
+
+    emit updateSchedulerThreadInterval(seconds);
 }
 
 

@@ -21,6 +21,7 @@
 #include <QSettings>
 #include <thread>
 #include <unistd.h>
+#include "Config.h"
 #include "Pump.h"
 
 
@@ -43,7 +44,7 @@ class Scheduler : public QObject
          *
          * @param:  A pointer to the insulin pump
          */
-        Scheduler(Pump *ThePump);
+        Scheduler(Pump *ThePump, config cfg);
 
         /**
          * @name:   ~Scheduler
@@ -130,6 +131,14 @@ class Scheduler : public QObject
         virtual void setSchouldRun(bool value);
 
         /**
+         * @name:   Get Interval Seconds
+         * @brief:  Get the threads cycle time in seconds
+         *
+         * @return: The threads cycle time in seconds
+         */
+        virtual int getIntervalSec() const;
+
+        /**
          * @name:   Get/Set Thread
          * @brief:  Get/Set the thread object of the schedulling thread
          *
@@ -139,7 +148,7 @@ class Scheduler : public QObject
         virtual std::thread* getThread() const;
         virtual void setThread(std::thread* value);
 
-private:
+    private:
         /**
          * @name:   Timer
          * @brief:  QElapsedTimer object for measuring the system time
@@ -192,6 +201,15 @@ private:
         bool SchouldRun;
 
         /**
+         * @name:   Interval Sec
+         * @brief:  Intervall in seconds for the thread method
+         *
+         *  Intervall time in seconds for a single cycle
+         *  of the thread method
+         */
+        int IntervalSec;
+
+        /**
          * @name:   Thread
          * @brief:  The thread object reference of the schedulling thread
          *
@@ -237,7 +255,7 @@ private:
          */
         virtual void writeOperationTime();
 
-public slots:
+    public slots:
         /**
          * @name:   Set Operation Time in Hours
          * @brief:  Sets the actual operation time
@@ -248,6 +266,17 @@ public slots:
          * @param:  The new operation time in hours
          */
         void setOperationTimeInHours(int hours);
+
+        /**
+         * @name:   Set Interval Seconds
+         * @brief:  Set the threads cycle time in seconds
+         *
+         *  Public slot to set the cycle interval time in seconds
+         *  and emit a signal to the user interface
+         *
+         * @param:  The threads cycle time in seconds
+         */
+        virtual void setIntervalSec(int value);
 
     signals:
         /**
@@ -260,6 +289,17 @@ public slots:
          * @param:  The new operation time in hours
          */
         void updateOperationTime(int hours);
+
+        /**
+         * @name:   Update Scheduler Thread Interval
+         * @brief:  Sets the scheduler thread interval in the UI
+         *
+         *  Signal that gets emitted when the scheduler thread
+         *  interval in seconds gets changed
+         *
+         * @param:  The new scheduler thread interval in seconds
+         */
+        void updateSchedulerThreadInterval(int seconds);
 };
 
 #endif

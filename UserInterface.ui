@@ -536,9 +536,9 @@
     <property name="geometry">
      <rect>
       <x>910</x>
-      <y>150</y>
+      <y>130</y>
       <width>210</width>
-      <height>120</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="font">
@@ -569,7 +569,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>60</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -604,9 +604,9 @@
     <property name="geometry">
      <rect>
       <x>910</x>
-      <y>280</y>
+      <y>240</y>
       <width>210</width>
-      <height>120</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="font">
@@ -637,7 +637,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>60</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -672,9 +672,9 @@
     <property name="geometry">
      <rect>
       <x>910</x>
-      <y>410</y>
+      <y>350</y>
       <width>210</width>
-      <height>120</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="font">
@@ -705,7 +705,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>60</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -740,9 +740,9 @@
     <property name="geometry">
      <rect>
       <x>910</x>
-      <y>540</y>
+      <y>460</y>
       <width>210</width>
-      <height>120</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="font">
@@ -773,7 +773,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>60</y>
        <width>151</width>
        <height>31</height>
       </rect>
@@ -853,7 +853,7 @@
      <rect>
       <x>1020</x>
       <y>30</y>
-      <width>101</width>
+      <width>111</width>
       <height>100</height>
      </rect>
     </property>
@@ -879,6 +879,100 @@
      </property>
     </widget>
     <widget class="QPushButton" name="mMaxOpTimeButton">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>60</y>
+       <width>80</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_SchedInt">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>570</y>
+      <width>111</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Scheduler</string>
+    </property>
+    <widget class="QSpinBox" name="mSchedIntSpinner">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="mSchedIntButton">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>60</y>
+       <width>80</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_ContrInt">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>570</y>
+      <width>90</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Controller</string>
+    </property>
+    <widget class="QSpinBox" name="mContrIntSpinner">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="mContrIntButton">
      <property name="geometry">
       <rect>
        <x>0</x>

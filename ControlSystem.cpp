@@ -34,7 +34,7 @@ ControlSystem::ControlSystem(UserInterface* ui)
     {
         ui->init(Configuration);
         ThePump = new Pump(TheTracer, Configuration);
-        TheScheduler = new Scheduler(ThePump);
+        TheScheduler = new Scheduler(ThePump, Configuration);
     }
     else
     {
@@ -59,6 +59,8 @@ ControlSystem::ControlSystem(UserInterface* ui)
 
     QObject::connect(TheScheduler, SIGNAL(updateOperationTime(int)), ui, SLOT(operationTimeChanged(int)));
     QObject::connect(ui, SIGNAL(setOperationTime(int)), TheScheduler, SLOT(setOperationTimeInHours(int)));
+    QObject::connect(TheScheduler, SIGNAL(updateSchedulerThreadInterval(int)), ui, SLOT(schedulerThreadIntervalChanged(int)));
+    QObject::connect(ui, SIGNAL(setSchedulerThreadInterval(int)), TheScheduler, SLOT(setIntervalSec(int)));
 
     QObject::connect(TheTracer, SIGNAL(writeStatusLogInUi(QString)), ui, SLOT(insertStatusLog(QString)));
     QObject::connect(TheTracer, SIGNAL(writeWarningLogInUi(QString)), ui, SLOT(insertWarningLog(QString)));
@@ -68,6 +70,8 @@ ControlSystem::ControlSystem(UserInterface* ui)
     QObject::connect(ui, SIGNAL(setMinBatteryLevel(int)), this, SLOT(setBatteryMinLoad(int)));
     QObject::connect(this, SIGNAL(updateMaxOperationTime(int)), ui, SLOT(maxOperationTimeChanged(int)));
     QObject::connect(ui, SIGNAL(setMaxOperationTime(int)), this, SLOT(setMaxOperationHours(int)));
+    QObject::connect(this, SIGNAL(updateControlThreadInterval(int)), ui, SLOT(controlThreadIntervalChanged(int)));
+    QObject::connect(ui, SIGNAL(setControlThreadInterval(int)), this, SLOT(setIntervalSec(int)));
 
     // Let objects do their initialisation
     ThePump->initPump();
@@ -89,7 +93,7 @@ int ControlSystem::checkOperationHours()
     }
 
     int OperationHours = OperationTime/3600000;
-    if(OperationHours > Configuration.maxOpTime)
+    if(OperationHours >= Configuration.maxOpTime)
     {
         QString msg = "The maximum operation time (" + QString::number(Configuration.maxOpTime)
                     + "h) is reached (" + QString::number(OperationHours) + "h).";
@@ -97,7 +101,7 @@ int ControlSystem::checkOperationHours()
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
     }
-    else if(OperationHours > (Configuration.maxOpTime*0.9))
+    else if(OperationHours >= (Configuration.maxOpTime*0.9))
     {
         QString msg = "The actual operation time (" + QString::number(Configuration.maxOpTime) +
                       "h) is near maximum (" + QString::number(OperationHours) + "h).";
@@ -206,7 +210,7 @@ int ControlSystem::checkBatteryStatus()
 {
     int BatteryStatus = ThePump->getBatteryPowerLevel();
 
-    if(BatteryStatus < Configuration.battCrit)
+    if(BatteryStatus <= Configuration.battCrit)
     {
         QString msg = "The batteries charging state (" + QString::number(BatteryStatus)
                     + "%) is beyond minimum (" + QString::number(Configuration.battCrit) + "%).";
@@ -214,7 +218,7 @@ int ControlSystem::checkBatteryStatus()
         TheTracer->playAcousticWarning();
         TheTracer->vibrationWarning();
     }
-    else if(BatteryStatus < Configuration.battWarn)
+    else if(BatteryStatus <= Configuration.battWarn)
     {
         QString msg = "The batteries charging state (" + QString::number(BatteryStatus)
                     + "%) is getting low (min:" + QString::number(Configuration.battCrit)+ "%).";
@@ -274,6 +278,22 @@ void ControlSystem::setSchouldRun(bool value)
     SchouldRun = value;
 }
 
+/* Getter & Setter for the treads cycle interval time
+ */
+int ControlSystem::getIntervalSec() const
+{
+    return Configuration.contrInt;
+}
+
+/* (SLOT) */
+void ControlSystem::setIntervalSec(int seconds)
+{
+    Configuration.contrInt = seconds;
+
+    emit updateControlThreadInterval(seconds);
+}
+
+
 
 /* Reads the configuration file
  */
@@ -293,10 +313,12 @@ bool ControlSystem::readConfiguration(QString filename)
     }
 
     SaveFile->beginGroup( "InsulinPump-Static" );
+
     if((Configuration.hsf = SaveFile->value("Sensitivity").toInt()) == 0)
     {
         return false;
     }
+
     if((Configuration.upperLevel = SaveFile->value("UpperLevel").toInt()) == 0)
     {
         return false;
@@ -321,10 +343,12 @@ bool ControlSystem::readConfiguration(QString filename)
     {
         return false;
     }
+
     if((Configuration.absMaxBSL = SaveFile->value("AbsoluteMax").toInt()) == 0)
     {
         return false;
     }
+
     if((Configuration.resWarn = SaveFile->value("ReservoirWarn").toInt()) == 0)
     {
         return false;
@@ -333,6 +357,7 @@ bool ControlSystem::readConfiguration(QString filename)
     {
         return false;
     }
+
     if((Configuration.battWarn = SaveFile->value("BatterieWarn").toInt()) == 0)
     {
         return false;
@@ -341,7 +366,17 @@ bool ControlSystem::readConfiguration(QString filename)
     {
         return false;
     }
+
     if((Configuration.maxOpTime = SaveFile->value("MaxOpTime").toInt()) == 0)
+    {
+        return false;
+    }
+
+    if((Configuration.contrInt = SaveFile->value("ContrInt").toInt()) == 0)
+    {
+        return false;
+    }
+    if((Configuration.schedInt = SaveFile->value("SchedInt").toInt()) == 0)
     {
         return false;
     }

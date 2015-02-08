@@ -37,30 +37,12 @@
 
 #define MAX_BATTERY_CHARGE  100
 
+#include "Config.h"
 #include "Tracer.h"
 #include <QObject>
 
 using namespace std;
 
-/**
- * @brief The config struct
- *        used to config pump from .conf-file
- */
-struct config{
-    int hsf;
-    int upperLevel;
-    int lowerLevel;
-    int upperLimit;
-    int lowerLimit;
-    int upperAlarm;
-    int lowerAlarm;
-    int absMaxBSL;
-    int resWarn;
-    int resCrit;
-    int battWarn;
-    int battCrit;
-    int maxOpTime;
-};
 
 class Pump : public QObject
 {

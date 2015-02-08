@@ -19,10 +19,11 @@
 
 #include <QFileInfo>
 #include <QMessageBox>
-#include "UserInterface.h"
+#include "Config.h"
+#include "Pump.h"
 #include "Scheduler.h"
 #include "Tracer.h"
-#include "Pump.h"
+#include "UserInterface.h"
 
 
 #define CONFIGFILE_NAME "InsulinPump.conf"
@@ -114,7 +115,6 @@ class ControlSystem : public QObject
          * @name:   Get Bettery Minimum Load
          * @brief:  Get the minimum battery load level in percent
          *
-         * @param:  The batteries minimum load level in percent
          * @return: The batteries minimum load level in percent
          */
         virtual int getBatteryMinLoad() const;
@@ -123,7 +123,6 @@ class ControlSystem : public QObject
          * @name:   Get Maximum Operation Hours
          * @brief:  Get the maximum operation time in hours
          *
-         * @param:  The maximum operation time in hours
          * @return: The maximum operation time in hours
          */
         virtual int getMaxOperationHours() const;
@@ -137,6 +136,14 @@ class ControlSystem : public QObject
          */
         virtual bool getSchouldRun() const;
         virtual void setSchouldRun(bool value);
+
+        /**
+         * @name:   Get Interval Seconds
+         * @brief:  Get the threads cycle time in seconds
+         *
+         * @return: The threads cycle time in seconds
+         */
+        virtual int getIntervalSec() const;
 
     private:
         /**
@@ -184,18 +191,6 @@ class ControlSystem : public QObject
         /**
          * @name:   Configuration values
          * @brief:  Some values from config file for pump
-         *
-         *  Hsf         Hormone Sensitivity Factor
-         *  UpperLevel  Upper Bloodsugar Target Level
-         *  LowerLevel  Lower BLoodsugar Target Level
-         *  UpperLimit  Upper Bloodsugar Target Limit
-         *  LowerLimit  Lower Bloodsugar Target Limit
-         *  AbsMax      Absolute Maximum Bloodsugar
-         *  ResWarn     Reservoir Warning Fill Level
-         *  ResCrit     Reservoir Critical Fill Level
-         *  BattWarn    Battery Warning Level
-         *  BattCrit    Battery Critical Level
-         *  MaxOpTime   Maximum Operation Time (h)
          */
         config Configuration;
 
@@ -205,7 +200,7 @@ class ControlSystem : public QObject
          *
          *  Reads some specific values from the configuration file
          */
-        bool readConfiguration(QString filename);
+        virtual bool readConfiguration(QString filename);
 
     public slots:
         /**
@@ -230,6 +225,17 @@ class ControlSystem : public QObject
          */
         virtual void setMaxOperationHours(int hours);
 
+        /**
+         * @name:   Set Interval Seconds
+         * @brief:  Set the threads cycle time in seconds
+         *
+         *  Public slot to set the cycle interval time in seconds
+         *  and emit a signal to the user interface
+         *
+         * @param:  The threads cycle time in seconds
+         */
+        virtual void setIntervalSec(int value);
+
     signals:
         /**
          * @name:   Update Minimum Battery Level
@@ -252,6 +258,17 @@ class ControlSystem : public QObject
          * @param:  The new maximum operation time in hours
          */
         void updateMaxOperationTime(int hours);
+
+        /**
+         * @name:   Update Control Thread Interval
+         * @brief:  Sets the control thread interval in the UI
+         *
+         *  Signal that gets emitted when the control thread
+         *  interval in seconds gets changed
+         *
+         * @param:  The new control thread interval in seconds
+         */
+        void updateControlThreadInterval(int seconds);
 };
 
 #endif
